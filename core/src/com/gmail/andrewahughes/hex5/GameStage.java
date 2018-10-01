@@ -25,6 +25,7 @@ public class GameStage extends Stage {
     public StageInterface stageInterface;
     public float black=1.0f;
     public Image pauseImg1;
+    HexWide hexWide = new HexWide(50,400,200);
     public GameStage(Viewport viewport, Texture texture,final StageInterface stageInterface) {
         super( viewport );
 
