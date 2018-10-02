@@ -15,12 +15,13 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 public class HexWide extends Actor{
     int selectedSector;
     int approxSector;
+    int blue=0;
     private ShapeRenderer renderer = new ShapeRenderer();//it’s probably better to pass this in rather than make a new shapeRenderer for each hex?
 
     public final float edgeSize;
     public final float altitudeSize;
     public float posX, posY;
-    public boolean visible;
+    public boolean visible ;
 
 
 
@@ -30,10 +31,12 @@ public class HexWide extends Actor{
         altitudeSize = edgeSize * 0.866025403784439f;
         this.posX = posX;
         this.posY = posY;
+        visible=true;
 
         this.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                blue++;
 //this has already implicitly tested if the touch is within the bounding rect, assuming the tapSquare is bounding
 //test if touch is within smaller than bounding circle
                 if(pointInCircle(posX, posY, edgeSize,x,y))
@@ -70,6 +73,7 @@ public class HexWide extends Actor{
                             if(y-(posY)<((-x-(posX))*altitudeSize/edgeSize) + altitudeSize*5)
                             {
                                 selectedSector = approxSector;
+
                             }
                         }
                         else if (approxSector==3)
@@ -117,18 +121,17 @@ public class HexWide extends Actor{
         return approxSector;
     }
 
-    @Override
-    public void draw(Batch batch,float parentAlpha) {
+
+    public void draw() {
         act(Gdx.graphics.getDeltaTime());
 
         if (visible) {
             renderer.begin(ShapeRenderer.ShapeType.Line);
-            renderer.setColor(Color.BLUE);
+            renderer.setColor(0,100,40*blue,1);
 
             drawWideHex(renderer,posX,posY,edgeSize);
             renderer.end();
 
-            super.draw(batch, parentAlpha);
         }
     }
 

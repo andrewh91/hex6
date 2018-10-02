@@ -25,12 +25,17 @@ public class GameStage extends Stage {
     public StageInterface stageInterface;
     public float black=1.0f;
     public Image pauseImg1;
-    HexWide hexWide = new HexWide(50,400,200);
+    HexWide hexWide = new HexWide(150,400,200);
+    HexWideField hexWideField ;
+
+
+
     public GameStage(Viewport viewport, Texture texture,final StageInterface stageInterface) {
         super( viewport );
 
+        hexWideField= new HexWideField(50,50,700,300,2,3);
         this.stageInterface =stageInterface;
-
+        //this.addActor(hexWide);
         Table table = new Table();
         table.setFillParent(true);
         table.center();
@@ -66,12 +71,19 @@ public class GameStage extends Stage {
 
             Gdx.gl.glClearColor(0.9f*black, 0.9f*black, 0.7f*black, 1);
             Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
             renderer.begin(ShapeRenderer.ShapeType.Line);
             renderer.setColor(Color.BLUE);;
 
             drawWideHex(renderer,(int)(150),100,90);
             drawTallHex(renderer,70,200,70);
             renderer.end();
+            this.act();
+            hexWide.draw();
+            hexWideField.draw();
+
+
+
 
             super.draw();
         }
