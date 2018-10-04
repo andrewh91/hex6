@@ -25,15 +25,16 @@ public class GameStage extends Stage {
     public StageInterface stageInterface;
     public float black=1.0f;
     public Image pauseImg1;
-    HexWide hexWide = new HexWide(150,400,200);
+    HexWide hexWide ;
     HexWideField hexWideField ;
 
 
 
     public GameStage(Viewport viewport, Texture texture,final StageInterface stageInterface) {
         super( viewport );
-
-        hexWideField= new HexWideField(50,50,700,300,2,3);
+        hexWide= new HexWide(150,400,200);
+        this.addActor(hexWide);
+        hexWideField= new HexWideField(50,50,1000,500,2,3);
         this.stageInterface =stageInterface;
         //this.addActor(hexWide);
         Table table = new Table();

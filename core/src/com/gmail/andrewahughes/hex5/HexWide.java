@@ -3,6 +3,8 @@ package com.gmail.andrewahughes.hex5;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -16,6 +18,12 @@ public class HexWide extends Actor{
     int selectedSector;
     int approxSector;
     int blue=0;
+
+    BitmapFont font = new BitmapFont();
+    String text = new String();
+    SpriteBatch spriteBatch = new SpriteBatch();
+
+
     private ShapeRenderer renderer = new ShapeRenderer();//it’s probably better to pass this in rather than make a new shapeRenderer for each hex?
 
     public final float edgeSize;
@@ -32,11 +40,13 @@ public class HexWide extends Actor{
         this.posX = posX;
         this.posY = posY;
         visible=true;
+        setBounds(posX-edgeSize,posY-altitudeSize,edgeSize*2,altitudeSize*2);//posX gives the centre so need  to offset that
 
         this.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 blue++;
+
 //this has already implicitly tested if the touch is within the bounding rect, assuming the tapSquare is bounding
 //test if touch is within smaller than bounding circle
                 if(pointInCircle(posX, posY, edgeSize,x,y))
@@ -92,7 +102,7 @@ public class HexWide extends Actor{
                     }
                 }
                 //return selectedSector;
-
+            text=""+selectedSector+" - "+x+" - "+y;
             }
         });
 
@@ -128,9 +138,14 @@ public class HexWide extends Actor{
         if (visible) {
             renderer.begin(ShapeRenderer.ShapeType.Line);
             renderer.setColor(0,100,40*blue,1);
-
             drawWideHex(renderer,posX,posY,edgeSize);
+            renderer.rect(posX-edgeSize,posY-altitudeSize,edgeSize*2,altitudeSize*2);
             renderer.end();
+            spriteBatch.begin();
+            font.draw(spriteBatch, "Hello World!"+text, 10, 10);
+
+            spriteBatch.end();
+
 
         }
     }
