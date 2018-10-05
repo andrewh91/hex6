@@ -10,6 +10,8 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
+import java.awt.Rectangle;
+
 /**
  * Created by Andrew Hughes on 26/09/2018.
  */
@@ -21,6 +23,8 @@ public class HexWide extends Actor{
 
     BitmapFont font = new BitmapFont();
     String text = new String();
+    String text1 = new String();
+    String text2 = new String();
     SpriteBatch spriteBatch = new SpriteBatch();
 
 
@@ -46,63 +50,61 @@ public class HexWide extends Actor{
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 blue++;
-
+                if(x>posX&&x<posX+edgeSize*2&&y>posY&&y<posY+altitudeSize*2||true)
+                {
+                    text1=" in square ";
 //this has already implicitly tested if the touch is within the bounding rect, assuming the tapSquare is bounding
 //test if touch is within smaller than bounding circle
-                if(pointInCircle(posX, posY, edgeSize,x,y))
-                {
+                    if (pointInCircle(posX, posY, edgeSize, x, y)) {
 //test angle
+                        text2=" in circle ";
 //returns sector of the hex touch landed in approx ( could technically be outside the hex but still in a sort of projection of that sector)
 //sector 0 will range from the 9 o’clock position to the 11 o’clock position, sector 1 from the 11 o’clock to 1 o’clock position and the sectors continue like that clockwise.
-                    approxSector = getApproxSector(y,posY,x,posX);
+                        approxSector = getApproxSector(y, posY, x, posX);
 
 //if angle does not prove touch is in hex then test the corner case that the angle indicates the touch might be in
 //if the touch is in approxSector 1 or 4 we know it is deffo in the hex because these sectors are flush with the bounding box and we already know the touch is in the bounding box. If it’s in some other sector we need more tests
-                    if(approxSector==1||approxSector==4)
-                    {
-                        selectedSector = approxSector;
-                    }
-                    else //sector is something other than 1 or 4
-                    {
-                        if(approxSector==5)//if approxSector is the bottom left use this test
-                        {//if touch point(relative to bottom left corner of hex) y coord is more than given formula then it is inside the hex
-                            if(y-(posY)>((-x-(posX))*altitudeSize/edgeSize) + altitudeSize)
-                            {
-                                selectedSector = approxSector;
-                            }
-                        }
-                        else if (approxSector==0)
-                        { //top left
-                            if(y-(posY)<((x-(posX))*altitudeSize/edgeSize) + altitudeSize)
-                            {
-                                selectedSector = approxSector;
-                            }
-                        }
-                        else if (approxSector==2)
-                        { //top right
-                            if(y-(posY)<((-x-(posX))*altitudeSize/edgeSize) + altitudeSize*5)
-                            {
-                                selectedSector = approxSector;
+                        if (approxSector == 1 || approxSector == 4) {
+                            selectedSector = approxSector;
+                        } else //sector is something other than 1 or 4
+                        {
+                            if (approxSector == 5)//if approxSector is the bottom left use this test
+                            {//if touch point(relative to bottom left corner of hex) y coord is more than given formula then it is inside the hex
+                                if (y - (posY) > ((-x - (posX)) * altitudeSize / edgeSize) + altitudeSize) {
+                                    selectedSector = approxSector;
+                                }
+                            } else if (approxSector == 0) { //top left
+                                if (y - (posY) < ((x - (posX)) * altitudeSize / edgeSize) + altitudeSize) {
+                                    selectedSector = approxSector;
+                                }
+                            } else if (approxSector == 2) { //top right
+                                if (y - (posY) < ((-x - (posX)) * altitudeSize / edgeSize) + altitudeSize * 5) {
+                                    selectedSector = approxSector;
 
+                                }
+                            } else if (approxSector == 3) { //bottom right
+                                if (y - (posY) > ((-x - (posX)) * altitudeSize / edgeSize) + altitudeSize * 3) {
+                                    selectedSector = approxSector;
+                                }
+                            } else {//if no corner case is true then the touch is not in the hex, return 6 to indicate this, but do not set selectedSector to 6
+                                //return 6;
+                                approxSector = 6;
                             }
-                        }
-                        else if (approxSector==3)
-                        { //bottom right
-                            if(y-(posY)>((-x-(posX))*altitudeSize/edgeSize) + altitudeSize*3)
-                            {
-                                selectedSector = approxSector;
-                            }
-                        }
-                        else
-                        {//if no corner case is true then the touch is not in the hex, return 6 to indicate this, but do not set selectedSector to 6
-                            //return 6;
-                            approxSector=6;
-                        }
 
+                        }
                     }
+                    else
+                    {
+                        text2=" ";
+                    }
+                    //return selectedSector;
                 }
-                //return selectedSector;
-            text=""+selectedSector+" - "+x+" - "+y;
+                else
+                {
+                    blue=0;
+                    text1=" ";
+                }
+                text = "" + selectedSector + " - " + x + " - " + y;
             }
         });
 
@@ -132,17 +134,17 @@ public class HexWide extends Actor{
     }
 
 
-    public void draw() {
+    public void draw(ShapeRenderer sr) {
         act(Gdx.graphics.getDeltaTime());
 
         if (visible) {
-            renderer.begin(ShapeRenderer.ShapeType.Line);
-            renderer.setColor(0,100,40*blue,1);
-            drawWideHex(renderer,posX,posY,edgeSize);
-            renderer.rect(posX-edgeSize,posY-altitudeSize,edgeSize*2,altitudeSize*2);
-            renderer.end();
+            //sr.begin(ShapeRenderer.ShapeType.Line);
+            sr.setColor(0,100,40*blue,1);
+            drawWideHex(sr,posX,posY,edgeSize);
+            //renderer.rect(posX-edgeSize,posY-altitudeSize,edgeSize*2,altitudeSize*2);
+            //sr.end();
             spriteBatch.begin();
-            font.draw(spriteBatch, "Hello World!"+text, 10, 10);
+            font.draw(spriteBatch, "Hello World!"+text+text1+text2, 10, 10);
 
             spriteBatch.end();
 

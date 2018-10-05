@@ -4,8 +4,10 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -27,14 +29,23 @@ public class GameStage extends Stage {
     public Image pauseImg1;
     HexWide hexWide ;
     HexWideField hexWideField ;
+    Viewport viewport;
+    OrthographicCamera orthographicCamera ;
+    Vector2 v1,v2,v3,v4 ;
 
 
 
     public GameStage(Viewport viewport, Texture texture,final StageInterface stageInterface) {
         super( viewport );
+        this.viewport=viewport;
+        v1=new Vector2(60,60);
+        v2=new Vector2(110,110);
+        v3=new Vector2(50,50);
+        v4=new Vector2(100,100);
+        orthographicCamera = new OrthographicCamera(viewport.getScreenWidth(),viewport.getScreenHeight());
         hexWide= new HexWide(150,400,200);
         this.addActor(hexWide);
-        hexWideField= new HexWideField(50,50,1000,500,2,3);
+        hexWideField= new HexWideField(50,50,1000,500,4,4);
         this.stageInterface =stageInterface;
         //this.addActor(hexWide);
         Table table = new Table();
@@ -72,17 +83,20 @@ public class GameStage extends Stage {
 
             Gdx.gl.glClearColor(0.9f*black, 0.9f*black, 0.7f*black, 1);
             Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
+            //renderer.setProjectionMatrix(orthographicCamera.combined);
             renderer.begin(ShapeRenderer.ShapeType.Line);
-            renderer.setColor(Color.BLUE);;
-
-            drawWideHex(renderer,(int)(150),100,90);
+            renderer.setColor(Color.BLUE);
+            renderer.line(viewport.unproject(v1),viewport.unproject(v2));
+            renderer.setColor(Color.RED);
+            renderer.line(v3,v4);
+            renderer.rect(50,50,1000,500);
+            drawWideHex(renderer,150,100,90);
             drawTallHex(renderer,70,200,70);
-            renderer.end();
             this.act();
-            hexWide.draw();
-            hexWideField.draw();
+            hexWide.draw(renderer);
+            hexWideField.draw(renderer);
 
+            renderer.end();
 
 
 

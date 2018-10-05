@@ -1,5 +1,7 @@
 package com.gmail.andrewahughes.hex5;
 
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+
 /**
  * Created by Andrew Hughes on 02/10/2018.
  */
@@ -25,7 +27,7 @@ HexWide hexWideArray[];
         {
         for(int j=0;j<noOfRows;j++)
         {
-        hexWideArray[noOfHexes] = new HexWide(edgeSize,(float)(posX+marginX+(0.5*edgeSize+((j+1)*1.5*edgeSize))-edgeSize),(float)(posY+marginY+(edgeSize*0.866025403784439)*(i+1)+(edgeSize*0.866025403784439)*(j%2)));
+        hexWideArray[noOfHexes] = new HexWide(edgeSize,(float)(posX+marginX+(0.5*edgeSize+((j+1)*1.5*edgeSize))-edgeSize),(float)(posY+marginY+(edgeSize*0.866025403784439*2)*(i+1)+(edgeSize*0.866025403784439)*(j%2)));
         noOfHexes++;
         }
         }
@@ -35,11 +37,11 @@ public HexWideField(int posX, int posY, int width, int height, float edgeSize)
 {
         this.edgeSize=edgeSize;
 }
-public void draw()
+public void draw(ShapeRenderer sr)
 {
         for (int i = 0;i<noOfColumns*noOfRows;i++)
         {
-                hexWideArray[i].draw();
+                hexWideArray[i].draw(sr);
         }
 }
 public float deriveEdgeSize(int width, int height,int noOfRows, int noOfColumns)
