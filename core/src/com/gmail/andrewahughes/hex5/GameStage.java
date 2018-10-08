@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -43,9 +44,10 @@ public class GameStage extends Stage {
         v3=new Vector2(50,50);
         v4=new Vector2(100,100);
         orthographicCamera = new OrthographicCamera(viewport.getScreenWidth(),viewport.getScreenHeight());
-        hexWide= new HexWide(150,400,200);
+        orthographicCamera.translate(viewport.getScreenWidth()/2,viewport.getScreenHeight()/2);
+        hexWide= new HexWide(150,150,200,orthographicCamera);
         this.addActor(hexWide);
-        hexWideField= new HexWideField(50,50,1000,500,4,4);
+        hexWideField= new HexWideField(50,50,1000,500,4,4,orthographicCamera);
         this.stageInterface =stageInterface;
         //this.addActor(hexWide);
         Table table = new Table();
@@ -61,6 +63,7 @@ public class GameStage extends Stage {
             public void clicked(InputEvent event, float x, float y) {
                 if(pauseImg1.isVisible())
                 {//if you click the badlogic image, go back to main menu
+
                     pauseImg1.setVisible(false);
                     setPause(false);
                     black=1.0f;
@@ -83,12 +86,13 @@ public class GameStage extends Stage {
 
             Gdx.gl.glClearColor(0.9f*black, 0.9f*black, 0.7f*black, 1);
             Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-            //renderer.setProjectionMatrix(orthographicCamera.combined);
+            orthographicCamera.update();
+            renderer.setProjectionMatrix(orthographicCamera.combined);
             renderer.begin(ShapeRenderer.ShapeType.Line);
             renderer.setColor(Color.BLUE);
-            renderer.line(viewport.unproject(v1),viewport.unproject(v2));
-            renderer.setColor(Color.RED);
-            renderer.line(v3,v4);
+            //renderer.line(viewport.unproject(v1),viewport.unproject(v2));
+            //renderer.setColor(Color.RED);
+            //renderer.line(v3,v4);
             renderer.rect(50,50,1000,500);
             drawWideHex(renderer,150,100,90);
             drawTallHex(renderer,70,200,70);

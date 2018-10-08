@@ -2,10 +2,12 @@ package com.gmail.andrewahughes.hex5;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
@@ -26,7 +28,7 @@ public class HexWide extends Actor{
     String text1 = new String();
     String text2 = new String();
     SpriteBatch spriteBatch = new SpriteBatch();
-
+    OrthographicCamera orthographicCamera;
 
     private ShapeRenderer renderer = new ShapeRenderer();//it’s probably better to pass this in rather than make a new shapeRenderer for each hex?
 
@@ -35,76 +37,70 @@ public class HexWide extends Actor{
     public float posX, posY;
     public boolean visible ;
 
+    Vector3 worldCoordinates;
 
-
-    public HexWide(final float edgeSize, final float posX, final float posY)
+    public HexWide(final float edgeSize, final float centreX, final float centreY, final OrthographicCamera orthographicCamera)
     {
+        this.orthographicCamera = orthographicCamera;
         this.edgeSize = edgeSize;
         altitudeSize = edgeSize * 0.866025403784439f;
-        this.posX = posX;
-        this.posY = posY;
+        this.posX = centreX;
+        this.posY = centreY;
         visible=true;
-        setBounds(posX-edgeSize,posY-altitudeSize,edgeSize*2,altitudeSize*2);//posX gives the centre so need  to offset that
+        setBounds(centreX-edgeSize,centreY-altitudeSize,edgeSize*2,altitudeSize*2);//posX gives the centre so need  to offset that
 
         this.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                worldCoordinates = orthographicCamera.unproject(new Vector3(x,y,0));
+                x=worldCoordinates.x;
+                y=orthographicCamera.viewportHeight-worldCoordinates.y;
                 blue++;
-                if(x>posX&&x<posX+edgeSize*2&&y>posY&&y<posY+altitudeSize*2||true)
-                {
+                if(x>posX-edgeSize&&x<posX+edgeSize&&y>posY-altitudeSize&&y<posY+altitudeSize){
                     text1=" in square ";
-//this has already implicitly tested if the touch is within the bounding rect, assuming the tapSquare is bounding
-//test if touch is within smaller than bounding circle
-                    if (pointInCircle(posX, posY, edgeSize, x, y)) {
-//test angle
+                    if (pointInCircle(posX, posY, altitudeSize,x, y)) {
                         text2=" in circle ";
-//returns sector of the hex touch landed in approx ( could technically be outside the hex but still in a sort of projection of that sector)
-//sector 0 will range from the 9 o’clock position to the 11 o’clock position, sector 1 from the 11 o’clock to 1 o’clock position and the sectors continue like that clockwise.
                         approxSector = getApproxSector(y, posY, x, posX);
-
-//if angle does not prove touch is in hex then test the corner case that the angle indicates the touch might be in
-//if the touch is in approxSector 1 or 4 we know it is deffo in the hex because these sectors are flush with the bounding box and we already know the touch is in the bounding box. If it’s in some other sector we need more tests
+                    }
+                    else{
+                        text2=" not in circle but might be in hex... ";
                         if (approxSector == 1 || approxSector == 4) {
                             selectedSector = approxSector;
-                        } else //sector is something other than 1 or 4
-                        {
-                            if (approxSector == 5)//if approxSector is the bottom left use this test
-                            {//if touch point(relative to bottom left corner of hex) y coord is more than given formula then it is inside the hex
+                            text2=" in hex ";
+                        }
+                        else{
+                            if (approxSector == 5){
                                 if (y - (posY) > ((-x - (posX)) * altitudeSize / edgeSize) + altitudeSize) {
                                     selectedSector = approxSector;
                                 }
-                            } else if (approxSector == 0) { //top left
+                            }
+                            else if (approxSector == 0) {
                                 if (y - (posY) < ((x - (posX)) * altitudeSize / edgeSize) + altitudeSize) {
                                     selectedSector = approxSector;
                                 }
-                            } else if (approxSector == 2) { //top right
+                            }
+                            else if (approxSector == 2) {
                                 if (y - (posY) < ((-x - (posX)) * altitudeSize / edgeSize) + altitudeSize * 5) {
                                     selectedSector = approxSector;
-
                                 }
-                            } else if (approxSector == 3) { //bottom right
+                            }
+                            else if (approxSector == 3) {
                                 if (y - (posY) > ((-x - (posX)) * altitudeSize / edgeSize) + altitudeSize * 3) {
                                     selectedSector = approxSector;
                                 }
-                            } else {//if no corner case is true then the touch is not in the hex, return 6 to indicate this, but do not set selectedSector to 6
-                                //return 6;
-                                approxSector = 6;
                             }
-
+                            else{
+                                approxSector = 6;
+                                text2=" not in hex ";
+                            }
                         }
                     }
-                    else
-                    {
-                        text2=" ";
-                    }
-                    //return selectedSector;
                 }
-                else
-                {
+                else{
+                    text1=" not in square";
                     blue=0;
-                    text1=" ";
                 }
-                text = "" + selectedSector + " - " + x + " - " + y;
+                text = "" + selectedSector + " - " + x+" / wx "+worldCoordinates.x + " - " + y+" / wy "+(orthographicCamera.viewportHeight-worldCoordinates.y);
             }
         });
 
@@ -139,12 +135,15 @@ public class HexWide extends Actor{
 
         if (visible) {
             //sr.begin(ShapeRenderer.ShapeType.Line);
+            orthographicCamera.update();
+            renderer.setProjectionMatrix(orthographicCamera.combined);
+
             sr.setColor(0,100,40*blue,1);
             drawWideHex(sr,posX,posY,edgeSize);
             //renderer.rect(posX-edgeSize,posY-altitudeSize,edgeSize*2,altitudeSize*2);
             //sr.end();
             spriteBatch.begin();
-            font.draw(spriteBatch, "Hello World!"+text+text1+text2, 10, 10);
+            font.draw(spriteBatch, "Hello World! "+" x "+posX +" y "+ posY+ " edge "+edgeSize+text+text1+text2, posX, posY);
 
             spriteBatch.end();
 

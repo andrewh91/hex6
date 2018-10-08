@@ -1,5 +1,6 @@
 package com.gmail.andrewahughes.hex5;
 
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 /**
@@ -10,9 +11,10 @@ public class HexWideField
 {
 public float edgeSize;
 public int noOfColumns,noOfRows ;
+
 HexWide hexWideArray[];
 
-        public HexWideField(int posX, int posY, int width, int height,int noOfRows, int noOfColumns)
+        public HexWideField(int posX, int posY, int width, int height, int noOfRows, int noOfColumns, OrthographicCamera orthographicCamera)
         {
         this.edgeSize = deriveEdgeSize(width, height, noOfRows, noOfColumns);
         this.noOfColumns=noOfColumns;
@@ -27,7 +29,7 @@ HexWide hexWideArray[];
         {
         for(int j=0;j<noOfRows;j++)
         {
-        hexWideArray[noOfHexes] = new HexWide(edgeSize,(float)(posX+marginX+(0.5*edgeSize+((j+1)*1.5*edgeSize))-edgeSize),(float)(posY+marginY+(edgeSize*0.866025403784439*2)*(i+1)+(edgeSize*0.866025403784439)*(j%2)));
+        hexWideArray[noOfHexes] = new HexWide(edgeSize,(float)(posX+marginX+(0.5*edgeSize+((j+1)*1.5*edgeSize))-edgeSize),(float)(posY+marginY+(edgeSize*0.866025403784439*2)*(i+1)+(edgeSize*0.866025403784439)*(j%2)),orthographicCamera);
         noOfHexes++;
         }
         }
@@ -55,7 +57,79 @@ public float deriveEdgeSize(int width, int height,int noOfRows, int noOfColumns)
         edgeSize=(float)(hexHeight/0.866025403784439/2);
         }
         return edgeSize;
-        }
 }
+
+public int[] getAdjacent(int hex, int noOfColumns, int noOfRows)
+{
+        int totalHexes = noOfColumns*noOfRows;
+        int[] adjacentArray=new int[6];
+        int i=0;
+        if(hex+noOfColumns<totalHexes)
+        {
+                adjacentArray[i]=hex+noOfColumns;
+                i++;
+        }
+        if(hex%noOfColumns<noOfColumns-1)
+        {
+                if(hex%2==0)
+                {
+
+                        adjacentArray[i]=hex+1;
+                        i++;
+                }
+                else if(hex+1+noOfColumns<totalHexes)
+                {
+                        adjacentArray[i]=hex+1+noOfColumns;
+                        i++;
+                }
+        }
+        if(hex%noOfColumns<noOfColumns-1)
+        {
+                if(hex%2==1)
+                {
+                        adjacentArray[i]=hex+1;
+                        i++;
+                }
+                else if(hex+1-noOfColumns>0)
+                {
+                        adjacentArray[i]=hex+1-noOfColumns;
+                        i++;
+                }
+        }
+        if(hex-noOfColumns>=0)
+        {
+                adjacentArray[i]=hex-noOfColumns;
+                i++;
+        }
+        if(hex%noOfColumns>0)
+        {
+                if(hex%2==1)
+                {
+                        adjacentArray[i]=hex-1;;
+                        i++;
+                }
+                else if(hex-1-noOfColumns>=0)
+                {
+                        adjacentArray[i]=hex-1-noOfColumns;
+                        i++;
+                }
+        }
+        if(hex%noOfColumns>0)
+        {
+                if(hex%2==0)
+                {
+                        adjacentArray[i]=hex-1;
+                        i++;
+                }
+                else if(hex-1+noOfColumns<totalHexes)
+                {
+                        adjacentArray[i]=hex-1+noOfColumns;
+                        i++;
+                }
+        }
+        return adjacentArray;
+}
+}
+
 
 
