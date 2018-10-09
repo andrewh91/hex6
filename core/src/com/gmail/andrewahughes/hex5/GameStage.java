@@ -30,6 +30,7 @@ public class GameStage extends Stage {
     public Image pauseImg1;
     HexWide hexWide ;
     HexWideField hexWideField ;
+    RectTest rectTest;
     Viewport viewport;
     OrthographicCamera orthographicCamera ;
     Vector2 v1,v2,v3,v4 ;
@@ -48,6 +49,9 @@ public class GameStage extends Stage {
         hexWide= new HexWide(150,150,200,orthographicCamera);
         this.addActor(hexWide);
         hexWideField= new HexWideField(50,50,1000,500,4,4,orthographicCamera);
+        rectTest = new RectTest(100,100,400,300,orthographicCamera);
+        this.addActor(rectTest);
+
         this.stageInterface =stageInterface;
         //this.addActor(hexWide);
         Table table = new Table();
@@ -99,6 +103,8 @@ public class GameStage extends Stage {
             this.act();
             hexWide.draw(renderer);
             hexWideField.draw(renderer);
+
+            rectTest.draw(renderer);
 
             renderer.end();
 

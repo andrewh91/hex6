@@ -52,9 +52,11 @@ public class HexWide extends Actor{
         this.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                x=Gdx.input.getX();
+                y=Gdx.input.getY();
                 worldCoordinates = orthographicCamera.unproject(new Vector3(x,y,0));
                 x=worldCoordinates.x;
-                y=orthographicCamera.viewportHeight-worldCoordinates.y;
+                y=worldCoordinates.y;
                 blue++;
                 if(x>posX-edgeSize&&x<posX+edgeSize&&y>posY-altitudeSize&&y<posY+altitudeSize){
                     text1=" in square ";
@@ -135,8 +137,6 @@ public class HexWide extends Actor{
 
         if (visible) {
             //sr.begin(ShapeRenderer.ShapeType.Line);
-            orthographicCamera.update();
-            renderer.setProjectionMatrix(orthographicCamera.combined);
 
             sr.setColor(0,100,40*blue,1);
             drawWideHex(sr,posX,posY,edgeSize);
