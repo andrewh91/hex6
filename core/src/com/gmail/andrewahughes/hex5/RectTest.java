@@ -28,18 +28,15 @@ public class RectTest extends Actor{
     String text1 = new String();
     String text2 = new String();
     SpriteBatch spriteBatch = new SpriteBatch();
-    OrthographicCamera orthographicCamera;
 
     private ShapeRenderer renderer = new ShapeRenderer();//it’s probably better to pass this in rather than make a new shapeRenderer for each hex?
 
     public boolean visible ;
     public float px,py,width,height;
 
-    Vector3 worldCoordinates;
 
-    public RectTest(final float px, final float py, final float width , final float height, final OrthographicCamera orthographicCamera)
+    public RectTest(final float px, final float py, final float width , final float height)
     {
-        this.orthographicCamera = orthographicCamera;
         visible=true;
         setBounds(px,py,width,height);//posX gives the centre so need  to offset that
         this.px=px;
@@ -50,15 +47,15 @@ public class RectTest extends Actor{
         this.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                x=Gdx.input.getX();
-                y=Gdx.input.getY();
+                //x=Gdx.input.getX();
+                //y=Gdx.input.getY();
                 text = "  x "  + x+" - y " + y ;
 
-                worldCoordinates = orthographicCamera.unproject(new Vector3(x,y,0));
-                x=worldCoordinates.x;
-                y=worldCoordinates.y;
+                //worldCoordinates = orthographicCamera.unproject(new Vector3(x,y,0));
+                //x=worldCoordinates.x;
+                //y=worldCoordinates.y;
                 blue++;
-                if(x>px&&x<px+width&&y>py&&y<py+height) {
+                if(x>0&&x<0+width&&y>0&&y<0+height) {
                     text2 = " in square ";
                 }
                 else{

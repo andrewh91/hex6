@@ -3,6 +3,7 @@ package com.gmail.andrewahughes.hex5;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -20,6 +21,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
 
 import de.golfgl.gdxgamesvcs.GameServiceException;
 import de.golfgl.gdxgamesvcs.IGameServiceClient;
@@ -55,16 +57,19 @@ public class GdxGameSvcsApp extends ApplicationAdapter implements IGameServiceLi
     private TextureAtlas atlas;
     private TextField scoreFillin;
     private TextField cloudData;
+    OrthographicCamera cam;
+    ExtendViewport extendViewport;
 
     @Override
     public void create() {
-
+        cam=new OrthographicCamera();
+        extendViewport = new ExtendViewport(800,450);
         badlogic = new Texture("badlogic.jpg");
-        gameStage = new GameStage(new ExtendViewport(800, 450),badlogic,this);
-        gamePauseStage = new GamePauseStage(new ExtendViewport(800, 450),badlogic,this);
+        gameStage = new GameStage(extendViewport,badlogic,this);
+        gamePauseStage = new GamePauseStage(extendViewport,badlogic,this);
         //Gdx.input.setInputProcessor(gameStage);
 
-        mainStage = new Stage(new ExtendViewport(800, 450));
+        mainStage = new Stage(extendViewport);
         Gdx.input.setInputProcessor(mainStage);
         Gdx.input.setCatchBackKey(true);
 

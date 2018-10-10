@@ -28,7 +28,6 @@ public class HexWide extends Actor{
     String text1 = new String();
     String text2 = new String();
     SpriteBatch spriteBatch = new SpriteBatch();
-    OrthographicCamera orthographicCamera;
 
     private ShapeRenderer renderer = new ShapeRenderer();//it’s probably better to pass this in rather than make a new shapeRenderer for each hex?
 
@@ -37,11 +36,9 @@ public class HexWide extends Actor{
     public float posX, posY;
     public boolean visible ;
 
-    Vector3 worldCoordinates;
 
-    public HexWide(final float edgeSize, final float centreX, final float centreY, final OrthographicCamera orthographicCamera)
+    public HexWide(final float edgeSize, final float centreX, final float centreY)
     {
-        this.orthographicCamera = orthographicCamera;
         this.edgeSize = edgeSize;
         altitudeSize = edgeSize * 0.866025403784439f;
         this.posX = centreX;
@@ -52,11 +49,11 @@ public class HexWide extends Actor{
         this.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                x=Gdx.input.getX();
-                y=Gdx.input.getY();
-                worldCoordinates = orthographicCamera.unproject(new Vector3(x,y,0));
-                x=worldCoordinates.x;
-                y=worldCoordinates.y;
+                //x=Gdx.input.getX();
+                //y=Gdx.input.getY();
+                //worldCoordinates = orthographicCamera.unproject(new Vector3(x,y,0));
+                //x=worldCoordinates.x;
+                //y=worldCoordinates.y;
                 blue++;
                 if(x>posX-edgeSize&&x<posX+edgeSize&&y>posY-altitudeSize&&y<posY+altitudeSize){
                     text1=" in square ";
@@ -102,7 +99,7 @@ public class HexWide extends Actor{
                     text1=" not in square";
                     blue=0;
                 }
-                text = "" + selectedSector + " - " + x+" / wx "+worldCoordinates.x + " - " + y+" / wy "+(orthographicCamera.viewportHeight-worldCoordinates.y);
+                text = "" + selectedSector + " - " + x+ " - " + y;
             }
         });
 

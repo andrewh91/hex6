@@ -32,7 +32,6 @@ public class GameStage extends Stage {
     HexWideField hexWideField ;
     RectTest rectTest;
     Viewport viewport;
-    OrthographicCamera orthographicCamera ;
     Vector2 v1,v2,v3,v4 ;
 
 
@@ -44,12 +43,11 @@ public class GameStage extends Stage {
         v2=new Vector2(110,110);
         v3=new Vector2(50,50);
         v4=new Vector2(100,100);
-        orthographicCamera = new OrthographicCamera(viewport.getScreenWidth(),viewport.getScreenHeight());
-        orthographicCamera.translate(viewport.getScreenWidth()/2,viewport.getScreenHeight()/2);
-        hexWide= new HexWide(150,150,200,orthographicCamera);
+        viewport.getCamera().translate(viewport.getScreenWidth()/2,viewport.getScreenHeight()/2,0);
+        hexWide= new HexWide(150,150,200);
         this.addActor(hexWide);
-        hexWideField= new HexWideField(50,50,1000,500,4,4,orthographicCamera);
-        rectTest = new RectTest(100,100,400,300,orthographicCamera);
+        hexWideField= new HexWideField(50,50,1000,500,4,4);
+        rectTest = new RectTest(400,100,50,300);
         this.addActor(rectTest);
 
         this.stageInterface =stageInterface;
@@ -90,14 +88,14 @@ public class GameStage extends Stage {
 
             Gdx.gl.glClearColor(0.9f*black, 0.9f*black, 0.7f*black, 1);
             Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-            orthographicCamera.update();
-            renderer.setProjectionMatrix(orthographicCamera.combined);
+            viewport.getCamera().update();
+            renderer.setProjectionMatrix(viewport.getCamera().combined);
             renderer.begin(ShapeRenderer.ShapeType.Line);
             renderer.setColor(Color.BLUE);
             //renderer.line(viewport.unproject(v1),viewport.unproject(v2));
             //renderer.setColor(Color.RED);
             //renderer.line(v3,v4);
-            renderer.rect(50,50,1000,500);
+            renderer.rect(10,10,780,380);
             drawWideHex(renderer,150,100,90);
             drawTallHex(renderer,70,200,70);
             this.act();
