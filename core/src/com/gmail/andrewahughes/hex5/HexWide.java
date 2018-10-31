@@ -27,6 +27,7 @@ public class HexWide extends Actor{
     String text = new String();
     String text1 = new String();
     String text2 = new String();
+    String indexNo = new String();
     SpriteBatch spriteBatch = new SpriteBatch();
 
     private ShapeRenderer renderer = new ShapeRenderer();//it’s probably better to pass this in rather than make a new shapeRenderer for each hex?
@@ -37,8 +38,9 @@ public class HexWide extends Actor{
     public boolean visible ;
 
 
-    public HexWide(final float edgeSize, final float centreX, final float centreY)
+    public HexWide(final float edgeSize, final float centreX, final float centreY,int index)
     {
+        indexNo = ""+index;
         this.edgeSize = edgeSize;
         altitudeSize = edgeSize * 0.866025403784439f;
         this.posX = centreX;
@@ -139,10 +141,19 @@ public class HexWide extends Actor{
             drawWideHex(sr,posX,posY,edgeSize);
             //renderer.rect(posX-edgeSize,posY-altitudeSize,edgeSize*2,altitudeSize*2);
             //sr.end();
-            spriteBatch.begin();
-            font.draw(spriteBatch, "Hello World! "+" x "+posX +" y "+ posY+ " edge "+edgeSize+text+text1+text2, posX, posY);
 
-            spriteBatch.end();
+        }
+    }
+
+    public void drawSprites(SpriteBatch sb) {
+        act(Gdx.graphics.getDeltaTime());
+
+        if (visible) {
+            //sr.begin(ShapeRenderer.ShapeType.Line);
+
+
+            font.draw(sb, "a "+indexNo+" x "+(int)posX +" y "+ (int)posY+ " edge "+(int)edgeSize+text+text1+text2, posX, posY);
+
 
 
         }

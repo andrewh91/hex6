@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
@@ -25,6 +26,7 @@ public class GameStage extends Stage {
     private boolean visible = false;
     private boolean pause = false;
     private ShapeRenderer renderer = new ShapeRenderer();
+    SpriteBatch spriteBatch = new SpriteBatch();
     public StageInterface stageInterface;
     public float black=1.0f;
     public Image pauseImg1;
@@ -43,10 +45,11 @@ public class GameStage extends Stage {
         v2=new Vector2(110,110);
         v3=new Vector2(50,50);
         v4=new Vector2(100,100);
-        viewport.getCamera().translate(viewport.getScreenWidth()/2,viewport.getScreenHeight()/2,0);
-        hexWide= new HexWide(150,150,200);
+        //viewport.getCamera().translate(viewport.getScreenWidth()/2,viewport.getScreenHeight()/2,0);
+        //viewport.update(viewport.getScreenWidth(),viewport.getScreenHeight(),true);
+        hexWide= new HexWide(150,150,200,0);
         this.addActor(hexWide);
-        hexWideField= new HexWideField(50,50,1000,500,4,4);
+        hexWideField= new HexWideField(50,50,700,350,4,4);
         rectTest = new RectTest(400,100,50,300);
         this.addActor(rectTest);
 
@@ -95,7 +98,7 @@ public class GameStage extends Stage {
             //renderer.line(viewport.unproject(v1),viewport.unproject(v2));
             //renderer.setColor(Color.RED);
             //renderer.line(v3,v4);
-            renderer.rect(10,10,780,380);
+            renderer.rect(10,10,780,450);
             drawWideHex(renderer,150,100,90);
             drawTallHex(renderer,70,200,70);
             this.act();
@@ -105,6 +108,11 @@ public class GameStage extends Stage {
             rectTest.draw(renderer);
 
             renderer.end();
+            spriteBatch.setProjectionMatrix(viewport.getCamera().combined);
+            spriteBatch.begin();
+            hexWide.drawSprites(spriteBatch);
+            hexWideField.drawSprites(spriteBatch);
+            spriteBatch.end();
 
 
 

@@ -21,6 +21,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
+import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 import de.golfgl.gdxgamesvcs.GameServiceException;
@@ -58,18 +59,18 @@ public class GdxGameSvcsApp extends ApplicationAdapter implements IGameServiceLi
     private TextField scoreFillin;
     private TextField cloudData;
     OrthographicCamera cam;
-    ExtendViewport extendViewport;
+    StretchViewport stretchViewport;
 
     @Override
     public void create() {
         cam=new OrthographicCamera();
-        extendViewport = new ExtendViewport(800,450);
+        stretchViewport = new StretchViewport(1280,720);
         badlogic = new Texture("badlogic.jpg");
-        gameStage = new GameStage(extendViewport,badlogic,this);
-        gamePauseStage = new GamePauseStage(extendViewport,badlogic,this);
+        gameStage = new GameStage(stretchViewport,badlogic,this);
+        gamePauseStage = new GamePauseStage(stretchViewport,badlogic,this);
         //Gdx.input.setInputProcessor(gameStage);
 
-        mainStage = new Stage(extendViewport);
+        mainStage = new Stage(stretchViewport);
         Gdx.input.setInputProcessor(mainStage);
         Gdx.input.setCatchBackKey(true);
 
