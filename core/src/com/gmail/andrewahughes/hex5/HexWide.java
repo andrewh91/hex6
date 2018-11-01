@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 import java.awt.Rectangle;
@@ -18,15 +19,17 @@ import java.awt.Rectangle;
  * Created by Andrew Hughes on 26/09/2018.
  */
 
-public class HexWide extends Actor{
+public class HexWide extends Actor {
     int selectedSector;
     int approxSector;
-    int blue=0;
+    int blue = 0;
 
     BitmapFont font = new BitmapFont();
     String text = new String();
     String text1 = new String();
     String text2 = new String();
+    String text3 = new String();
+
     String indexNo = new String();
     SpriteBatch spriteBatch = new SpriteBatch();
 
@@ -35,18 +38,19 @@ public class HexWide extends Actor{
     public final float edgeSize;
     public final float altitudeSize;
     public float posX, posY;
-    public boolean visible ;
+    public boolean visible;
+
+    public int touchX = 0, touchY = 0, touchRadius = 10;
 
 
-    public HexWide(final float edgeSize, final float centreX, final float centreY,int index)
-    {
-        indexNo = ""+index;
+    public HexWide(final float edgeSize, final float centreX, final float centreY, final int index, final GameStage gs) {
+        indexNo = "" + index;
         this.edgeSize = edgeSize;
         altitudeSize = edgeSize * 0.866025403784439f;
         this.posX = centreX;
         this.posY = centreY;
-        visible=true;
-        setBounds(centreX-edgeSize,centreY-altitudeSize,edgeSize*2,altitudeSize*2);//posX gives the centre so need  to offset that
+        visible = true;
+        setBounds(centreX - edgeSize, centreY - altitudeSize, edgeSize * 2, altitudeSize * 2);//posX gives the centre so need  to offset that
 
         this.addListener(new ClickListener() {
             @Override
@@ -56,56 +60,89 @@ public class HexWide extends Actor{
                 //worldCoordinates = orthographicCamera.unproject(new Vector3(x,y,0));
                 //x=worldCoordinates.x;
                 //y=worldCoordinates.y;
-                blue++;
-                if(x>posX-edgeSize&&x<posX+edgeSize&&y>posY-altitudeSize&&y<posY+altitudeSize){
-                    text1=" in square ";
-                    if (pointInCircle(posX, posY, altitudeSize,x, y)) {
-                        text2=" in circle ";
-                        approxSector = getApproxSector(y, posY, x, posX);
-                    }
-                    else{
-                        text2=" not in circle but might be in hex... ";
-                        if (approxSector == 1 || approxSector == 4) {
-                            selectedSector = approxSector;
-                            text2=" in hex ";
-                        }
-                        else{
-                            if (approxSector == 5){
-                                if (y - (posY) > ((-x - (posX)) * altitudeSize / edgeSize) + altitudeSize) {
-                                    selectedSector = approxSector;
-                                }
-                            }
-                            else if (approxSector == 0) {
-                                if (y - (posY) < ((x - (posX)) * altitudeSize / edgeSize) + altitudeSize) {
-                                    selectedSector = approxSector;
-                                }
-                            }
-                            else if (approxSector == 2) {
-                                if (y - (posY) < ((-x - (posX)) * altitudeSize / edgeSize) + altitudeSize * 5) {
-                                    selectedSector = approxSector;
-                                }
-                            }
-                            else if (approxSector == 3) {
-                                if (y - (posY) > ((-x - (posX)) * altitudeSize / edgeSize) + altitudeSize * 3) {
-                                    selectedSector = approxSector;
-                                }
-                            }
-                            else{
-                                approxSector = 6;
-                                text2=" not in hex ";
-                            }
-                        }
-                    }
-                }
-                else{
-                    text1=" not in square";
-                    blue=0;
-                }
-                text = "" + selectedSector + " - " + x+ " - " + y;
+
+                touchLogic( event,  x,  y);
+                    gs.setSelected(index,selectedSector);
+                    //approx sector will indicate where the potential overlapis, need to cjeck if the is a hex there then select the hex
+
             }
         });
 
     }
+ void touchLogic(InputEvent event, float x, float y)
+{
+
+    touchX =(int)x;
+    touchY=(int)y;
+    blue++;
+    if(x >0&&x<edgeSize *2&&y >0&&y<altitudeSize *2)
+    {
+        text1 = " in square ";
+        approxSector = getApproxSector(y, altitudeSize, x, edgeSize);
+        if (pointInCircle(edgeSize, altitudeSize, altitudeSize, x, y)) {
+            text2 = " in circle ";
+            selectedSector = approxSector;
+        } else {
+            text2 = " not in circle ";
+            if (approxSector == 1 || approxSector == 4) {
+                selectedSector = approxSector;
+                text2 = " in hex ";
+            } else {//the origin for the touch is the bottom left of the bounding box
+                if (approxSector == 5) {
+                    if (y > -x * altitudeSize * 2 / edgeSize + altitudeSize) {// translate up one altitude
+                        selectedSector = approxSector;
+                        text1 = " corner case ";
+                        text2 = " in hex ";
+                    } else {
+                        selectedSector = 15;
+                        text2 = " not in hex ";
+                        blue = 0;
+                    }
+                } else if (approxSector == 0) {
+                    if (y < x * altitudeSize * 2 / edgeSize + altitudeSize) {
+                        selectedSector = approxSector;
+                        text1 = " corner case ";
+                        text2 = " in hex ";
+
+                    } else {
+                        selectedSector = 10;
+                        text2 = " not in hex ";
+                        blue = 0;
+
+                    }
+                } else if (approxSector == 2) {
+                    if (y < -x * altitudeSize * 2 / edgeSize + altitudeSize * 5) {// need to translate to the right, but actually ee just translate up by altitude size times 5
+                        selectedSector = approxSector;
+                        text1 = " corner case ";
+                        text2 = " in hex ";
+
+                    } else {
+                        selectedSector = 12;
+                        text2 = " not in hex ";
+                        blue = 0;
+                    }
+                } else if (approxSector == 3) {
+                    if (y > x * altitudeSize * 2 / edgeSize - altitudeSize * 3) {
+                        selectedSector = approxSector;
+                        text1 = " corner case ";
+                        text2 = " in hex ";
+
+                    } else {
+                        selectedSector = 13;
+                        text2 = " not in hex ";
+                        blue = 0;
+                    }
+                }
+            }
+        }
+    } else
+    {
+        text1 = " not in square";
+        blue = 0;
+    }
+
+    text =" approxsector:"+approxSector +" sector:"+selectedSector +" - x:"+(int)x +" - y:"+(int)y;
+}
     public boolean pointInCircle(float circleOriginX, float circleOriginY, float radius, float pointX, float pointY)
     {//returns true if given circle contains given point
         if((pointX - circleOriginX)*(pointX - circleOriginX) + (pointY - circleOriginY)*(pointY - circleOriginY)<radius*radius)
@@ -139,6 +176,12 @@ public class HexWide extends Actor{
 
             sr.setColor(0,100,40*blue,1);
             drawWideHex(sr,posX,posY,edgeSize);
+            sr.circle(posX,posY,altitudeSize);
+            sr.setColor(Color.RED);
+            sr.circle(touchX+posX-edgeSize,touchY+posY-altitudeSize,touchRadius);
+
+
+
             //renderer.rect(posX-edgeSize,posY-altitudeSize,edgeSize*2,altitudeSize*2);
             //sr.end();
 

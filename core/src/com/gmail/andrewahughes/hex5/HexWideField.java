@@ -11,11 +11,11 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 public class HexWideField
 {
 public float edgeSize;
-public int noOfColumns,noOfRows ;
+public int noOfColumns,noOfRows ,noOfHexes;
 
 HexWide hexWideArray[];
 
-        public HexWideField(int posX, int posY, int width, int height, int noOfRows, int noOfColumns) {
+        public HexWideField(int posX, int posY, int width, int height, int noOfRows, int noOfColumns,final GameStage gs) {
                 this.edgeSize = deriveEdgeSize(width, height, noOfRows, noOfColumns);
                 this.noOfColumns = noOfColumns;
                 this.noOfRows = noOfRows;
@@ -33,14 +33,14 @@ HexWide hexWideArray[];
                 }
 
 
-        int noOfHexes=0;
+         noOfHexes=0;
 //create a field of hexes starting from the bottom left, moving right across the columns the back to the far left and up one then start again
-        for(int i=0;i<noOfColumns;i++)
+        for(int i=0;i<noOfRows;i++)
         {
-        for(int j=0;j<noOfRows;j++)
+        for(int j=0;j<noOfColumns;j++)
         {
         hexWideArray[noOfHexes] = new HexWide(edgeSize,(float)(posX+marginX+(0.5*edgeSize+((j+1)*1.5*edgeSize))-edgeSize),
-                (float)(posY+marginY+(edgeSize*0.866025403784439*2)*(i+1)+(edgeSize*0.866025403784439)*(j%2)),noOfHexes);
+                (float)(posY+marginY-(edgeSize*0.866025403784439)+(edgeSize*0.866025403784439*2)*(i+1)+(edgeSize*0.866025403784439)*(j%2)),noOfHexes,gs);
         noOfHexes++;
         }
         }
@@ -56,6 +56,10 @@ public void draw(ShapeRenderer sr)
         {
                 hexWideArray[i].draw(sr);
         }
+}
+public int getNoOfHexes()
+{
+        return noOfHexes;
 }
 
 

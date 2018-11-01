@@ -17,6 +17,7 @@ public class AndroidLauncher extends AndroidApplication {
         super.onCreate(savedInstanceState);
         AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
 
+        config.useImmersiveMode=true;
         GdxGameSvcsApp game = new GdxGameSvcsApp();
         this.gpgsClient = new GpgsClient() {
             @Override

@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
@@ -36,6 +37,11 @@ public class GameStage extends Stage {
     Viewport viewport;
     Vector2 v1,v2,v3,v4 ;
 
+    BitmapFont font = new BitmapFont();
+    String text = new String();
+
+    int selectedSector, selectedHex;
+
 
 
     public GameStage(Viewport viewport, Texture texture,final StageInterface stageInterface) {
@@ -47,9 +53,10 @@ public class GameStage extends Stage {
         v4=new Vector2(100,100);
         //viewport.getCamera().translate(viewport.getScreenWidth()/2,viewport.getScreenHeight()/2,0);
         //viewport.update(viewport.getScreenWidth(),viewport.getScreenHeight(),true);
-        hexWide= new HexWide(150,150,200,0);
+        hexWide= new HexWide(390,640,360,0, this);
         this.addActor(hexWide);
-        hexWideField= new HexWideField(50,50,700,350,4,4);
+        hexWideField= new HexWideField(50,50,700,350,2,5,this);
+        addHexesToStage(hexWideField);
         rectTest = new RectTest(400,100,50,300);
         this.addActor(rectTest);
 
@@ -82,6 +89,11 @@ public class GameStage extends Stage {
 
         addActor(table);
     }
+    public void setSelected(int index, int sector)
+    {
+        selectedSector = sector;
+        selectedHex=index;
+    }
 
     @Override
     public void draw() {
@@ -98,7 +110,7 @@ public class GameStage extends Stage {
             //renderer.line(viewport.unproject(v1),viewport.unproject(v2));
             //renderer.setColor(Color.RED);
             //renderer.line(v3,v4);
-            renderer.rect(10,10,780,450);
+            renderer.rect(50,50,700,350);
             drawWideHex(renderer,150,100,90);
             drawTallHex(renderer,70,200,70);
             this.act();
@@ -112,6 +124,7 @@ public class GameStage extends Stage {
             spriteBatch.begin();
             hexWide.drawSprites(spriteBatch);
             hexWideField.drawSprites(spriteBatch);
+            font.draw(spriteBatch,text+ " hex "+selectedHex+" sector "+selectedSector,30,690);
             spriteBatch.end();
 
 
@@ -141,6 +154,14 @@ public class GameStage extends Stage {
         sr.line(originX - edgeSize , originY , originX - (edgeSize / 2) , (int)(originY - altitudeSize));
         sr.line(originX - (edgeSize / 2) , (int)(originY - altitudeSize),originX + (edgeSize / 2) , (int)(originY - altitudeSize));
 
+    }
+
+    public void addHexesToStage( HexWideField hwf)
+    {
+        for(int i=0;i<hwf.getNoOfHexes();i++)
+        {
+            addActor(hwf.hexWideArray[i]);
+        }
     }
 
     public void drawTallHex(ShapeRenderer sr, int originX, int originY, int edgeSize)
