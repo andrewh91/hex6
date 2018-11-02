@@ -22,7 +22,7 @@ import java.awt.Rectangle;
 public class HexWide extends Actor {
     int selectedSector;
     int approxSector;
-    int blue = 0;
+    int blue = 0,red =0;
 
     BitmapFont font = new BitmapFont();
     String text = new String();
@@ -38,7 +38,7 @@ public class HexWide extends Actor {
     public final float edgeSize;
     public final float altitudeSize;
     public float posX, posY;
-    public boolean visible;
+    public boolean visible,highlight = false;
 
     public int touchX = 0, touchY = 0, touchRadius = 10;
 
@@ -62,9 +62,15 @@ public class HexWide extends Actor {
                 //y=worldCoordinates.y;
 
                 touchLogic( event,  x,  y);
-                    gs.setSelected(index,selectedSector);
+                if(highlight)
+                {
+                    unhighlight(0);
+                }
+                else
+                {
+                    gs.setSelected(index, selectedSector);
                     //approx sector will indicate where the potential overlapis, need to cjeck if the is a hex there then select the hex
-
+                }
             }
         });
 
@@ -167,6 +173,17 @@ public class HexWide extends Actor {
         return approxSector;
     }
 
+    public void highlight(int value)
+    {
+        red = value;
+        highlight=true;
+    }
+    public void unhighlight(int value)
+    {
+        red = value;
+        blue=value;
+        highlight=false;
+    }
 
     public void draw(ShapeRenderer sr) {
         act(Gdx.graphics.getDeltaTime());
@@ -174,7 +191,7 @@ public class HexWide extends Actor {
         if (visible) {
             //sr.begin(ShapeRenderer.ShapeType.Line);
 
-            sr.setColor(0,100,40*blue,1);
+            sr.setColor(1*red,100,40*blue,1);
             drawWideHex(sr,posX,posY,edgeSize);
             sr.circle(posX,posY,altitudeSize);
             sr.setColor(Color.RED);

@@ -18,6 +18,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
+import java.util.ArrayList;
+
 
 /**
  * Created by Andrew Hughes on 13/09/2018.
@@ -41,6 +43,7 @@ public class GameStage extends Stage {
     String text = new String();
 
     int selectedSector, selectedHex;
+    public int noOfRows=3,noOfColumns=7;
 
 
 
@@ -55,7 +58,7 @@ public class GameStage extends Stage {
         //viewport.update(viewport.getScreenWidth(),viewport.getScreenHeight(),true);
         hexWide= new HexWide(390,640,360,0, this);
         this.addActor(hexWide);
-        hexWideField= new HexWideField(50,50,700,350,2,5,this);
+        hexWideField= new HexWideField(50,50,1180,620,noOfRows,noOfColumns,this);
         addHexesToStage(hexWideField);
         rectTest = new RectTest(400,100,50,300);
         this.addActor(rectTest);
@@ -91,9 +94,114 @@ public class GameStage extends Stage {
     }
     public void setSelected(int index, int sector)
     {
-        selectedSector = sector;
-        selectedHex=index;
+        int totalHexes = noOfColumns*noOfRows;
+        if(sector>9)//in the case of an overlap in the touch logic the sector would have 10 added to it's value to indicate that it is the hex's neighbour that is selected.
+        {//one of 4 adjacent hexes could be selected, work out which one it is with the selected sector
+//10 means the hex above and to the left of the given hex is selected, 
+//12 is above and to the right
+//13 below right 
+//15 below left
+
+//above left would be hex index -1
+//above right would be hex index +1
+//below right would be hex index - noOfColumns +1
+//below left would be hex index - noOfColumns -1
+//if hex is in an even column (the left most column is 0 which is even) 
+            if((index%noOfColumns)%2==0)
+            {
+                if(sector ==10)
+                {
+//if not on left edge AND not on top edge
+                    if(index%noOfColumns>0&&index+noOfColumns<totalHexes)
+                    {
+                        selectedHex = index -1;
+                    }
+                }
+                if(sector ==12)
+                {
+//if not on the right edge AND not on the top 
+                    if(index%noOfColumns<noOfColumns-1&&index+noOfColumns<totalHexes)
+                    {
+                        selectedHex = index+1;
+                    }
+                }
+                if(sector ==13)
+                {
+//if not on the right edge AND not on the bottom
+                    if(index%noOfColumns<noOfColumns-1&&index-noOfColumns>=0)
+                    {
+                        selectedHex  = index - noOfColumns +1;
+                    }
+                }
+                if(sector ==15)
+                {
+//if not on left edge AND not on bottom edge
+                    if(index%noOfColumns>0&&index-noOfColumns>=0)
+                    {
+                        selectedHex  =index - noOfColumns -1;
+                    }
+                }
+            }
+//else if the given hex is in an odd column;
+//above left would be hex index + noOfColumns -1
+//above right would be hex index + noOfColumns +1
+//below right would be hex index +1
+//below left would be hex index -1
+//if the given hex is in an even column;
+            else
+            {
+                if(sector ==10)
+                {
+//if not on left edge AND not on top edge
+                    if(index%noOfColumns>0&&index+noOfColumns<totalHexes)
+                    {
+                        selectedHex = index + noOfColumns -1;
+                    }
+                }
+                if(sector ==12)
+                {
+//if not on the right edge AND not on the top
+                    if(index%noOfColumns<noOfColumns-1&&index+noOfColumns<totalHexes)
+                    {
+                        selectedHex = index + noOfColumns +1;
+                    }
+                }
+                if(sector ==13)
+                {
+//if not on the right edge AND not on the bottom
+                    if(index%noOfColumns<noOfColumns-1&&index-noOfColumns>=0)
+                    {
+                        selectedHex  = index +1;
+                    }
+                }
+                if(sector ==15)
+                {
+//if not on left edge AND not on bottom edge
+                    if(index%noOfColumns>0&&index-noOfColumns>=0)
+                    {
+                        selectedHex  = index -1;
+                    }
+                }
+            }
+
+//  the touched sector will actually be the opposing sector to the given hex, so translate that
+
+            selectedSector = (sector+3-10)%6;
+
+        }
+        else
+        {
+            selectedSector = sector;
+            selectedHex=index;
+        }
+//get the adjacent hexes of the selected hex
+
+        ArrayList<Integer> adjacentArray;
+        adjacentArray = hexWideField.getAdjacent(selectedHex,noOfColumns, noOfRows);
+        hexWideField.highlightAdjacent(adjacentArray);
+        hexWideField.hexWideArray[selectedHex].highlight(200);
     }
+
 
     @Override
     public void draw() {
