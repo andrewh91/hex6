@@ -30,6 +30,13 @@ public class HexWide extends Actor {
     String text2 = new String();
     String text3 = new String();
 
+    String symbol0 = new String();
+    String symbol1 = new String();
+    String symbol2 = new String();
+    String symbol3 = new String();
+    String symbol4 = new String();
+    String symbol5 = new String();
+
     String indexNo = new String();
     SpriteBatch spriteBatch = new SpriteBatch();
 
@@ -38,13 +45,20 @@ public class HexWide extends Actor {
     public final float edgeSize;
     public final float altitudeSize;
     public float posX, posY;
-    public boolean visible,highlight = false;
+    public boolean visible,highlight,select = false;
 
     public int touchX = 0, touchY = 0, touchRadius = 10;
 
 
-    public HexWide(final float edgeSize, final float centreX, final float centreY, final int index, final GameStage gs) {
+    public HexWide(final float edgeSize, final float centreX, final float centreY, final int index, final GameStage gs, final Database db) {
         indexNo = "" + index;
+        text3 = db.getHex(index)[0]+" "+db.getHex(index)[1]+" "+db.getHex(index)[2]+" "+db.getHex(index)[3]+" "+db.getHex(index)[4]+" "+db.getHex(index)[5]+" ";
+        symbol0 = ""+db.getHex(index)[0];
+        symbol1 = ""+db.getHex(index)[1];
+        symbol2 = ""+db.getHex(index)[2];
+        symbol3 = ""+db.getHex(index)[3];
+        symbol4 = ""+db.getHex(index)[4];
+        symbol5 = ""+db.getHex(index)[5];
         this.edgeSize = edgeSize;
         altitudeSize = edgeSize * 0.866025403784439f;
         this.posX = centreX;
@@ -62,15 +76,9 @@ public class HexWide extends Actor {
                 //y=worldCoordinates.y;
 
                 touchLogic( event,  x,  y);
-                if(highlight)
-                {
-                    unhighlight(0);
-                }
-                else
-                {
                     gs.setSelected(index, selectedSector);
-                    //approx sector will indicate where the potential overlapis, need to cjeck if the is a hex there then select the hex
-                }
+                    //approx sector will indicate where the potential overlaps, need to check if the is a hex there then select the hex
+
             }
         });
 
@@ -80,7 +88,6 @@ public class HexWide extends Actor {
 
     touchX =(int)x;
     touchY=(int)y;
-    blue++;
     if(x >0&&x<edgeSize *2&&y >0&&y<altitudeSize *2)
     {
         text1 = " in square ";
@@ -102,7 +109,6 @@ public class HexWide extends Actor {
                     } else {
                         selectedSector = 15;
                         text2 = " not in hex ";
-                        blue = 0;
                     }
                 } else if (approxSector == 0) {
                     if (y < x * altitudeSize * 2 / edgeSize + altitudeSize) {
@@ -113,7 +119,6 @@ public class HexWide extends Actor {
                     } else {
                         selectedSector = 10;
                         text2 = " not in hex ";
-                        blue = 0;
 
                     }
                 } else if (approxSector == 2) {
@@ -125,7 +130,6 @@ public class HexWide extends Actor {
                     } else {
                         selectedSector = 12;
                         text2 = " not in hex ";
-                        blue = 0;
                     }
                 } else if (approxSector == 3) {
                     if (y > x * altitudeSize * 2 / edgeSize - altitudeSize * 3) {
@@ -136,7 +140,6 @@ public class HexWide extends Actor {
                     } else {
                         selectedSector = 13;
                         text2 = " not in hex ";
-                        blue = 0;
                     }
                 }
             }
@@ -144,7 +147,6 @@ public class HexWide extends Actor {
     } else
     {
         text1 = " not in square";
-        blue = 0;
     }
 
     text =" approxsector:"+approxSector +" sector:"+selectedSector +" - x:"+(int)x +" - y:"+(int)y;
@@ -181,8 +183,19 @@ public class HexWide extends Actor {
     public void unhighlight(int value)
     {
         red = value;
-        blue=value;
         highlight=false;
+    }
+
+    public void select(int value)
+    {
+        blue = value;
+        select=true;
+    }
+    public void unselect(int value)
+    {
+
+        blue=value;
+        select=false;
     }
 
     public void draw(ShapeRenderer sr) {
@@ -212,7 +225,10 @@ public class HexWide extends Actor {
             //sr.begin(ShapeRenderer.ShapeType.Line);
 
 
-            font.draw(sb, "a "+indexNo+" x "+(int)posX +" y "+ (int)posY+ " edge "+(int)edgeSize+text+text1+text2, posX, posY);
+            //font.draw(sb, "a "+indexNo+" x "+(int)posX +" y "+ (int)posY+ " edge "+(int)edgeSize+text+text1+text2, posX, posY);
+            font.draw(sb,  text3, posX, posY+20);
+            drawSymbols(sb,posX,posY,edgeSize*.7f,altitudeSize*.7f);
+
 
 
 
@@ -235,6 +251,15 @@ public class HexWide extends Actor {
 
     }
 
+    public void drawSymbols (SpriteBatch sb, float originX, float originY , float edgeSize, float altitudeSize)
+    {
+        font.draw(sb, ""+symbol0, originX - altitudeSize, (float)(originY+0.5*edgeSize));
+        font.draw(sb, ""+symbol1, originX, originY+edgeSize);
+        font.draw(sb, ""+symbol2, originX + altitudeSize, (float)(originY+0.5*edgeSize));
+        font.draw(sb, ""+symbol3, originX + altitudeSize, (float)(originY-0.5*edgeSize));
+        font.draw(sb, ""+symbol4, originX, originY-edgeSize);
+        font.draw(sb, ""+symbol5, originX-altitudeSize, (float)(originY-0.5*edgeSize));
+    }
 
 
 }

@@ -17,7 +17,7 @@ public int noOfColumns,noOfRows ,noOfHexes;
 
 HexWide hexWideArray[];
 
-        public HexWideField(int posX, int posY, int width, int height, int noOfRows, int noOfColumns,final GameStage gs) {
+        public HexWideField(int posX, int posY, int width, int height, int noOfRows, int noOfColumns,final GameStage gs, final Database db) {
                 this.edgeSize = deriveEdgeSize(width, height, noOfRows, noOfColumns);
                 this.noOfColumns = noOfColumns;
                 this.noOfRows = noOfRows;
@@ -42,7 +42,7 @@ HexWide hexWideArray[];
         for(int j=0;j<noOfColumns;j++)
         {
         hexWideArray[noOfHexes] = new HexWide(edgeSize,(float)(posX+marginX+(0.5*edgeSize+((j+1)*1.5*edgeSize))-edgeSize),
-                (float)(posY+marginY-(edgeSize*0.866025403784439)+(edgeSize*0.866025403784439*2)*(i+1)+(edgeSize*0.866025403784439)*(j%2)),noOfHexes,gs);
+                (float)(posY+marginY-(edgeSize*0.866025403784439)+(edgeSize*0.866025403784439*2)*(i+1)+(edgeSize*0.866025403784439)*(j%2)),noOfHexes,gs,db);
         noOfHexes++;
         }
         }
@@ -211,6 +211,16 @@ public float deriveEdgeSize(int width, int height,int noOfRows, int noOfColumns)
                         hexWideArray[array.get(i)].highlight(80);
                 }
         }
+
+        public void unhighlightAdjacent(ArrayList<Integer> array)
+        {
+                for(int i =0; i<array.size();i++)
+                {
+                        hexWideArray[array.get(i)].unhighlight(0);
+                }
+        }
+
+
 
 
 

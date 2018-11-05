@@ -35,6 +35,7 @@ public class GameStage extends Stage {
     public Image pauseImg1;
     HexWide hexWide ;
     HexWideField hexWideField ;
+    Database database;
     RectTest rectTest;
     Viewport viewport;
     Vector2 v1,v2,v3,v4 ;
@@ -42,7 +43,9 @@ public class GameStage extends Stage {
     BitmapFont font = new BitmapFont();
     String text = new String();
 
-    int selectedSector, selectedHex;
+    int selectedSector=-1, selectedHex=-1;
+    int selectedSector2=-1, selectedHex2=-1;
+
     public int noOfRows=3,noOfColumns=7;
 
 
@@ -56,9 +59,10 @@ public class GameStage extends Stage {
         v4=new Vector2(100,100);
         //viewport.getCamera().translate(viewport.getScreenWidth()/2,viewport.getScreenHeight()/2,0);
         //viewport.update(viewport.getScreenWidth(),viewport.getScreenHeight(),true);
-        hexWide= new HexWide(390,640,360,0, this);
+        database = new Database(31);
+        hexWide= new HexWide(390,640,360,0, this,database);
         this.addActor(hexWide);
-        hexWideField= new HexWideField(50,50,1180,620,noOfRows,noOfColumns,this);
+        hexWideField= new HexWideField(50,50,1180,620,noOfRows,noOfColumns,this, database);
         addHexesToStage(hexWideField);
         rectTest = new RectTest(400,100,50,300);
         this.addActor(rectTest);
@@ -92,9 +96,15 @@ public class GameStage extends Stage {
 
         addActor(table);
     }
+
+
     public void setSelected(int index, int sector)
     {
         int totalHexes = noOfColumns*noOfRows;
+        int proposedSelectedHex=-1;
+        int proposedSelectedSector=-1;
+
+//overlap
         if(sector>9)//in the case of an overlap in the touch logic the sector would have 10 added to it's value to indicate that it is the hex's neighbour that is selected.
         {//one of 4 adjacent hexes could be selected, work out which one it is with the selected sector
 //10 means the hex above and to the left of the given hex is selected, 
@@ -114,7 +124,7 @@ public class GameStage extends Stage {
 //if not on left edge AND not on top edge
                     if(index%noOfColumns>0&&index+noOfColumns<totalHexes)
                     {
-                        selectedHex = index -1;
+                        proposedSelectedHex = index -1;
                     }
                 }
                 if(sector ==12)
@@ -122,7 +132,7 @@ public class GameStage extends Stage {
 //if not on the right edge AND not on the top 
                     if(index%noOfColumns<noOfColumns-1&&index+noOfColumns<totalHexes)
                     {
-                        selectedHex = index+1;
+                        proposedSelectedHex = index+1;
                     }
                 }
                 if(sector ==13)
@@ -130,7 +140,7 @@ public class GameStage extends Stage {
 //if not on the right edge AND not on the bottom
                     if(index%noOfColumns<noOfColumns-1&&index-noOfColumns>=0)
                     {
-                        selectedHex  = index - noOfColumns +1;
+                        proposedSelectedHex = index - noOfColumns +1;
                     }
                 }
                 if(sector ==15)
@@ -138,7 +148,7 @@ public class GameStage extends Stage {
 //if not on left edge AND not on bottom edge
                     if(index%noOfColumns>0&&index-noOfColumns>=0)
                     {
-                        selectedHex  =index - noOfColumns -1;
+                        proposedSelectedHex =index - noOfColumns -1;
                     }
                 }
             }
@@ -155,7 +165,7 @@ public class GameStage extends Stage {
 //if not on left edge AND not on top edge
                     if(index%noOfColumns>0&&index+noOfColumns<totalHexes)
                     {
-                        selectedHex = index + noOfColumns -1;
+                        proposedSelectedHex = index + noOfColumns -1;
                     }
                 }
                 if(sector ==12)
@@ -163,7 +173,7 @@ public class GameStage extends Stage {
 //if not on the right edge AND not on the top
                     if(index%noOfColumns<noOfColumns-1&&index+noOfColumns<totalHexes)
                     {
-                        selectedHex = index + noOfColumns +1;
+                        proposedSelectedHex = index + noOfColumns +1;
                     }
                 }
                 if(sector ==13)
@@ -171,7 +181,7 @@ public class GameStage extends Stage {
 //if not on the right edge AND not on the bottom
                     if(index%noOfColumns<noOfColumns-1&&index-noOfColumns>=0)
                     {
-                        selectedHex  = index +1;
+                        proposedSelectedHex = index +1;
                     }
                 }
                 if(sector ==15)
@@ -179,28 +189,112 @@ public class GameStage extends Stage {
 //if not on left edge AND not on bottom edge
                     if(index%noOfColumns>0&&index-noOfColumns>=0)
                     {
-                        selectedHex  = index -1;
+                        proposedSelectedHex = index -1;
                     }
                 }
             }
 
 //  the touched sector will actually be the opposing sector to the given hex, so translate that
 
-            selectedSector = (sector+3-10)%6;
+            proposedSelectedSector= (sector+3-10)%6;
 
-        }
+        }//end overlap logic
         else
         {
-            selectedSector = sector;
-            selectedHex=index;
+            proposedSelectedSector= sector;
+            proposedSelectedHex=index;
         }
-//get the adjacent hexes of the selected hex
+//now we have stored the correct hex and sector
+//is the hex highlighted? - ergo is it adjacent to a selected hex? 
+        if(hexWideField.hexWideArray[proposedSelectedHex].highlight)
+        {
+            selectedHex2 = proposedSelectedHex; //set the second selection as this hex
+            selectedSector2 = proposedSelectedSector;
+            hexWideField.hexWideArray[selectedHex2].select(200);
+            hexWideField.hexWideArray[selectedHex2].unhighlight(0);
 
-        ArrayList<Integer> adjacentArray;
-        adjacentArray = hexWideField.getAdjacent(selectedHex,noOfColumns, noOfRows);
-        hexWideField.highlightAdjacent(adjacentArray);
-        hexWideField.hexWideArray[selectedHex].highlight(200);
+//compare match
+            if(database.compareSymbols(selectedHex,selectedSector,selectedHex2,selectedSector2))
+            {//if match unselect and unhighlight everything
+
+//unhighlight all the adjacents of the first selected hex 
+                ArrayList<Integer> adjacentArray;
+                adjacentArray = hexWideField.getAdjacent(selectedHex,noOfColumns, noOfRows);
+                hexWideField.unhighlightAdjacent(adjacentArray);
+
+
+                hexWideField.hexWideArray[selectedHex].unselect(0);
+                selectedHex=-1;
+                selectedSector=-1;
+
+                hexWideField.hexWideArray[selectedHex2].unselect(0);
+                selectedHex2=-1;
+                selectedSector2=-1;
+
+
+            }
+            else// no match, unselect latest hex
+            {
+
+                hexWideField.hexWideArray[selectedHex2].unselect(0);
+
+                // and re highlight it
+                hexWideField.hexWideArray[selectedHex2].highlight(255);
+
+
+                selectedHex2=-1;
+                selectedSector2=-1;
+            }
+        }
+//is the hex already selected?
+        else if(hexWideField.hexWideArray[proposedSelectedHex].select)
+        {
+//unselect it
+            hexWideField.hexWideArray[proposedSelectedHex].unselect(0);
+//unhighlight all the adjacents of the hex
+            ArrayList<Integer> adjacentArray;
+            adjacentArray = hexWideField.getAdjacent(selectedHex,noOfColumns, noOfRows);
+            hexWideField.unhighlightAdjacent(adjacentArray);
+
+            selectedHex=-1;
+            selectedSector=-1;
+        }
+        else if(selectedHex==-1) // no hex already selected, proposed hex is not already selected and not already highlighted
+        {
+//get the adjacent hexes of the selected hex
+            selectedHex = proposedSelectedHex;
+            selectedSector= proposedSelectedSector;
+            ArrayList<Integer> adjacentArray;
+            adjacentArray = hexWideField.getAdjacent(selectedHex,noOfColumns, noOfRows);
+            hexWideField.highlightAdjacent(adjacentArray);
+            hexWideField.hexWideArray[selectedHex].select(200);
+        }
+        //a hex is already selected but now some other hex is selected that is not adjacent nor the current hex
+        else
+        {
+
+//unhighlight all the adjacents of the first selected hex 
+            ArrayList<Integer> adjacentArray;
+            adjacentArray = hexWideField.getAdjacent(selectedHex,noOfColumns, noOfRows);
+            hexWideField.unhighlightAdjacent(adjacentArray);
+
+
+            hexWideField.hexWideArray[selectedHex].unselect(0);
+            selectedHex=-1;
+            selectedSector=-1;
+
+            hexWideField.hexWideArray[selectedHex2].unselect(0);
+            selectedHex2=-1;
+            selectedSector2=-1;
+        }
     }
+
+
+
+
+
+
+
 
 
     @Override
@@ -218,19 +312,19 @@ public class GameStage extends Stage {
             //renderer.line(viewport.unproject(v1),viewport.unproject(v2));
             //renderer.setColor(Color.RED);
             //renderer.line(v3,v4);
-            renderer.rect(50,50,700,350);
-            drawWideHex(renderer,150,100,90);
-            drawTallHex(renderer,70,200,70);
+            //renderer.rect(50,50,700,350);
+            //drawWideHex(renderer,150,100,90);
+            //drawTallHex(renderer,70,200,70);
             this.act();
-            hexWide.draw(renderer);
+            //hexWide.draw(renderer);
             hexWideField.draw(renderer);
 
-            rectTest.draw(renderer);
+            //rectTest.draw(renderer);
 
             renderer.end();
             spriteBatch.setProjectionMatrix(viewport.getCamera().combined);
             spriteBatch.begin();
-            hexWide.drawSprites(spriteBatch);
+            //hexWide.drawSprites(spriteBatch);
             hexWideField.drawSprites(spriteBatch);
             font.draw(spriteBatch,text+ " hex "+selectedHex+" sector "+selectedSector,30,690);
             spriteBatch.end();
