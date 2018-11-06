@@ -50,6 +50,7 @@ public class Database{
 
 
     int[][] randData;
+    int[] randArray;
 
     public Database( int noOfSymbols)
     {
@@ -116,29 +117,52 @@ public class Database{
                 {randomIds.get(5),	randomIds.get(10),	randomIds.get(15),	randomIds.get(20),	randomIds.get(25),	randomIds.get(0)},
                 {randomIds.get(26),	randomIds.get(27),	randomIds.get(28),	randomIds.get(29),	randomIds.get(30),	randomIds.get(0)}
         };
+        // create an array of random numbers, we will use the hex's index number to get a random number then use this random number to get a set of 6 symbols from the randData
+        randArray = new int[30];
+        for(int j= 0;j<30;j++)
+        {
+            randArray[j]=rand.nextInt(30);
+        }
 
     }//end assignRandomSymbol
 
     public int[] getHex(int hexId)
     {
+        hexId = getRandFromIndex(hexId);
+
         int[] hex= new int[]{randData[hexId][0],randData[hexId][1],randData[hexId][2],randData[hexId][3],randData[hexId][4],randData[hexId][5]};
         return hex;
     }
 
     public int getSymbol(int hexId, int symbolsId)
     {
+        hexId = getRandFromIndex(hexId);
+
         return randData[hexId][symbolsId];
+    }
+
+    public int getRandFromIndex(int index)
+    {//use the hex index position(mod 31 so we dont go out of bounds) to get a random number to use to get random symbols
+        return randArray[index%31];
     }
 
     public boolean compareSymbols(int hexId1, int symbolsId1, int hexId2, int symbolsId2)
     {
-        if(randData[hexId1][symbolsId1]==randData[hexId2][symbolsId2])
-        {
-            return true;
-        }
-        else
+        // its possible for arguments above to be negative, which would be bad
+        if(hexId1<0||symbolsId1<0||hexId2<0||symbolsId2<0)
         {
             return false;
+        }
+        else {
+            //need to randomise the access to the database otherwise hex location becomes predictable.
+            hexId1 = getRandFromIndex(hexId1);
+            hexId2 = getRandFromIndex(hexId2);
+
+            if (randData[hexId1][symbolsId1] == randData[hexId2][symbolsId2]) {
+                return true;
+            } else {
+                return false;
+            }
         }
     }
 

@@ -47,6 +47,11 @@ public class GameStage extends Stage {
     int selectedSector2=-1, selectedHex2=-1;
 
     public int noOfRows=3,noOfColumns=7;
+    int noOfSelected=0;
+    ArrayList<Integer> adjacentArray;
+
+    int proposedSelectedHex = -1;
+    int proposedSelectedSector = -1;
 
 
 
@@ -98,14 +103,11 @@ public class GameStage extends Stage {
     }
 
 
-    public void setSelected(int index, int sector)
-    {
-        int totalHexes = noOfColumns*noOfRows;
-        int proposedSelectedHex=-1;
-        int proposedSelectedSector=-1;
+    public void setSelected(int index, int sector) {
+        int totalHexes = noOfColumns * noOfRows;
 
 //overlap
-        if(sector>9)//in the case of an overlap in the touch logic the sector would have 10 added to it's value to indicate that it is the hex's neighbour that is selected.
+        if (sector > 9)//in the case of an overlap in the touch logic the sector would have 10 added to it's value to indicate that it is the hex's neighbour that is selected.
         {//one of 4 adjacent hexes could be selected, work out which one it is with the selected sector
 //10 means the hex above and to the left of the given hex is selected, 
 //12 is above and to the right
@@ -117,38 +119,29 @@ public class GameStage extends Stage {
 //below right would be hex index - noOfColumns +1
 //below left would be hex index - noOfColumns -1
 //if hex is in an even column (the left most column is 0 which is even) 
-            if((index%noOfColumns)%2==0)
-            {
-                if(sector ==10)
-                {
+            if ((index % noOfColumns) % 2 == 0) {
+                if (sector == 10) {
 //if not on left edge AND not on top edge
-                    if(index%noOfColumns>0&&index+noOfColumns<totalHexes)
-                    {
-                        proposedSelectedHex = index -1;
+                    if (index % noOfColumns > 0 && index + noOfColumns < totalHexes) {
+                        proposedSelectedHex = index - 1;
                     }
                 }
-                if(sector ==12)
-                {
+                if (sector == 12) {
 //if not on the right edge AND not on the top 
-                    if(index%noOfColumns<noOfColumns-1&&index+noOfColumns<totalHexes)
-                    {
-                        proposedSelectedHex = index+1;
+                    if (index % noOfColumns < noOfColumns - 1 && index + noOfColumns < totalHexes) {
+                        proposedSelectedHex = index + 1;
                     }
                 }
-                if(sector ==13)
-                {
+                if (sector == 13) {
 //if not on the right edge AND not on the bottom
-                    if(index%noOfColumns<noOfColumns-1&&index-noOfColumns>=0)
-                    {
-                        proposedSelectedHex = index - noOfColumns +1;
+                    if (index % noOfColumns < noOfColumns - 1 && index - noOfColumns >= 0) {
+                        proposedSelectedHex = index - noOfColumns + 1;
                     }
                 }
-                if(sector ==15)
-                {
+                if (sector == 15) {
 //if not on left edge AND not on bottom edge
-                    if(index%noOfColumns>0&&index-noOfColumns>=0)
-                    {
-                        proposedSelectedHex =index - noOfColumns -1;
+                    if (index % noOfColumns > 0 && index - noOfColumns >= 0) {
+                        proposedSelectedHex = index - noOfColumns - 1;
                     }
                 }
             }
@@ -158,143 +151,163 @@ public class GameStage extends Stage {
 //below right would be hex index +1
 //below left would be hex index -1
 //if the given hex is in an even column;
-            else
-            {
-                if(sector ==10)
-                {
+            else {
+                if (sector == 10) {
 //if not on left edge AND not on top edge
-                    if(index%noOfColumns>0&&index+noOfColumns<totalHexes)
-                    {
-                        proposedSelectedHex = index + noOfColumns -1;
+                    if (index % noOfColumns > 0 && index + noOfColumns < totalHexes) {
+                        proposedSelectedHex = index + noOfColumns - 1;
                     }
                 }
-                if(sector ==12)
-                {
+                if (sector == 12) {
 //if not on the right edge AND not on the top
-                    if(index%noOfColumns<noOfColumns-1&&index+noOfColumns<totalHexes)
-                    {
-                        proposedSelectedHex = index + noOfColumns +1;
+                    if (index % noOfColumns < noOfColumns - 1 && index + noOfColumns < totalHexes) {
+                        proposedSelectedHex = index + noOfColumns + 1;
                     }
                 }
-                if(sector ==13)
-                {
+                if (sector == 13) {
 //if not on the right edge AND not on the bottom
-                    if(index%noOfColumns<noOfColumns-1&&index-noOfColumns>=0)
-                    {
-                        proposedSelectedHex = index +1;
+                    if (index % noOfColumns < noOfColumns - 1 && index - noOfColumns >= 0) {
+                        proposedSelectedHex = index + 1;
                     }
                 }
-                if(sector ==15)
-                {
+                if (sector == 15) {
 //if not on left edge AND not on bottom edge
-                    if(index%noOfColumns>0&&index-noOfColumns>=0)
-                    {
-                        proposedSelectedHex = index -1;
+                    if (index % noOfColumns > 0 && index - noOfColumns >= 0) {
+                        proposedSelectedHex = index - 1;
                     }
                 }
             }
 
 //  the touched sector will actually be the opposing sector to the given hex, so translate that
 
-            proposedSelectedSector= (sector+3-10)%6;
+            proposedSelectedSector = (sector + 3 - 10) % 6;
 
         }//end overlap logic
-        else
-        {
-            proposedSelectedSector= sector;
-            proposedSelectedHex=index;
+        else {
+            proposedSelectedSector = sector;
+            proposedSelectedHex = index;
         }
-//now we have stored the correct hex and sector
-//is the hex highlighted? - ergo is it adjacent to a selected hex? 
-        if(hexWideField.hexWideArray[proposedSelectedHex].highlight)
-        {
-            selectedHex2 = proposedSelectedHex; //set the second selection as this hex
-            selectedSector2 = proposedSelectedSector;
-            hexWideField.hexWideArray[selectedHex2].select(200);
-            hexWideField.hexWideArray[selectedHex2].unhighlight(0);
+        if (noOfSelected == 0) {
+            selectFirstHex();
+        }//end if(noOfSelected==0)
 
-//compare match
-            if(database.compareSymbols(selectedHex,selectedSector,selectedHex2,selectedSector2))
-            {//if match unselect and unhighlight everything
+        else if (noOfSelected == 1) {
+            if (hexWideField.hexWideArray[proposedSelectedHex].highlight) {
+                selectSecondHex();
+                if (database.compareSymbols(selectedHex, selectedSector, selectedHex2, selectedSector2)) {
+                    resetSelection();
+                }
 
-//unhighlight all the adjacents of the first selected hex 
-                ArrayList<Integer> adjacentArray;
-                adjacentArray = hexWideField.getAdjacent(selectedHex,noOfColumns, noOfRows);
-                hexWideField.unhighlightAdjacent(adjacentArray);
-
-
-                hexWideField.hexWideArray[selectedHex].unselect(0);
-                selectedHex=-1;
-                selectedSector=-1;
-
-                hexWideField.hexWideArray[selectedHex2].unselect(0);
-                selectedHex2=-1;
-                selectedSector2=-1;
-
-
-            }
-            else// no match, unselect latest hex
+            }//end if highlighted
+            else if (hexWideField.hexWideArray[proposedSelectedHex].select) {
+                if (proposedSelectedSector == selectedSector) {
+                    resetSelection();
+                } else//proposed sector is different
+                {
+                    swapSector1(proposedSelectedHex, selectedSector, proposedSelectedSector);
+                }
+            }//end if selected
+            else //not highlighted and not selected
             {
-
-                hexWideField.hexWideArray[selectedHex2].unselect(0);
-
-                // and re highlight it
-                hexWideField.hexWideArray[selectedHex2].highlight(255);
-
-
-                selectedHex2=-1;
-                selectedSector2=-1;
+                resetSelection();
             }
-        }
-//is the hex already selected?
-        else if(hexWideField.hexWideArray[proposedSelectedHex].select)
+        }//end else if(noOfSelected==1)
+        else if (noOfSelected == 2) {
+            if (hexWideField.hexWideArray[proposedSelectedHex].select) {
+                if (selectedHex == proposedSelectedHex) {
+                    if (selectedSector == proposedSelectedSector) {
+                        removeOneSelected(selectedHex2, selectedSector2, proposedSelectedHex, proposedSelectedSector);
+                    } else {
+                        swapSector1(proposedSelectedHex, selectedSector, proposedSelectedSector);
+                        if (database.compareSymbols(selectedHex, selectedSector, selectedHex2, selectedSector2)) {
+                            resetSelection();
+                        }
+                    }
+                } else if (selectedHex2 == proposedSelectedHex) {
+                    if (selectedSector2 == proposedSelectedSector) {
+                        removeOneSelected(selectedHex, selectedSector, proposedSelectedHex, proposedSelectedSector);
+                    } else {
+                        swapSector2(proposedSelectedHex, selectedSector2, proposedSelectedSector);
+                        if (database.compareSymbols(selectedHex, selectedSector, selectedHex2, selectedSector2)) {
+                            resetSelection();
+                        }
+                    }
+                }
+            }//end if selected
+            else {
+                resetSelection();
+            }
+        }//end else if(noOfSelected==2)
+    }
+    public void resetSelection()
+    {
+        if(selectedHex!=-1)
         {
-//unselect it
-            hexWideField.hexWideArray[proposedSelectedHex].unselect(0);
-//unhighlight all the adjacents of the hex
-            ArrayList<Integer> adjacentArray;
-            adjacentArray = hexWideField.getAdjacent(selectedHex,noOfColumns, noOfRows);
-            hexWideField.unhighlightAdjacent(adjacentArray);
-
-            selectedHex=-1;
-            selectedSector=-1;
-        }
-        else if(selectedHex==-1) // no hex already selected, proposed hex is not already selected and not already highlighted
-        {
-//get the adjacent hexes of the selected hex
-            selectedHex = proposedSelectedHex;
-            selectedSector= proposedSelectedSector;
-            ArrayList<Integer> adjacentArray;
-            adjacentArray = hexWideField.getAdjacent(selectedHex,noOfColumns, noOfRows);
-            hexWideField.highlightAdjacent(adjacentArray);
-            hexWideField.hexWideArray[selectedHex].select(200);
-        }
-        //a hex is already selected but now some other hex is selected that is not adjacent nor the current hex
-        else
-        {
-
-//unhighlight all the adjacents of the first selected hex 
-            ArrayList<Integer> adjacentArray;
-            adjacentArray = hexWideField.getAdjacent(selectedHex,noOfColumns, noOfRows);
-            hexWideField.unhighlightAdjacent(adjacentArray);
-
-
             hexWideField.hexWideArray[selectedHex].unselect(0);
-            selectedHex=-1;
-            selectedSector=-1;
-
-            hexWideField.hexWideArray[selectedHex2].unselect(0);
-            selectedHex2=-1;
-            selectedSector2=-1;
+            hexWideField.hexWideArray[selectedHex].unhighlightSymbol();
+            adjacentArray = hexWideField.getAdjacent(selectedHex,noOfColumns, noOfRows);
+            hexWideField.unhighlightAdjacent(adjacentArray);
         }
+        if(selectedHex2!=-1)
+        {
+            hexWideField.hexWideArray[selectedHex2].unselect(0);
+            hexWideField.hexWideArray[selectedHex2].unhighlightSymbol();
+            adjacentArray = hexWideField.getAdjacent(selectedHex2,noOfColumns, noOfRows);
+            hexWideField.unhighlightAdjacent(adjacentArray);
+        }
+        selectedHex=-1;
+        selectedHex2=-1;
+        noOfSelected=0;
     }
 
+    public void selectFirstHex()
+    {
+        selectedHex = proposedSelectedHex;
+        selectedSector = proposedSelectedSector;
+        hexWideField.hexWideArray[selectedHex].select(200);
+        hexWideField.hexWideArray[selectedHex].highlightSymbol(selectedSector);
+        adjacentArray = hexWideField.getAdjacent(selectedHex,noOfColumns, noOfRows);
+        hexWideField.highlightAdjacent(adjacentArray);
+        noOfSelected=1;
+    }
 
+    public void selectSecondHex()
+    {
+        adjacentArray = hexWideField.getAdjacent(selectedHex,noOfColumns, noOfRows);
+        hexWideField.unhighlightAdjacent(adjacentArray);
 
+        selectedHex2 = proposedSelectedHex;
+        selectedSector2 = proposedSelectedSector;
+        hexWideField.hexWideArray[selectedHex2].select(200);
+        hexWideField.hexWideArray[selectedHex2].highlightSymbol(selectedSector2);
+        noOfSelected=2;
+    }
 
+    public void removeOneSelected(int givenHex, int givenSector, int remainingHex, int remainingSector)
+    {
+        hexWideField.hexWideArray[givenHex].unselect(0);
+        hexWideField.hexWideArray[givenSector].unhighlightSymbol();
+        adjacentArray = hexWideField.getAdjacent(remainingHex,noOfColumns, noOfRows);
+        hexWideField.highlightAdjacent(adjacentArray);
+        selectedHex = remainingHex;
+        selectedSector = remainingSector;
+        selectedHex2 = -1;
+        selectedSector2 = -1;
+        noOfSelected=1;
+    }
 
-
-
+    public void swapSector1(int hex, int oldSector, int newSector)
+    {
+        hexWideField.hexWideArray[hex].unhighlightSymbol();
+        hexWideField.hexWideArray[hex].highlightSymbol(newSector);
+        selectedSector=newSector;
+    }
+    public void swapSector2(int hex, int oldSector, int newSector)
+    {
+        hexWideField.hexWideArray[hex].unhighlightSymbol();
+        hexWideField.hexWideArray[hex].highlightSymbol(newSector);
+        selectedSector2=newSector;
+    }
 
 
     @Override

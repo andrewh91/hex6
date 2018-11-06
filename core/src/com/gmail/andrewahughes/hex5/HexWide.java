@@ -22,7 +22,7 @@ import java.awt.Rectangle;
 public class HexWide extends Actor {
     int selectedSector;
     int approxSector;
-    int blue = 0,red =0;
+    int blue = 0,red =0,redSymbol=0;
 
     BitmapFont font = new BitmapFont();
     String text = new String();
@@ -46,7 +46,8 @@ public class HexWide extends Actor {
     public final float altitudeSize;
     public float posX, posY;
     public boolean visible,highlight,select = false;
-
+    public int selectedSymbol=-1;
+    public boolean highlightSymbol = false;
     public int touchX = 0, touchY = 0, touchRadius = 10;
 
 
@@ -185,7 +186,19 @@ public class HexWide extends Actor {
         red = value;
         highlight=false;
     }
-
+    //method to highlight which symbol is selected
+    public void highlightSymbol(int symbol)
+    {
+        redSymbol = 200;
+        highlightSymbol=true;
+        selectedSymbol=symbol;
+    }
+    public void unhighlightSymbol()
+    {
+        redSymbol = 0;
+        highlightSymbol=false;
+        selectedSymbol=-1;
+    }
     public void select(int value)
     {
         blue = value;
@@ -206,6 +219,8 @@ public class HexWide extends Actor {
 
             sr.setColor(1*red,100,40*blue,1);
             drawWideHex(sr,posX,posY,edgeSize);
+            drawWideSymbol(sr,posX,posY,edgeSize);
+
             sr.circle(posX,posY,altitudeSize);
             sr.setColor(Color.RED);
             sr.circle(touchX+posX-edgeSize,touchY+posY-altitudeSize,touchRadius);
@@ -260,7 +275,46 @@ public class HexWide extends Actor {
         font.draw(sb, ""+symbol4, originX, originY-edgeSize);
         font.draw(sb, ""+symbol5, originX-altitudeSize, (float)(originY-0.5*edgeSize));
     }
+    void drawWideSymbol(ShapeRenderer sr, float originX, float originY, float edgeSize)
+    {
+        //draws the highlighted symbol
+        if(highlightSymbol)
+        {
+            sr.setColor(redSymbol,50,50,1);
+            if(selectedSymbol==0)
+            {
+                sr.line(originX , originY , originX - edgeSize, originY);
+                sr.line(originX  , originY , originX - edgeSize*0.5f, originY+altitudeSize);
+            }
+            else if(selectedSymbol==1)
+            {
+                sr.line(originX  , originY , originX - edgeSize*0.5f, originY+altitudeSize);
+                sr.line(originX  , originY , originX + edgeSize*0.5f, originY+altitudeSize);
+            }
+            else if(selectedSymbol==2)
+            {
+                sr.line(originX  , originY , originX + edgeSize*0.5f, originY+altitudeSize);
+                sr.line(originX , originY , originX +edgeSize, originY);
+            }
+            else if(selectedSymbol==3)
+            {
+                sr.line(originX , originY , originX +edgeSize, originY);
+                sr.line(originX  , originY , originX + edgeSize*0.5f, originY-altitudeSize);
+            }
+            else if(selectedSymbol==4)
+            {
+                sr.line(originX  , originY , originX + edgeSize*0.5f, originY-altitudeSize);
+                sr.line(originX  , originY , originX - edgeSize*0.5f, originY-altitudeSize);
+            }
+            else if(selectedSymbol==5)
+            {
+                sr.line(originX  , originY , originX - edgeSize*0.5f, originY-altitudeSize);
+                sr.line(originX , originY , originX - edgeSize, originY);
+            }
 
+        }//end if highlightSymbol
+
+    }
 
 }
 
