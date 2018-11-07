@@ -42,7 +42,7 @@ public class GameStage extends Stage {
 
     BitmapFont font = new BitmapFont();
     String text = new String();
-
+    String state = new String();
     int selectedSector=-1, selectedHex=-1;
     int selectedSector2=-1, selectedHex2=-1;
 
@@ -52,6 +52,8 @@ public class GameStage extends Stage {
 
     int proposedSelectedHex = -1;
     int proposedSelectedSector = -1;
+
+    boolean zoomSelectionMode =true;
 
 
 
@@ -65,11 +67,11 @@ public class GameStage extends Stage {
         //viewport.getCamera().translate(viewport.getScreenWidth()/2,viewport.getScreenHeight()/2,0);
         //viewport.update(viewport.getScreenWidth(),viewport.getScreenHeight(),true);
         database = new Database(31);
-        hexWide= new HexWide(390,640,360,0, this,database);
+        hexWide= new HexWide(1,0,0,0, this,database);
         this.addActor(hexWide);
         hexWideField= new HexWideField(50,50,1180,620,noOfRows,noOfColumns,this, database);
         addHexesToStage(hexWideField);
-        rectTest = new RectTest(400,100,50,300);
+        rectTest = new RectTest(0,0,0,0);
         this.addActor(rectTest);
 
         this.stageInterface =stageInterface;
@@ -194,18 +196,18 @@ public class GameStage extends Stage {
         else if (noOfSelected == 1) {
             if (hexWideField.hexWideArray[proposedSelectedHex].highlight) {
                 selectSecondHex();
-                if (database.compareSymbols(selectedHex, selectedSector, selectedHex2, selectedSector2)) {
-                    resetSelection();
+                //if not zoomSelectionMode compare sector with all sectors on first hex
+                if (!zoomSelectionMode) {
+                   if( compareAll(selectedHex2,selectedHex,proposedSelectedSector))
+                   {
+                       resetSelection();
+                   }
                 }
 
             }//end if highlighted
             else if (hexWideField.hexWideArray[proposedSelectedHex].select) {
-                if (proposedSelectedSector == selectedSector) {
                     resetSelection();
-                } else//proposed sector is different
-                {
-                    swapSector1(proposedSelectedHex, selectedSector, proposedSelectedSector);
-                }
+
             }//end if selected
             else //not highlighted and not selected
             {
@@ -215,22 +217,21 @@ public class GameStage extends Stage {
         else if (noOfSelected == 2) {
             if (hexWideField.hexWideArray[proposedSelectedHex].select) {
                 if (selectedHex == proposedSelectedHex) {
-                    if (selectedSector == proposedSelectedSector) {
-                        removeOneSelected(selectedHex2, selectedSector2, proposedSelectedHex, proposedSelectedSector);
-                    } else {
-                        swapSector1(proposedSelectedHex, selectedSector, proposedSelectedSector);
-                        if (database.compareSymbols(selectedHex, selectedSector, selectedHex2, selectedSector2)) {
-                            resetSelection();
-                        }
+                    if(compareAll(selectedHex,selectedHex2,proposedSelectedSector)){
+                        resetSelection();
+                    }
+                    else
+                    {
+                        swapSector1(selectedHex,selectedSector,proposedSelectedSector);
                     }
                 } else if (selectedHex2 == proposedSelectedHex) {
-                    if (selectedSector2 == proposedSelectedSector) {
-                        removeOneSelected(selectedHex, selectedSector, proposedSelectedHex, proposedSelectedSector);
-                    } else {
-                        swapSector2(proposedSelectedHex, selectedSector2, proposedSelectedSector);
-                        if (database.compareSymbols(selectedHex, selectedSector, selectedHex2, selectedSector2)) {
-                            resetSelection();
-                        }
+                    if(compareAll(selectedHex2,selectedHex,proposedSelectedSector)){
+                        resetSelection();
+                    }
+                    else
+                    {
+                        swapSector2(selectedHex2,selectedSector2,proposedSelectedSector);
+
                     }
                 }
             }//end if selected
@@ -257,17 +258,23 @@ public class GameStage extends Stage {
         }
         selectedHex=-1;
         selectedHex2=-1;
+        if(zoomSelectionMode)
+        {
+            //zoom out
+        }
         noOfSelected=0;
     }
 
     public void selectFirstHex()
     {
         selectedHex = proposedSelectedHex;
-        selectedSector = proposedSelectedSector;
         hexWideField.hexWideArray[selectedHex].select(200);
-        hexWideField.hexWideArray[selectedHex].highlightSymbol(selectedSector);
         adjacentArray = hexWideField.getAdjacent(selectedHex,noOfColumns, noOfRows);
         hexWideField.highlightAdjacent(adjacentArray);
+        if(zoomSelectionMode)
+        {
+            // zoom to fit adjacents
+        }
         noOfSelected=1;
     }
 
@@ -277,9 +284,16 @@ public class GameStage extends Stage {
         hexWideField.unhighlightAdjacent(adjacentArray);
 
         selectedHex2 = proposedSelectedHex;
-        selectedSector2 = proposedSelectedSector;
         hexWideField.hexWideArray[selectedHex2].select(200);
-        hexWideField.hexWideArray[selectedHex2].highlightSymbol(selectedSector2);
+        if(zoomSelectionMode)
+        {
+            // zoom to fit pair of selected hexes
+        }
+        else
+        {
+            selectedSector2 = proposedSelectedSector;
+            hexWideField.hexWideArray[selectedHex2].highlightSymbol(selectedSector2);
+        }
         noOfSelected=2;
     }
 
@@ -308,7 +322,17 @@ public class GameStage extends Stage {
         hexWideField.hexWideArray[hex].highlightSymbol(newSector);
         selectedSector2=newSector;
     }
-
+public boolean compareAll(int touchedHex,int otherHex, int touchedSector)
+{
+    for (int i = 0; i < 6; i++)
+    {
+        if(database.compareSymbols(touchedHex, touchedSector, otherHex, i))
+        {
+            return true;
+        }
+    }
+    return false;
+}
 
     @Override
     public void draw() {
@@ -339,7 +363,7 @@ public class GameStage extends Stage {
             spriteBatch.begin();
             //hexWide.drawSprites(spriteBatch);
             hexWideField.drawSprites(spriteBatch);
-            font.draw(spriteBatch,text+ " hex "+selectedHex+" sector "+selectedSector,30,690);
+            font.draw(spriteBatch,text+ " sh "+selectedHex+" sh2 "+selectedHex2+" s1 "+selectedSector+" s2 "+selectedSector2+" ph "+proposedSelectedHex+" ps "+proposedSelectedSector+" state "+state,30,690);
             spriteBatch.end();
 
 
