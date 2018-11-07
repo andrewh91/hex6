@@ -46,7 +46,7 @@ public class GameStage extends Stage {
     int selectedSector=-1, selectedHex=-1;
     int selectedSector2=-1, selectedHex2=-1;
 
-    public int noOfRows=3,noOfColumns=7;
+    public int noOfRows=4,noOfColumns=9;
     int noOfSelected=0;
     ArrayList<Integer> adjacentArray;
 
@@ -66,7 +66,7 @@ public class GameStage extends Stage {
         v4=new Vector2(100,100);
         //viewport.getCamera().translate(viewport.getScreenWidth()/2,viewport.getScreenHeight()/2,0);
         //viewport.update(viewport.getScreenWidth(),viewport.getScreenHeight(),true);
-        database = new Database(31);
+        database = new Database(31,noOfColumns,noOfRows);
         hexWide= new HexWide(1,0,0,0, this,database);
         this.addActor(hexWide);
         hexWideField= new HexWideField(50,50,1180,620,noOfRows,noOfColumns,this, database);

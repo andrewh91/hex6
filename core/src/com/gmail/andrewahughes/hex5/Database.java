@@ -50,10 +50,20 @@ public class Database{
 
 
     int[][] randData;
-    int[] randArray;
+    ArrayList<Integer> randArray1 = new ArrayList<Integer>();
+    int r;
+    int setOfSymbolIndex;
+    ArrayList<Integer> refList= new ArrayList<Integer>();//stores a reference to the  index of the set of symbols each hex uses
+    ArrayList<Integer> randomIds = new ArrayList<Integer>();
+    ArrayList<Integer>[] symbolShuffle= new ArrayList[31];//stores a reference to the 31 different random orders the 6 symbols where shuffled into
 
-    public Database( int noOfSymbols)
+    int noOfColumns,noOfRows,totalHexes;
+
+    public Database( int noOfSymbols,int columns ,int rows)
     {
+        noOfColumns=columns;
+        noOfRows = rows;
+        totalHexes=rows*columns;
 //we need exactly 31 symbols. if we have a set of more than 31 symbols we need to play without some
 //assign each datum a random symbol
         assignRandomSymbol(noOfSymbols);
@@ -61,28 +71,7 @@ public class Database{
 
     public void assignRandomSymbol(int noOfSymbols)
     {
-//list of symbol ids, from 0 to whatever noOfSymbols is
-        ArrayList<Integer> symbolIds = new ArrayList<Integer>();
-        for(int i = 0; i < noOfSymbols;i++)
-        {
-            symbolIds.add(i);
-        }
-//random ids, assign 31 random values - make sure no value is repeated
-        ArrayList<Integer> randomIds = new ArrayList<Integer>();
-        for(int i = 0; i < 31;i++)
-        {
-            int j;
-            if(symbolIds.size()==1)
-            {
-                j=0;
-            }
-            else {
-                j = rand.nextInt(symbolIds.size() - 1);//get random integer between 0 and the size of symbolIds -1
-            }
-            randomIds.add(symbolIds.get(j));//get a random index position of the symbols id and assign that value to the random list.
-            symbolIds.remove(j);//remove the value at that random index position from the symbol list.
-
-        }
+        randomIds=randomlySortedList(31);
 //now assign them to the 2d array randomly
         randData= new int[][]{
                 {randomIds.get(1),	randomIds.get(2),	randomIds.get(3),	randomIds.get(4),	randomIds.get(5),	randomIds.get(26)},
@@ -118,11 +107,15 @@ public class Database{
                 {randomIds.get(26),	randomIds.get(27),	randomIds.get(28),	randomIds.get(29),	randomIds.get(30),	randomIds.get(0)}
         };
         // create an array of random numbers, we will use the hex's index number to get a random number then use this random number to get a set of 6 symbols from the randData
-        randArray = new int[30];
-        for(int j= 0;j<30;j++)
-        {
-            randArray[j]=rand.nextInt(30);
-        }
+
+        randArray1 = randomlySortedList(31);
+
+        for(int i =0;i<totalHexes;i++)
+        {setRefList(i,noOfColumns);}
+//this is 31 item array of 6 item arraylists, this will allow me to alter the position of symbols so even 2 sets of identical symbols will at least appear in a different order
+for(int j =0;j<31;j++)
+{symbolShuffle[j] =randomlySortedList(6);}//this is purely to mix the symbols
+
 
     }//end assignRandomSymbol
 
@@ -130,7 +123,9 @@ public class Database{
     {
         hexId = getRandFromIndex(hexId);
 
-        int[] hex= new int[]{randData[hexId][0],randData[hexId][1],randData[hexId][2],randData[hexId][3],randData[hexId][4],randData[hexId][5]};
+        int[] hex= new int[]{randData[hexId][symbolShuffle[hexId].get(0)],randData[hexId][symbolShuffle[hexId].get(1)],
+                randData[hexId][symbolShuffle[hexId].get(2)],randData[hexId][symbolShuffle[hexId].get(3)],
+                randData[hexId][symbolShuffle[hexId].get(4)],randData[hexId][symbolShuffle[hexId].get(5)]};
         return hex;
     }
 
@@ -140,12 +135,99 @@ public class Database{
 
         return randData[hexId][symbolsId];
     }
-
     public int getRandFromIndex(int index)
-    {//use the hex index position(mod 31 so we dont go out of bounds) to get a random number to use to get random symbols
-        return randArray[index%31];
+    {
+        return refList.get(index);
     }
 
+    public int setRefList(int index, int noOfColumns)
+    {
+        if(index>30)//if the index is over 30 then we need to make sure we're not putting sets of symbols adjacent to identical sets of symbols
+        {
+            if(index<noOfColumns)//if still on the first row - which is unlikely if this is >31st hex but still possible.
+            {
+                setOfSymbolIndex=getUniqueSetOfSymbolsFirstRow(index);//use this recursive method to return a unique set of symbols which will not match the adjacent sets of symbols
+            }
+            else//if index > 30 but not on first row
+            {
+                setOfSymbolIndex=getUniqueSetOfSymbols(index,noOfColumns);
+            }
+        }
+        else//if index is between 0 and 30 just return the random numbers in order(it's a random order)
+        {
+
+
+            setOfSymbolIndex= randomIds.get(index);
+        }
+        refList.add(index,setOfSymbolIndex);//add the random number to the ref list for easy retrieval later, the random number will coincidentally have the same index number as the hex's index number in the argument for this method, but just incase we will add it at the index position anyway
+        return setOfSymbolIndex;
+    }
+
+    public int getUniqueSetOfSymbolsFirstRow(int index)
+    {
+        r = rand.nextInt(30);
+        if(r!=refList.get(index-1))
+        {
+//continue
+        }
+        else//if the proposed symbols are not unique try again
+        {
+            r = getUniqueSetOfSymbolsFirstRow(index);
+        }
+        return r;//the known adjacents are unique return the random number
+    }
+
+    public int getUniqueSetOfSymbols(int index,int noOfColumns)
+    {
+        r = rand.nextInt(30);
+        if((index%noOfColumns)%2==0)//if even
+        {
+            if(r!=refList.get(index-1)&&r!=refList.get(index-noOfColumns)&&r!=refList.get(index-noOfColumns+1)&&(index-noOfColumns==0||r!=refList.get(index-noOfColumns-1)))//if none of the adjacents' sets of symbols match the proposed set of symbols then continue
+            {
+//continue
+            }
+            else//if the proposed symbols are not unique try a new proposed set
+            {
+                r = getUniqueSetOfSymbols(index,noOfColumns);
+            }
+        }
+else //if (odd)
+        {
+            if(r!=refList.get(index-1)&&r!=refList.get(index-noOfColumns))
+            {
+//continue
+            }
+            else//if the proposed symbols are not unique try again
+            {
+                r = getUniqueSetOfSymbols(index,noOfColumns);
+            }
+        }
+
+        return r;//the known adjacents are unique return the random number
+    }
+    ArrayList<Integer> randomlySortedList(int limitExclusive)
+    {
+        ArrayList<Integer> numberList= new ArrayList<Integer>();
+        for(int i = 0; i < limitExclusive;i++)
+        {
+            numberList.add(i);
+        }
+//random number, assign given amount of random numbers- make sure no value is repeated
+        ArrayList<Integer> randomNumbers = new ArrayList<Integer>();
+        for(int i = 0; i < limitExclusive;i++) {
+            int j;
+            if (numberList.size() == 1) {
+                j = 0;
+            } else {
+                j = rand.nextInt(numberList.size() - 1);//get random integer between 0 and limit - exclusive
+            }
+            randomNumbers.add(numberList.get(j));//get a random number from the list
+            numberList.remove(j);//remove the value at that random index position from the number list
+        }
+//end up with numbers 0 to limit randomly sorted in a list
+            return randomNumbers;
+
+    }
     public boolean compareSymbols(int hexId1, int symbolsId1, int hexId2, int symbolsId2)
     {
         // its possible for arguments above to be negative, which would be bad
@@ -158,7 +240,7 @@ public class Database{
             hexId1 = getRandFromIndex(hexId1);
             hexId2 = getRandFromIndex(hexId2);
 
-            if (randData[hexId1][symbolsId1] == randData[hexId2][symbolsId2]) {
+            if (randData[hexId1][symbolShuffle[hexId1].get(symbolsId1)] == randData[hexId2][symbolShuffle[hexId2].get(symbolsId2)]) {
                 return true;
             } else {
                 return false;
