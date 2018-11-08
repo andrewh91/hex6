@@ -73,19 +73,7 @@ public class GamePauseStage extends Stage {
         this.pauseImg1 =pauseImg;
         this.pauseImg1.setVisible(false);//start off invisible
 
-        this.pauseImg1.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                if(pauseImg1.isVisible())
-                {//if you click the badlogic image, go back to main menu
-                    //pauseImg1.setVisible(false);
-                    setPause(false);
-                    black=1.0f;
-                    setVisible(false);
-                    GamePauseStage.this.stageInterface.goToMainStage();
-                }
-            }
-        });
+
 
         table.add(pauseImg);
         table.center();
@@ -136,7 +124,28 @@ public class GamePauseStage extends Stage {
         column= new Label("column:", skin);
         portrait1Landscape2Value= new TextField("", skin);
         portrait1Landscape2= new Label("portrait1Landscape2:", skin);
+        TextButton button3 = new TextButton("return to main menu", skin);
+        button3.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
 
+                    setPause(false);
+                    black=1.0f;
+                    setVisible(false);
+                    GamePauseStage.this.stageInterface.goToMainStage();
+
+            }
+        });
+
+        TextButton button2 = new TextButton("cancel changes", skin);
+        button2.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+
+                GamePauseStage.this.stageInterface.updateOptionsGoToGameStage(0,0,0,0,0,0,0,0);
+
+            }
+        });
         TextButton button1 = new TextButton("Save changes", skin);
         button1.addListener(new ChangeListener() {
             @Override
@@ -215,8 +224,11 @@ public class GamePauseStage extends Stage {
         table.row();
         table.add(portrait1Landscape2Value);
         table.add(portrait1Landscape2);
+        table.row();
+        table.add(button1);
 
-table.add(button1);
+        table.add(button2);
+        table.add(button3);
         addActor(table);
 
 

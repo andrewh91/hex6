@@ -42,7 +42,7 @@ public class GdxGameSvcsApp extends ApplicationAdapter implements IGameServiceLi
     public static final String EVENT1 = "EVENT1";
     public static final String REPOLINK = "https://github.com/MrStahlfelge/gdx-gamesvcs";
     public static final String FILE_ID = "cloud";
-
+Platform platform;
     GameStage gameStage;
     GamePauseStage gamePauseStage;
     Texture badlogic;
@@ -61,9 +61,14 @@ public class GdxGameSvcsApp extends ApplicationAdapter implements IGameServiceLi
     OrthographicCamera cam;
     StretchViewport stretchViewport;
 
+   public GdxGameSvcsApp(Platform platform)
+   {
+       this.platform=platform;
+   }
     @Override
     public void create() {
-        cam=new OrthographicCamera();
+       cam=new OrthographicCamera();
+
         stretchViewport = new StretchViewport(1280,720);
         badlogic = new Texture("badlogic.jpg");
         gameStage = new GameStage(stretchViewport,badlogic,this);
@@ -586,6 +591,10 @@ public class GdxGameSvcsApp extends ApplicationAdapter implements IGameServiceLi
     }
     @Override
     public void goToGameStage() {
+        //platform.SetOrientation("portrait");
+//stretchViewport.update(720,1280);
+//gameStage.getViewport().setScreenSize(720,1280);
+
         gameStage.setVisible(true);
         setVisible(false);
         gamePauseStage.setVisible(false);
@@ -628,4 +637,8 @@ public class GdxGameSvcsApp extends ApplicationAdapter implements IGameServiceLi
     public void setVisible(boolean visible) {
         this.visible = visible;
     }
+
+
+
+
 }

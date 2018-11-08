@@ -1,6 +1,8 @@
 package com.gmail.andrewahughes.hex5;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 
 import com.badlogic.gdx.backends.android.AndroidApplication;
@@ -18,7 +20,9 @@ public class AndroidLauncher extends AndroidApplication {
         AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
 
         config.useImmersiveMode=true;
-        GdxGameSvcsApp game = new GdxGameSvcsApp();
+        PlatformAndroid platformAndroid = new PlatformAndroid();
+        platformAndroid.setActivity(this);
+        GdxGameSvcsApp game = new GdxGameSvcsApp((Platform)platformAndroid);
         this.gpgsClient = new GpgsClient() {
             @Override
             public boolean submitEvent(String eventId, int increment) {
@@ -43,4 +47,16 @@ public class AndroidLauncher extends AndroidApplication {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         gpgsClient.onGpgsActivityResult(requestCode, resultCode, data);
     }
+
+    /**
+     * Created by Andrew Hughes on 08/11/2018.
+     */
+
+
+
+    /**
+     * Created by Andrew Hughes on 08/11/2018.
+     */
+
+
 }
