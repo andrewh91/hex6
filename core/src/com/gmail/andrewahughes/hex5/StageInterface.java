@@ -8,4 +8,5 @@ public interface StageInterface {
     void goToGameStage();
     void goToMainStage();
     void goToGamePauseStage();
+    void updateOptionsGoToGameStage(int newNoOfRows, int newNoOfColumns, int newPortrait1Landscape2, int newFieldPosX, int newFieldPosY, int newFieldWidth, int newFieldHeight,int zoom);
 }

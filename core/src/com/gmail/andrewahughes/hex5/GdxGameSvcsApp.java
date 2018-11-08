@@ -593,6 +593,21 @@ public class GdxGameSvcsApp extends ApplicationAdapter implements IGameServiceLi
         Gdx.input.setCatchBackKey(true);
     }
     @Override
+    public void updateOptionsGoToGameStage(int newNoOfRows, int newNoOfColumns, int newPortrait1Landscape2, int newFieldPosX, int newFieldPosY, int newFieldWidth, int newFieldHeight,int newZoom) {
+        gameStage.setVisible(true);
+        if(  newNoOfRows+newNoOfColumns+ newPortrait1Landscape2+ newFieldPosX+ newFieldPosY+  newFieldWidth+ newFieldHeight>0) {
+            gameStage.updateField(newNoOfRows, newNoOfColumns, newPortrait1Landscape2, newFieldPosX, newFieldPosY, newFieldWidth, newFieldHeight);
+        }
+        if(newZoom>0)
+        {
+            gameStage.updateZoom(newZoom);
+        }
+        setVisible(false);
+        gamePauseStage.setVisible(false);
+        Gdx.input.setInputProcessor(gameStage);
+        Gdx.input.setCatchBackKey(true);
+    }
+    @Override
     public void goToGamePauseStage() {
         gamePauseStage.setVisible(true);
         gameStage.setVisible(false);

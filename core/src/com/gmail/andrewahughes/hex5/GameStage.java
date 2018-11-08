@@ -11,11 +11,14 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 import java.util.ArrayList;
@@ -54,6 +57,9 @@ public class GameStage extends Stage {
     int proposedSelectedSector = -1;
 
     boolean zoomSelectionMode =true;
+    int landscape=2;
+
+    int portrait1Landscape2=2, fieldPosX=50, fieldPosY=50, fieldWidth=1180, fieldHeight=620;
 
 
 
@@ -69,8 +75,10 @@ public class GameStage extends Stage {
         database = new Database(31,noOfColumns,noOfRows);
         hexWide= new HexWide(1,0,0,0, this,database);
         this.addActor(hexWide);
-        hexWideField= new HexWideField(50,50,1180,620,noOfRows,noOfColumns,this, database);
+        hexWideField= new HexWideField(fieldPosX,fieldPosY,fieldWidth,fieldHeight,noOfRows,noOfColumns,this, database);
         addHexesToStage(hexWideField);
+
+        updateField(noOfRows,noOfColumns,landscape,fieldPosX,fieldPosY,fieldWidth,fieldHeight);
         rectTest = new RectTest(0,0,0,0);
         this.addActor(rectTest);
 
@@ -400,6 +408,41 @@ public boolean compareAll(int touchedHex,int otherHex, int touchedSector)
         for(int i=0;i<hwf.getNoOfHexes();i++)
         {
             addActor(hwf.hexWideArray[i]);
+        }
+    }
+    public void removeAllActors()
+    {
+        for(Actor actor : getActors()) {
+            //actor.remove();
+            actor.addAction(Actions.removeActor());
+        }
+    }
+    public void updateField(int newNoOfRows, int newNoOfColumns, int newPortrait1Landscape2, int newFieldPosX, int newFieldPosY, int newFieldWidth, int newFieldHeight)
+    {
+        if(newNoOfColumns!=0){noOfColumns=newNoOfColumns;}
+        if(newNoOfRows!=0){noOfRows=newNoOfRows;}
+        if(newPortrait1Landscape2!=0){ landscape=newPortrait1Landscape2;}
+        if(newFieldPosX!=0){ fieldPosX=newFieldPosX;}
+        if(newFieldPosY!=0){ fieldPosY=newFieldPosY;}
+        if(newFieldWidth!=0){ fieldWidth=newFieldWidth;}
+        if(newFieldHeight!=0){ fieldHeight=newFieldHeight;}
+
+//reset / reload everything 
+        resetSelection();
+        removeAllActors();
+        database = new Database(31,noOfColumns,noOfRows);
+        hexWideField= new HexWideField(fieldPosX,fieldPosY,fieldWidth,fieldHeight,noOfRows,noOfColumns,this, database);
+        addHexesToStage(hexWideField);
+    }
+    public void updateZoom(int newZoom)
+    {
+        if(newZoom==1)
+        {
+            zoomSelectionMode=false;
+        }
+        else if(newZoom==2)
+        {
+            zoomSelectionMode=true;
         }
     }
 
