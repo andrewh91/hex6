@@ -4,13 +4,11 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -18,7 +16,6 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 import java.util.ArrayList;
@@ -49,36 +46,40 @@ public class GameStage extends Stage {
     int selectedSector=-1, selectedHex=-1;
     int selectedSector2=-1, selectedHex2=-1;
 
-    public int noOfRows=4,noOfColumns=9;
+
+    //recommended number of rows for portrait mode using hexwide in screens with 16:9 aspect ratio
+    //can be found using noOfRows =roundup(noOfColumns*2-noOfColumns/2)
+    public int noOfRows=6,noOfColumns=4;
     int noOfSelected=0;
+
     ArrayList<Integer> adjacentArray;
 
     int proposedSelectedHex = -1;
     int proposedSelectedSector = -1;
 
     boolean zoomSelectionMode =true;
-    int landscape=2;
 
-    int portrait1Landscape2=2, fieldPosX=50, fieldPosY=50, fieldWidth=1180, fieldHeight=620;
-
+    int portrait1Landscape2=1, fieldPosX=50, fieldPosY=50, fieldWidth=620, fieldHeight=1180;
 
 
-    public GameStage(Viewport viewport, Texture texture,final StageInterface stageInterface) {
+
+    public GameStage(Viewport viewport, Texture texture,final StageInterface stageInterface, int portrait) {
         super( viewport );
         this.viewport=viewport;
+        this.portrait1Landscape2 =portrait;
         v1=new Vector2(60,60);
         v2=new Vector2(110,110);
         v3=new Vector2(50,50);
         v4=new Vector2(100,100);
         //viewport.getCamera().translate(viewport.getScreenWidth()/2,viewport.getScreenHeight()/2,0);
         //viewport.update(viewport.getScreenWidth(),viewport.getScreenHeight(),true);
-        database = new Database(31,noOfColumns,noOfRows);
+        /*database = new Database(31,noOfColumns,noOfRows);
         hexWide= new HexWide(1,0,0,0, this,database);
         this.addActor(hexWide);
         hexWideField= new HexWideField(fieldPosX,fieldPosY,fieldWidth,fieldHeight,noOfRows,noOfColumns,this, database);
-        addHexesToStage(hexWideField);
+        addHexesToStage(hexWideField);*/
 
-        updateField(noOfRows,noOfColumns,landscape,fieldPosX,fieldPosY,fieldWidth,fieldHeight);
+        updateField(noOfRows,noOfColumns,portrait,fieldPosX,fieldPosY,fieldWidth,fieldHeight);
         rectTest = new RectTest(0,0,0,0);
         this.addActor(rectTest);
 
@@ -421,7 +422,7 @@ public boolean compareAll(int touchedHex,int otherHex, int touchedSector)
     {
         if(newNoOfColumns!=0){noOfColumns=newNoOfColumns;}
         if(newNoOfRows!=0){noOfRows=newNoOfRows;}
-        if(newPortrait1Landscape2!=0){ landscape=newPortrait1Landscape2;}
+        if(newPortrait1Landscape2!=0){ portrait1Landscape2 =newPortrait1Landscape2;}
         if(newFieldPosX!=0){ fieldPosX=newFieldPosX;}
         if(newFieldPosY!=0){ fieldPosY=newFieldPosY;}
         if(newFieldWidth!=0){ fieldWidth=newFieldWidth;}
@@ -431,8 +432,15 @@ public boolean compareAll(int touchedHex,int otherHex, int touchedSector)
         resetSelection();
         removeAllActors();
         database = new Database(31,noOfColumns,noOfRows);
-        hexWideField= new HexWideField(fieldPosX,fieldPosY,fieldWidth,fieldHeight,noOfRows,noOfColumns,this, database);
-        addHexesToStage(hexWideField);
+        if(portrait1Landscape2==1) {
+            hexWideField = new HexWideField(fieldPosX, fieldPosY, fieldWidth, fieldHeight, noOfRows, noOfColumns, this, database);
+            addHexesToStage(hexWideField);
+        }
+        else if(portrait1Landscape2==2)
+        {
+            //hextallfield
+            //add hexes to stage (hectallfield)
+        }
     }
     public void updateZoom(int newZoom)
     {

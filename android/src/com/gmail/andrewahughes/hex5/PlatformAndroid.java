@@ -16,7 +16,7 @@ public class PlatformAndroid extends AndroidApplication implements Platform {
         if (string == "landscape"){
             activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         }
-        if (string == "portrait"){
+        if (string == "portrait1landscap2"){
             activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         }
     }

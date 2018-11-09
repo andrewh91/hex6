@@ -47,7 +47,7 @@ Platform platform;
     GamePauseStage gamePauseStage;
     Texture badlogic;
     private boolean visible = true;
-
+int portrait=1;
     public IGameServiceClient gsClient;
     Skin skin;
     Stage mainStage;//main menu
@@ -60,6 +60,7 @@ Platform platform;
     private TextField cloudData;
     OrthographicCamera cam;
     StretchViewport stretchViewport;
+    public int vpWidth,vpHeight,vpShort,vpLong;
 
    public GdxGameSvcsApp(Platform platform)
    {
@@ -68,16 +69,20 @@ Platform platform;
     @Override
     public void create() {
        cam=new OrthographicCamera();
-
-        stretchViewport = new StretchViewport(1280,720);
+       vpLong=1280;// the long edge of the screen
+       vpShort=720;
+vpWidth=vpLong;
+vpHeight=vpShort;
+        stretchViewport = new StretchViewport(vpWidth,vpHeight);
         badlogic = new Texture("badlogic.jpg");
-        gameStage = new GameStage(stretchViewport,badlogic,this);
+        gameStage = new GameStage(stretchViewport,badlogic,this,portrait);
         gamePauseStage = new GamePauseStage(stretchViewport,badlogic,this);
         //Gdx.input.setInputProcessor(gameStage);
 
         mainStage = new Stage(stretchViewport);
         Gdx.input.setInputProcessor(mainStage);
         Gdx.input.setCatchBackKey(true);
+        setPortrait();
 
         prepareSkin();
 
@@ -522,7 +527,7 @@ Platform platform;
 
     @Override
     public void resize(int width, int height) {
-        mainStage.getViewport().update(width, height, true);
+        mainStage.getViewport().update(vpWidth, vpHeight, true);
     }
 
     @Override
@@ -591,9 +596,7 @@ Platform platform;
     }
     @Override
     public void goToGameStage() {
-        //platform.SetOrientation("portrait");
-//stretchViewport.update(720,1280);
-//gameStage.getViewport().setScreenSize(720,1280);
+
 
         gameStage.setVisible(true);
         setVisible(false);
@@ -601,12 +604,47 @@ Platform platform;
         Gdx.input.setInputProcessor(gameStage);
         Gdx.input.setCatchBackKey(true);
     }
+
+    public void setPortrait()
+    {
+        vpWidth =vpShort;
+        vpHeight=vpLong;//portrait1landscap2 mode is tall and narrow
+
+        //gameStage.getViewport().apply();
+        gameStage.getViewport().update(vpWidth,vpHeight);
+        gameStage.getViewport().setWorldSize(vpWidth,vpHeight);
+        gameStage.getViewport().getCamera().viewportHeight = vpHeight;
+        gameStage.getViewport().getCamera().viewportWidth = vpWidth;
+
+        gameStage.getViewport().getCamera().position.set(vpWidth/2,vpHeight/2,0);
+
+        gameStage.getViewport().getCamera().update();
+        platform.SetOrientation("portrait1landscap2");
+    }
+    public void setLandscape()
+    {
+        vpWidth =vpShort;
+        vpHeight=vpLong;//portrait1landscap2 mode is tall and narrow
+
+        //gameStage.getViewport().apply();
+        gameStage.getViewport().update(vpWidth,vpHeight);
+        gameStage.getViewport().setWorldSize(vpWidth,vpHeight);
+        gameStage.getViewport().getCamera().viewportHeight = vpHeight;
+        gameStage.getViewport().getCamera().viewportWidth = vpWidth;
+
+        gameStage.getViewport().getCamera().position.set(vpWidth/2,vpHeight/2,0);
+
+        gameStage.getViewport().getCamera().update();
+        platform.SetOrientation("landscape");
+    }
     @Override
     public void updateOptionsGoToGameStage(int newNoOfRows, int newNoOfColumns, int newPortrait1Landscape2, int newFieldPosX, int newFieldPosY, int newFieldWidth, int newFieldHeight,int newZoom) {
         gameStage.setVisible(true);
+        //certain options require the entire field to be recalculated, if any of those options are altered, recalculate new field,
         if(  newNoOfRows+newNoOfColumns+ newPortrait1Landscape2+ newFieldPosX+ newFieldPosY+  newFieldWidth+ newFieldHeight>0) {
             gameStage.updateField(newNoOfRows, newNoOfColumns, newPortrait1Landscape2, newFieldPosX, newFieldPosY, newFieldWidth, newFieldHeight);
         }
+        //these options can be changed without recalculating the field
         if(newZoom>0)
         {
             gameStage.updateZoom(newZoom);
