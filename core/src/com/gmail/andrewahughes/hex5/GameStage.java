@@ -35,6 +35,9 @@ public class GameStage extends Stage {
     public Image pauseImg1;
     HexWide hexWide ;
     HexWideField hexWideField ;
+    HexTall hexTall;
+    HexTallField hexTallField ;
+
     Database database;
     RectTest rectTest;
     Viewport viewport;
@@ -71,6 +74,9 @@ public class GameStage extends Stage {
         v2=new Vector2(110,110);
         v3=new Vector2(50,50);
         v4=new Vector2(100,100);
+
+        updateField(noOfRows,noOfColumns,portrait,fieldPosX,fieldPosY,fieldWidth,fieldHeight);
+
         //viewport.getCamera().translate(viewport.getScreenWidth()/2,viewport.getScreenHeight()/2,0);
         //viewport.update(viewport.getScreenWidth(),viewport.getScreenHeight(),true);
         /*database = new Database(31,noOfColumns,noOfRows);
@@ -78,8 +84,8 @@ public class GameStage extends Stage {
         this.addActor(hexWide);
         hexWideField= new HexWideField(fieldPosX,fieldPosY,fieldWidth,fieldHeight,noOfRows,noOfColumns,this, database);
         addHexesToStage(hexWideField);*/
-
-        updateField(noOfRows,noOfColumns,portrait,fieldPosX,fieldPosY,fieldWidth,fieldHeight);
+//hexTall = new HexTall(150,400,400,0,this,database);
+//this.addActor(hexTall);
         rectTest = new RectTest(0,0,0,0);
         this.addActor(rectTest);
 
@@ -363,7 +369,12 @@ public boolean compareAll(int touchedHex,int otherHex, int touchedSector)
             //drawTallHex(renderer,70,200,70);
             this.act();
             //hexWide.draw(renderer);
-            hexWideField.draw(renderer);
+            if(portrait1Landscape2==1){
+                    hexWideField.draw(renderer);
+        }
+        else if(portrait1Landscape2==2) {
+            hexTallField.draw(renderer);
+        }
 
             //rectTest.draw(renderer);
 
@@ -371,7 +382,17 @@ public boolean compareAll(int touchedHex,int otherHex, int touchedSector)
             spriteBatch.setProjectionMatrix(viewport.getCamera().combined);
             spriteBatch.begin();
             //hexWide.drawSprites(spriteBatch);
-            hexWideField.drawSprites(spriteBatch);
+            //hexTall.drawSprites(spriteBatch);
+            if(portrait1Landscape2==1) {
+                hexWideField.drawSprites(spriteBatch);
+            }
+            else if(portrait1Landscape2==2)
+            {
+                hexTallField.drawSprites(spriteBatch);
+
+            }
+
+
             font.draw(spriteBatch,text+ " sh "+selectedHex+" sh2 "+selectedHex2+" s1 "+selectedSector+" s2 "+selectedSector2+" ph "+proposedSelectedHex+" ps "+proposedSelectedSector+" state "+state,30,690);
             spriteBatch.end();
 
@@ -411,6 +432,14 @@ public boolean compareAll(int touchedHex,int otherHex, int touchedSector)
             addActor(hwf.hexWideArray[i]);
         }
     }
+
+    public void addHexesToStage( HexTallField hwf)
+    {
+        for(int i=0;i<hwf.getNoOfHexes();i++)
+        {
+            addActor(hwf.hexTallArray[i]);
+        }
+    }
     public void removeAllActors()
     {
         for(Actor actor : getActors()) {
@@ -438,8 +467,9 @@ public boolean compareAll(int touchedHex,int otherHex, int touchedSector)
         }
         else if(portrait1Landscape2==2)
         {
-            //hextallfield
-            //add hexes to stage (hectallfield)
+
+            hexTallField = new HexTallField(fieldPosX,fieldPosY,fieldWidth,fieldHeight,newNoOfRows,noOfColumns,this,database);
+            addHexesToStage(hexTallField);
         }
     }
     public void updateZoom(int newZoom)

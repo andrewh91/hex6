@@ -608,7 +608,7 @@ vpHeight=vpShort;
     public void setPortrait()
     {
         vpWidth =vpShort;
-        vpHeight=vpLong;//portrait1landscap2 mode is tall and narrow
+        vpHeight=vpLong;//portrait mode is tall and narrow
 
         //gameStage.getViewport().apply();
         gameStage.getViewport().update(vpWidth,vpHeight);
@@ -619,12 +619,12 @@ vpHeight=vpShort;
         gameStage.getViewport().getCamera().position.set(vpWidth/2,vpHeight/2,0);
 
         gameStage.getViewport().getCamera().update();
-        platform.SetOrientation("portrait1landscap2");
+        platform.SetOrientation("portrait");
     }
     public void setLandscape()
     {
-        vpWidth =vpShort;
-        vpHeight=vpLong;//portrait1landscap2 mode is tall and narrow
+        vpWidth =vpLong;
+        vpHeight=vpShort;//landscape mode is tshort snd wide
 
         //gameStage.getViewport().apply();
         gameStage.getViewport().update(vpWidth,vpHeight);
@@ -642,6 +642,14 @@ vpHeight=vpShort;
         gameStage.setVisible(true);
         //certain options require the entire field to be recalculated, if any of those options are altered, recalculate new field,
         if(  newNoOfRows+newNoOfColumns+ newPortrait1Landscape2+ newFieldPosX+ newFieldPosY+  newFieldWidth+ newFieldHeight>0) {
+            if(newPortrait1Landscape2==1)
+            {
+                setPortrait();
+            }
+            else if(newPortrait1Landscape2==2)
+            {
+                setLandscape();
+            }
             gameStage.updateField(newNoOfRows, newNoOfColumns, newPortrait1Landscape2, newFieldPosX, newFieldPosY, newFieldWidth, newFieldHeight);
         }
         //these options can be changed without recalculating the field
