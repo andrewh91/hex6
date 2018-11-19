@@ -47,7 +47,7 @@ Platform platform;
     GamePauseStage gamePauseStage;
     Texture badlogic;
     private boolean visible = true;
-int portrait=1;
+int portrait=2;
     public IGameServiceClient gsClient;
     Skin skin;
     Stage mainStage;//main menu
@@ -82,7 +82,7 @@ vpHeight=vpShort;
         mainStage = new Stage(stretchViewport);
         Gdx.input.setInputProcessor(mainStage);
         Gdx.input.setCatchBackKey(true);
-        setPortrait();
+        setLandscape();
 
         prepareSkin();
 

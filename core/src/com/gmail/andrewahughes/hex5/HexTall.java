@@ -77,7 +77,7 @@ public class HexTall extends Actor {
                 //y=worldCoordinates.y;
 
                 touchLogic( event,  x,  y);
-                gs.setSelected(index, selectedSector);
+                gs.setSelectedTall(index, selectedSector);
                 //approx sector will indicate where the potential overlaps, need to check if the is a hex there then select the hex
 
             }
@@ -167,12 +167,13 @@ public class HexTall extends Actor {
     public int getApproxSector(float y, float posY, float x, float posX)
     {
         double angle = Math.atan2(y-posY,x-posX);
+        text3 = "angle"+angle;
 //this will give the angle in radians, the angle is taken between the line from the centre of the hex to the touch point and the line from centre of the hex to the right (i think. This would mean touching to the right of the centre would be angle 0, above the centre would be angle 90 etc except it’s given in radians and rather that give 270 it will give -90
 
 //because angles such as 270 are expressed as -90 if we do 180 - angle we will get all positive angles, (consequence of this is that the angles are now flipped 180 degrees so 0 would be to the left of centre, 90 would be below centre), translated into radians that’s pi-angle and we’ll get values from 0 to about <6.28 aka (2*PI),. because these are the tall hexes we should add PI/6 to the angle to rotate the angle a 12th of a circle clockwise  if we divide it by PI/3 aka (60 degrees) and rounddown we will get an integer from 0 to 5. We can return this simple integer to refer to which sector the angle is in, sector 0 will range from the 10 o’clock position to 121 o’clock, 1 will be from 12 to 2 o’clock, 2 will be 2 to 4 o’clock etc
 
 //
-        approxSector = (int)(Math.floor(((Math.PI-angle)+Math.PI/6)/(Math.PI/3)));
+        approxSector = (int)(Math.floor(((Math.PI-angle-Math.PI/6))/(Math.PI/3)));
         return approxSector;
     }
 

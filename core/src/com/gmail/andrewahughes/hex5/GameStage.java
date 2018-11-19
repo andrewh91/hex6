@@ -52,7 +52,7 @@ public class GameStage extends Stage {
 
     //recommended number of rows for portrait mode using hexwide in screens with 16:9 aspect ratio
     //can be found using noOfRows =roundup(noOfColumns*2-noOfColumns/2)
-    public int noOfRows=6,noOfColumns=4;
+    public int noOfRows=3,noOfColumns=7;
     int noOfSelected=0;
 
     ArrayList<Integer> adjacentArray;
@@ -62,7 +62,7 @@ public class GameStage extends Stage {
 
     boolean zoomSelectionMode =true;
 
-    int portrait1Landscape2=1, fieldPosX=50, fieldPosY=50, fieldWidth=620, fieldHeight=1180;
+    int portrait1Landscape2=2, fieldPosX=50, fieldPosY=50, fieldWidth=1180, fieldHeight=620;
 
 
 
@@ -282,6 +282,8 @@ public class GameStage extends Stage {
 
     public void selectFirstHex()
     {
+        if(proposedSelectedHex!=-1)
+        {
         selectedHex = proposedSelectedHex;
         hexWideField.hexWideArray[selectedHex].select(200);
         adjacentArray = hexWideField.getAdjacent(selectedHex,noOfColumns, noOfRows);
@@ -291,25 +293,25 @@ public class GameStage extends Stage {
             // zoom to fit adjacents
         }
         noOfSelected=1;
+        }
     }
 
     public void selectSecondHex()
     {
-        adjacentArray = hexWideField.getAdjacent(selectedHex,noOfColumns, noOfRows);
-        hexWideField.unhighlightAdjacent(adjacentArray);
+        if(proposedSelectedHex!=-1) {
+            adjacentArray = hexWideField.getAdjacent(selectedHex, noOfColumns, noOfRows);
+            hexWideField.unhighlightAdjacent(adjacentArray);
 
-        selectedHex2 = proposedSelectedHex;
-        hexWideField.hexWideArray[selectedHex2].select(200);
-        if(zoomSelectionMode)
-        {
-            // zoom to fit pair of selected hexes
+            selectedHex2 = proposedSelectedHex;
+            hexWideField.hexWideArray[selectedHex2].select(200);
+            if (zoomSelectionMode) {
+                // zoom to fit pair of selected hexes
+            } else {
+                selectedSector2 = proposedSelectedSector;
+                hexWideField.hexWideArray[selectedHex2].highlightSymbol(selectedSector2);
+            }
+            noOfSelected = 2;
         }
-        else
-        {
-            selectedSector2 = proposedSelectedSector;
-            hexWideField.hexWideArray[selectedHex2].highlightSymbol(selectedSector2);
-        }
-        noOfSelected=2;
     }
 
     public void removeOneSelected(int givenHex, int givenSector, int remainingHex, int remainingSector)
@@ -348,6 +350,237 @@ public boolean compareAll(int touchedHex,int otherHex, int touchedSector)
     }
     return false;
 }
+    public void setSelectedTall(int index, int sector) {
+        int totalHexes = noOfColumns * noOfRows;
+
+//overlap
+        if (sector > 9)//in the case of an overlap in the touch logic the sector would have 10 added to it's value to indicate that it is the hex's neighbour that is selected.
+        {//one of 4 adjacent hexes could be selected, work out which one it is with the selected sector
+//10 means the hex above and to the left of the given hex is selected,
+//11 is above and to the right
+//13 below right
+//14 below left
+
+//if hex is in an even row (including 0) above left would be hex index +1 + noOfRows
+//if hex is in an even row above right would be hex index +1
+//if hex is in an even row below right would be hex index -1
+//if hex is in an even row below left would be hex index - noOfRows -1
+
+//if hex is in an even rows (the bottom most row is 0 which is even) 
+            if ((index % noOfRows) % 2 == 0) {
+                if (sector == 10) {
+//if not on left edge AND not on top edge
+                    if (index >=noOfRows && index % noOfRows < noOfRows-1) {
+                        proposedSelectedHex = index+ 1-noOfRows;
+                    }
+                }
+                if (sector == 11) {
+//if not on the right edge AND not on the top
+                    if (index <= totalHexes-noOfRows && index % noOfRows < noOfRows-1) {
+                        proposedSelectedHex = index + 1;
+                    }
+                }
+                if (sector == 13) {
+//if not on the right edge AND not on the bottom
+                    if (index <= totalHexes-noOfRows && index % noOfRows > 0) {
+                        proposedSelectedHex = index -  1;
+                    }
+                }
+                if (sector == 14) {
+//if not on left edge AND not on bottom edge
+                    if (index >=noOfRows &&index % noOfRows > 0) {
+                        proposedSelectedHex = index - noOfRows - 1;
+                    }
+                }
+            }
+//else if odd row above left would just be hex index + 1 
+//else if odd row above right would be hex index + 1 + noOfRows
+//else if odd row below right would be hex index + noOfRows -1
+//else if odd row below left would be hex index - 1
+
+//if the given hex is in an even row;
+            else {//if in odd row
+                if (sector == 10) {
+//if not on left edge AND not on top edge
+                    if (index >=noOfRows && index % noOfRows < noOfRows-1) {
+                        proposedSelectedHex = index + 1;
+                    }
+                }
+                if (sector == 11) {
+//if not on the right edge AND not on the top
+                    if (index <= totalHexes-noOfRows && index % noOfRows < noOfRows-1) {
+                        proposedSelectedHex = index + noOfRows + 1;
+                    }
+                }
+                if (sector == 13) {
+//if not on the right edge AND not on the bottom
+                    if (index <= totalHexes-noOfRows && index % noOfRows > 0) {
+                        proposedSelectedHex = index +noOfRows- 1;
+                    }
+                }
+                if (sector == 14) {
+//if not on left edge AND not on bottom edge
+                    if (index >=noOfRows &&index % noOfRows > 0) {
+                        proposedSelectedHex = index - 1;
+                    }
+                }
+            }
+
+//  the touched sector will actually be the opposing sector to the given hex, so translate that
+
+            proposedSelectedSector = (sector + 3 - 10) % 6;
+
+        }//end overlap logic
+        else {
+            proposedSelectedSector = sector;
+            proposedSelectedHex = index;
+        }
+        if (noOfSelected == 0) {
+            selectFirstHexTall();
+        }//end if(noOfSelected==0)
+
+        else if (noOfSelected == 1) {
+            if (hexTallField.hexTallArray[proposedSelectedHex].highlight) {
+                selectSecondHexTall();
+                //if not zoomSelectionMode compare sector with all sectors on first hex
+                if (!zoomSelectionMode) {
+                    if( compareAllTall(selectedHex2,selectedHex,proposedSelectedSector))
+                    {
+                        resetSelectionTall();
+                    }
+                }
+
+            }//end if highlighted
+            else if (hexTallField.hexTallArray[proposedSelectedHex].select) {
+                resetSelectionTall();
+
+            }//end if selected
+            else //not highlighted and not selected
+            {
+                resetSelectionTall();
+            }
+        }//end else if(noOfSelected==1)
+        else if (noOfSelected == 2) {
+            if (hexTallField.hexTallArray[proposedSelectedHex].select) {
+                if (selectedHex == proposedSelectedHex) {
+                    if(compareAllTall(selectedHex,selectedHex2,proposedSelectedSector)){
+                        resetSelectionTall();
+                    }
+                    else
+                    {
+                        swapSector1Tall(selectedHex,selectedSector,proposedSelectedSector);
+                    }
+                } else if (selectedHex2 == proposedSelectedHex) {
+                    if(compareAllTall(selectedHex2,selectedHex,proposedSelectedSector)){
+                        resetSelectionTall();
+                    }
+                    else
+                    {
+                        swapSector2Tall(selectedHex2,selectedSector2,proposedSelectedSector);
+
+                    }
+                }
+            }//end if selected
+            else {
+                resetSelectionTall();
+            }
+        }//end else if(noOfSelected==2)
+    }
+
+    public void resetSelectionTall()
+    {
+        if(selectedHex!=-1)
+        {
+            hexTallField.hexTallArray[selectedHex].unselect(0);
+            hexTallField.hexTallArray[selectedHex].unhighlightSymbol();
+            adjacentArray = hexTallField.getAdjacent(selectedHex,noOfColumns, noOfRows);
+            hexTallField.unhighlightAdjacent(adjacentArray);
+        }
+        if(selectedHex2!=-1)
+        {
+            hexTallField.hexTallArray[selectedHex2].unselect(0);
+            hexTallField.hexTallArray[selectedHex2].unhighlightSymbol();
+            adjacentArray = hexTallField.getAdjacent(selectedHex2,noOfColumns, noOfRows);
+            hexTallField.unhighlightAdjacent(adjacentArray);
+        }
+        selectedHex=-1;
+        selectedHex2=-1;
+        proposedSelectedHex=-1;
+        if(zoomSelectionMode)
+        {
+            //zoom out
+        }
+        noOfSelected=0;
+    }
+
+    public void selectFirstHexTall()
+    {
+        if(proposedSelectedHex!=-1) {
+            selectedHex = proposedSelectedHex;
+            hexTallField.hexTallArray[selectedHex].select(200);
+            adjacentArray = hexTallField.getAdjacent(selectedHex, noOfColumns, noOfRows);
+            hexTallField.highlightAdjacent(adjacentArray);
+            if (zoomSelectionMode) {
+                // zoom to fit adjacents
+            }
+            noOfSelected = 1;
+        }
+    }
+
+    public void selectSecondHexTall()
+    {
+        if(proposedSelectedHex!=-1) {
+            adjacentArray = hexTallField.getAdjacent(selectedHex, noOfColumns, noOfRows);
+            hexTallField.unhighlightAdjacent(adjacentArray);
+
+            selectedHex2 = proposedSelectedHex;
+            hexTallField.hexTallArray[selectedHex2].select(200);
+            if (zoomSelectionMode) {
+                // zoom to fit pair of selected hexes
+            } else {
+                selectedSector2 = proposedSelectedSector;
+                hexTallField.hexTallArray[selectedHex2].highlightSymbol(selectedSector2);
+            }
+            noOfSelected = 2;
+        }
+    }
+
+    public void removeOneSelectedTall(int givenHex, int givenSector, int remainingHex, int remainingSector)
+    {
+        hexTallField.hexTallArray[givenHex].unselect(0);
+        hexTallField.hexTallArray[givenSector].unhighlightSymbol();
+        adjacentArray = hexTallField.getAdjacent(remainingHex,noOfColumns, noOfRows);
+        hexTallField.highlightAdjacent(adjacentArray);
+        selectedHex = remainingHex;
+        selectedSector = remainingSector;
+        selectedHex2 = -1;
+        selectedSector2 = -1;
+        noOfSelected=1;
+    }
+
+    public void swapSector1Tall(int hex, int oldSector, int newSector)
+    {
+        hexTallField.hexTallArray[hex].unhighlightSymbol();
+        hexTallField.hexTallArray[hex].highlightSymbol(newSector);
+        selectedSector=newSector;
+    }
+    public void swapSector2Tall(int hex, int oldSector, int newSector)
+    {
+        hexTallField.hexTallArray[hex].unhighlightSymbol();
+        hexTallField.hexTallArray[hex].highlightSymbol(newSector);
+        selectedSector2=newSector;
+    }
+    public boolean compareAllTall(int touchedHex,int otherHex, int touchedSector)
+    {
+        for (int i = 0; i < 6; i++)
+        {
+            if(database.compareSymbols(touchedHex, touchedSector, otherHex, i))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
 
     @Override
     public void draw() {
@@ -458,17 +691,17 @@ public boolean compareAll(int touchedHex,int otherHex, int touchedSector)
         if(newFieldHeight!=0){ fieldHeight=newFieldHeight;}
 
 //reset / reload everything 
-        resetSelection();
         removeAllActors();
         database = new Database(31,noOfColumns,noOfRows);
         if(portrait1Landscape2==1) {
+            resetSelection();
             hexWideField = new HexWideField(fieldPosX, fieldPosY, fieldWidth, fieldHeight, noOfRows, noOfColumns, this, database);
             addHexesToStage(hexWideField);
         }
         else if(portrait1Landscape2==2)
         {
-
-            hexTallField = new HexTallField(fieldPosX,fieldPosY,fieldWidth,fieldHeight,newNoOfRows,noOfColumns,this,database);
+            resetSelectionTall();
+            hexTallField = new HexTallField(fieldPosX,fieldPosY,fieldWidth,fieldHeight,noOfRows,noOfColumns,this,database);
             addHexesToStage(hexTallField);
         }
     }

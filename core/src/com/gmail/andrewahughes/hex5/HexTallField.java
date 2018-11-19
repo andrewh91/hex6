@@ -23,14 +23,14 @@ public class HexTallField
         this.noOfRows = noOfRows;
         hexTallArray = new HexTall[noOfColumns * noOfRows];
 //unless the specified argument result in the ideal ratio of number of hexes across and down then the hex field will be offset in either the x or y axis, record that to counteract it
-        int marginY = (int) ((height- (0.5 * edgeSize + (noOfColumns * 1.5 * edgeSize))) / 2);
+        int marginY = (int) ((height- (0.5 * edgeSize + (noOfRows * 1.5 * edgeSize))) / 2);
         int marginX;
         if (noOfRows > 1) {
-            marginX = (int) ((width- (edgeSize * (noOfRows+0.5) * 0.866025403784439 * 2)) / 2);
+            marginX = (int) ((width- (edgeSize * (noOfColumns+0.5) * 0.866025403784439 * 2)) / 2);
 
         } else
         {
-            marginX = (int)((width- (edgeSize*noOfRows*0.866025403784439*2))/2);
+            marginX = (int)((width- (edgeSize*noOfColumns*0.866025403784439*2))/2);
 
         }
 
@@ -90,111 +90,104 @@ public class HexTallField
         return edgeSize;
     }
     //#resumefrom here
-    public ArrayList<Integer> getAdjacent(int hex, int noOfColumns, int noOfRows)
+    public ArrayList<Integer> getAdjacent(int index, int noOfColumns, int noOfRows)
     {
         int totalHexes = noOfColumns*noOfRows;
         ArrayList<Integer> adjacentArray = new ArrayList<Integer>();
         int i=0;
 
-//if hex is in an even column (the left most column is 0 which is even)
-        if((hex%noOfColumns)%2==0)
+//if not top 
+        if( index % noOfRows < noOfRows-1)
         {
-//if not on the top edge
-            if(hex+noOfColumns<totalHexes)
+//if even
+            if ((index % noOfRows) % 2 == 0)
             {
-//add hex above
-                adjacentArray.add(hex+noOfColumns);
-                i++;
-            }
-//if not on left edge
-            if(hex%noOfColumns>0)
-            {
-//add hex above left
-                adjacentArray.add(hex-1);
-                i++;
-            }
-//if not on the right edge
-            if(hex%noOfColumns<noOfColumns-1)
-            {
-//add hex above and to the right
-                adjacentArray.add(hex+1);
-                i++;
-            }
-
-//if not on bottom edge
-            if(hex-noOfColumns>=0)
-            {
-//add hex below
-                adjacentArray.add(hex-noOfColumns);
-                i++;
-
-//if not on left edge
-                if(hex%noOfColumns>0)
+//if not left
+                if(index >=noOfRows)
                 {
-//add hex below left
-                    adjacentArray.add(hex-1-noOfColumns);
+//select top left 
+                    adjacentArray.add(index -noOfRows+ 1);
                     i++;
+//end if not left
                 }
-//if not on the right edge
-                if(hex%noOfColumns<noOfColumns-1)
+//select top right//we can do this even if we are on the right edge
+                adjacentArray.add(index+1);
+                i++;
+//end if even
+            }
+//else if odd
+            else  if ((index % noOfRows) % 2 == 1)
+            {
+//if not right
+                if(index < totalHexes-noOfRows)
                 {
-//add below right hex
-                    adjacentArray.add(hex+1-noOfColumns);
+//select top right
+                    adjacentArray.add(index +noOfRows+1);
                     i++;
+//end if not right
                 }
-
-            }//end if not on bottom
-        }//end even
-
-//if hex is in an odd column
-        else
+//select top left
+                adjacentArray.add(index+ 1);
+                i++;
+//end else if odd
+            }
+//end if not top
+        }
+//if not bottom 
+        if(index % noOfRows > 0)
         {
-//if not on the top edge
-            if(hex+noOfColumns<totalHexes)
+//if odd
+            if ((index % noOfRows) % 2 == 1)
             {
-//add hex above
-                adjacentArray.add(hex+noOfColumns);
-                i++;
-                //if not on left edge
-                if(hex%noOfColumns>0)
+//if not right 
+                if(index < totalHexes-noOfRows )
                 {
-//add hex above left
-                    adjacentArray.add(hex-1+noOfColumns);
+//select bottom right
+                    adjacentArray.add(index +noOfRows- 1);
                     i++;
+//end if not right
                 }
-//if not on the right edge
-                if(hex%noOfColumns<noOfColumns-1)
+//select bottom left
+                adjacentArray.add(index - 1);
+                i++;
+//end if odd
+            }
+//else if even
+            else if ((index % noOfRows) % 2 == 0)
+            {
+//if not left
+                if(index >=noOfRows )
                 {
-//add hex above and to the right
-                    adjacentArray.add(hex+1+noOfColumns);
+//select bottom left
+                    adjacentArray.add( index - noOfRows - 1);
                     i++;
+//end if not left
                 }
-            }//end if not on top
-
-//if not on bottom edge
-            if(hex-noOfColumns>=0)
-            {
-//add hex below
-                adjacentArray.add(hex-noOfColumns);
+//select bottom right
+                adjacentArray.add(  index -  1);
                 i++;
+//end if even
             }
+//end if not bottom 
+        }
 
-//if not on left edge
-            if(hex%noOfColumns>0)
-            {
-//add hex below left
+//if not left
+        if (index >=noOfRows)
+        {
+//select left
+            adjacentArray.add(  index -  noOfRows);
+            i++;
+//end if not left
+        }
+//if not right 
+        if(index < totalHexes-noOfRows )
+        {
+//select right 
+            adjacentArray.add(  index +  noOfRows);
+            i++;
+//end if not right
+        }
 
-                adjacentArray.add(hex-1);
-                i++;
-            }
-//if not on the right edge
-            if(hex%noOfColumns<noOfColumns-1)
-            {
-//add below right hex
-                adjacentArray.add(hex+1);
-                i++;
-            }
-        }//end odd
         return adjacentArray;
     }//end method
 
