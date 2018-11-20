@@ -52,7 +52,7 @@ public class GameStage extends Stage {
 
     //recommended number of rows for portrait mode using hexwide in screens with 16:9 aspect ratio
     //can be found using noOfRows =roundup(noOfColumns*2-noOfColumns/2)
-    public int noOfRows=3,noOfColumns=7;
+    public int noOfRows=3,noOfColumns=4;
     int noOfSelected=0;
 
     ArrayList<Integer> adjacentArray;
@@ -138,14 +138,14 @@ public class GameStage extends Stage {
 //if hex is in an even column (the left most column is 0 which is even) 
             if ((index % noOfColumns) % 2 == 0) {
                 if (sector == 10) {
-//if not on left edge AND not on top edge
-                    if (index % noOfColumns > 0 && index + noOfColumns < totalHexes) {
+//if not on left edge - doesnt matter if its on the top
+                    if (index % noOfColumns > 0 ) {
                         proposedSelectedHex = index - 1;
                     }
                 }
                 if (sector == 12) {
-//if not on the right edge AND not on the top 
-                    if (index % noOfColumns < noOfColumns - 1 && index + noOfColumns < totalHexes) {
+//if not on the right edge
+                    if (index % noOfColumns < noOfColumns - 1 ) {
                         proposedSelectedHex = index + 1;
                     }
                 }
@@ -182,15 +182,15 @@ public class GameStage extends Stage {
                     }
                 }
                 if (sector == 13) {
-//if not on the right edge AND not on the bottom
-                    if (index % noOfColumns < noOfColumns - 1 && index - noOfColumns >= 0) {
+//if not on the right edge
+                    if (index % noOfColumns < noOfColumns - 1 ) {
                         proposedSelectedHex = index + 1;
                     }
                 }
                 if (sector == 15) {
-//if not on left edge AND not on bottom edge
-                    if (index % noOfColumns > 0 && index - noOfColumns >= 0) {
-                        proposedSelectedHex = index - 1;
+//if not on left edge - on wide field odd column adjacents can go below left snd below right
+                    if (index % noOfColumns > 0 ) {
+                        proposedSelectedHex = index - 1;// bottom left
                     }
                 }
             }
@@ -375,14 +375,14 @@ public boolean compareAll(int touchedHex,int otherHex, int touchedSector)
                     }
                 }
                 if (sector == 11) {
-//if not on the right edge AND not on the top
-                    if (index <= totalHexes-noOfRows && index % noOfRows < noOfRows-1) {
+//if  not on the top - doesnt matter if its on the right or not
+                    if ( index % noOfRows < noOfRows-1) {
                         proposedSelectedHex = index + 1;
                     }
                 }
                 if (sector == 13) {
-//if not on the right edge AND not on the bottom
-                    if (index <= totalHexes-noOfRows && index % noOfRows > 0) {
+//if  not on the bottom - doesnt matter if its on tbe right
+                    if (index % noOfRows > 0) {
                         proposedSelectedHex = index -  1;
                     }
                 }
@@ -407,8 +407,8 @@ public boolean compareAll(int touchedHex,int otherHex, int touchedSector)
                     }
                 }
                 if (sector == 11) {
-//if not on the right edge AND not on the top
-                    if (index <= totalHexes-noOfRows && index % noOfRows < noOfRows-1) {
+//if  not on the top - doesnt matter if its o  the left or not
+                    if ( index % noOfRows < noOfRows-1) {
                         proposedSelectedHex = index + noOfRows + 1;
                     }
                 }
@@ -419,8 +419,8 @@ public boolean compareAll(int touchedHex,int otherHex, int touchedSector)
                     }
                 }
                 if (sector == 14) {
-//if not on left edge AND not on bottom edge
-                    if (index >=noOfRows &&index % noOfRows > 0) {
+//if not on bottom edge - doesnt matter if its on the keft or not
+                    if (index % noOfRows > 0) {
                         proposedSelectedHex = index - 1;
                     }
                 }
