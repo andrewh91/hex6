@@ -55,15 +55,18 @@ public class GameStage extends Stage {
     public int noOfRows=3,noOfColumns=4;
     int noOfSelected=0;
 
-    ArrayList<Integer> adjacentArray;
+    ArrayList<Integer> adjacentArray=new ArrayList<Integer>();
+    ArrayList<Integer> nonMatchingSymbols=new ArrayList<Integer>();
+    ArrayList<Integer> nonMatchingSymbolsHex1=new ArrayList<Integer>();
+    ArrayList<Integer> nonMatchingSymbolsHex2=new ArrayList<Integer>();
 
     int proposedSelectedHex = -1;
     int proposedSelectedSector = -1;
 
     boolean zoomSelectionMode =true;
 
-    int portrait1Landscape2=2, fieldPosX=50, fieldPosY=50, fieldWidth=1180, fieldHeight=620;
-
+    int portrait1Landscape2=1, fieldPosX=50, fieldPosY=50, fieldWidth=620, fieldHeight=1180;
+int difficulty=0;
 
 
     public GameStage(Viewport viewport, Texture texture,final StageInterface stageInterface, int portrait) {
@@ -142,20 +145,20 @@ public class GameStage extends Stage {
                     if (index % noOfColumns > 0 ) {
                         proposedSelectedHex = index - 1;
                     }
-                }
-                if (sector == 12) {
+                }// not needed, touch handled by more recent adjacent hex
+                /*if (sector == 12) {
 //if not on the right edge
                     if (index % noOfColumns < noOfColumns - 1 ) {
                         proposedSelectedHex = index + 1;
                     }
-                }
-                if (sector == 13) {
+                }*/
+                else if (sector == 13) {
 //if not on the right edge AND not on the bottom
                     if (index % noOfColumns < noOfColumns - 1 && index - noOfColumns >= 0) {
                         proposedSelectedHex = index - noOfColumns + 1;
                     }
                 }
-                if (sector == 15) {
+                else if (sector == 15) {
 //if not on left edge AND not on bottom edge
                     if (index % noOfColumns > 0 && index - noOfColumns >= 0) {
                         proposedSelectedHex = index - noOfColumns - 1;
@@ -169,7 +172,8 @@ public class GameStage extends Stage {
 //below left would be hex index -1
 //if the given hex is in an even column;
             else {
-                if (sector == 10) {
+                //only need one of these for odd columns most of the surrounding oveelapping hexes are created more recently so they will handle touch
+                /*if (sector == 10) {
 //if not on left edge AND not on top edge
                     if (index % noOfColumns > 0 && index + noOfColumns < totalHexes) {
                         proposedSelectedHex = index + noOfColumns - 1;
@@ -186,7 +190,7 @@ public class GameStage extends Stage {
                     if (index % noOfColumns < noOfColumns - 1 ) {
                         proposedSelectedHex = index + 1;
                     }
-                }
+                }*/
                 if (sector == 15) {
 //if not on left edge - on wide field odd column adjacents can go below left snd below right
                     if (index % noOfColumns > 0 ) {
@@ -259,6 +263,8 @@ public class GameStage extends Stage {
     {
         if(selectedHex!=-1)
         {
+            hexWideField.hexWideArray[selectedHex].unHighlightNonMatchingSymbols();
+
             hexWideField.hexWideArray[selectedHex].unselect(0);
             hexWideField.hexWideArray[selectedHex].unhighlightSymbol();
             adjacentArray = hexWideField.getAdjacent(selectedHex,noOfColumns, noOfRows);
@@ -266,6 +272,7 @@ public class GameStage extends Stage {
         }
         if(selectedHex2!=-1)
         {
+            hexWideField.hexWideArray[selectedHex2].unHighlightNonMatchingSymbols();
             hexWideField.hexWideArray[selectedHex2].unselect(0);
             hexWideField.hexWideArray[selectedHex2].unhighlightSymbol();
             adjacentArray = hexWideField.getAdjacent(selectedHex2,noOfColumns, noOfRows);
@@ -304,6 +311,22 @@ public class GameStage extends Stage {
 
             selectedHex2 = proposedSelectedHex;
             hexWideField.hexWideArray[selectedHex2].select(200);
+nonMatchingSymbolsHex1.clear();
+nonMatchingSymbolsHex2.clear();
+            nonMatchingSymbols=database.findNonMatchingSymbols(selectedHex,selectedHex2,difficulty);
+for(int i =0;i<nonMatchingSymbols.size();i++)//this list could have size up to 11, so divide it into 2 below
+{
+    if(nonMatchingSymbols.get(i)>5)//the values in the array should refer to symbols (0-5) but some are +6to indicate its in the second hex
+    {
+        nonMatchingSymbolsHex2.add(nonMatchingSymbols.get(i)-6);//add the ones over 5 to the second hex list, obviously subtract 6 so the value is between 0-5
+    }
+    else
+    {
+        nonMatchingSymbolsHex1.add(nonMatchingSymbols.get(i));
+    }
+}
+            hexWideField.hexWideArray[selectedHex].highlightNonMatchingSymbols(nonMatchingSymbolsHex1);
+            hexWideField.hexWideArray[selectedHex2].highlightNonMatchingSymbols(nonMatchingSymbolsHex2);
             if (zoomSelectionMode) {
                 // zoom to fit pair of selected hexes
             } else {
@@ -373,20 +396,20 @@ public boolean compareAll(int touchedHex,int otherHex, int touchedSector)
                     if (index >=noOfRows && index % noOfRows < noOfRows-1) {
                         proposedSelectedHex = index+ 1-noOfRows;
                     }
-                }
-                if (sector == 11) {
+                }// this should be impossible, as an adjacent hex would be placed more recently and that would handle the touch
+                /*if (sector == 11) {
 //if  not on the top - doesnt matter if its on the right or not
                     if ( index % noOfRows < noOfRows-1) {
                         proposedSelectedHex = index + 1;
                     }
-                }
-                if (sector == 13) {
+                }*/
+                else if (sector == 13) {
 //if  not on the bottom - doesnt matter if its on tbe right
                     if (index % noOfRows > 0) {
                         proposedSelectedHex = index -  1;
                     }
                 }
-                if (sector == 14) {
+                else if (sector == 14) {
 //if not on left edge AND not on bottom edge
                     if (index >=noOfRows &&index % noOfRows > 0) {
                         proposedSelectedHex = index - noOfRows - 1;
@@ -400,7 +423,8 @@ public boolean compareAll(int touchedHex,int otherHex, int touchedSector)
 
 //if the given hex is in an even row;
             else {//if in odd row
-                if (sector == 10) {
+                //only one corner case is not covered by overlapping adjacent hexes that were placed more recwntly
+                /*if (sector == 10) {
 //if not on left edge AND not on top edge
                     if (index >=noOfRows && index % noOfRows < noOfRows-1) {
                         proposedSelectedHex = index + 1;
@@ -417,7 +441,7 @@ public boolean compareAll(int touchedHex,int otherHex, int touchedSector)
                     if (index <= totalHexes-noOfRows && index % noOfRows > 0) {
                         proposedSelectedHex = index +noOfRows- 1;
                     }
-                }
+                }*/
                 if (sector == 14) {
 //if not on bottom edge - doesnt matter if its on the keft or not
                     if (index % noOfRows > 0) {
@@ -692,7 +716,7 @@ public boolean compareAll(int touchedHex,int otherHex, int touchedSector)
 
 //reset / reload everything 
         removeAllActors();
-        database = new Database(31,noOfColumns,noOfRows);
+        database = new Database(31,noOfColumns,noOfRows,portrait1Landscape2);
         if(portrait1Landscape2==1) {
             resetSelection();
             hexWideField = new HexWideField(fieldPosX, fieldPosY, fieldWidth, fieldHeight, noOfRows, noOfColumns, this, database);
@@ -717,6 +741,10 @@ public boolean compareAll(int touchedHex,int otherHex, int touchedSector)
         }
     }
 
+    public void updateDifficulty(int newDifficulty)
+    {
+        difficulty=newDifficulty;
+    }
     public void drawTallHex(ShapeRenderer sr, int originX, int originY, int edgeSize)
     {
         // draws a ‘tall’ hex hex with flat sides . originX and originY are the coordinates passed in which will determine the centre of the hex, edge size will determine the size, altitudeSize is the height (or altitude) of an equilateral triangle with edge size defined by edgeSize

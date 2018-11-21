@@ -14,6 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 import java.awt.Rectangle;
+import java.util.ArrayList;
 
 /**
  * Created by Andrew Hughes on 26/09/2018.
@@ -49,7 +50,7 @@ public class HexWide extends Actor {
     public int selectedSymbol=-1;
     public boolean highlightSymbol = false;
     public int touchX = 0, touchY = 0, touchRadius = 10;
-
+   ArrayList <Integer> removeSymbol= new ArrayList<Integer>(6);
 
     public HexWide(final float edgeSize, final float centreX, final float centreY, final int index, final GameStage gs, final Database db) {
         indexNo = "" + index;
@@ -65,6 +66,11 @@ public class HexWide extends Actor {
         this.posX = centreX;
         this.posY = centreY;
         visible = true;
+
+        for(int i =0;i<6;i++) {
+            removeSymbol.add(1);
+
+        }
         setBounds(centreX - edgeSize, centreY - altitudeSize, edgeSize * 2, altitudeSize * 2);//posX gives the centre so need  to offset that
 
         this.addListener(new ClickListener() {
@@ -268,13 +274,32 @@ public class HexWide extends Actor {
 
     public void drawSymbols (SpriteBatch sb, float originX, float originY , float edgeSize, float altitudeSize)
     {
-        font.draw(sb, ""+symbol0, originX - altitudeSize, (float)(originY+0.5*edgeSize));
-        font.draw(sb, ""+symbol1, originX, originY+edgeSize);
-        font.draw(sb, ""+symbol2, originX + altitudeSize, (float)(originY+0.5*edgeSize));
-        font.draw(sb, ""+symbol3, originX + altitudeSize, (float)(originY-0.5*edgeSize));
-        font.draw(sb, ""+symbol4, originX, originY-edgeSize);
-        font.draw(sb, ""+symbol5, originX-altitudeSize, (float)(originY-0.5*edgeSize));
+        if(removeSymbol.get(0)!=-1)
+        {
+            font.draw(sb, ""+symbol0, originX - altitudeSize, (float)(originY+0.5*edgeSize));
+        }
+        if(removeSymbol.get(1)!=-1)
+        {
+            font.draw(sb, ""+symbol1, originX, originY+edgeSize);
+        }
+        if(removeSymbol.get(2)!=-1)
+        {
+            font.draw(sb, ""+symbol2, originX + altitudeSize, (float)(originY+0.5*edgeSize));
+        }
+        if(removeSymbol.get(3)!=-1)
+        {
+            font.draw(sb, ""+symbol3, originX + altitudeSize, (float)(originY-0.5*edgeSize));
+        }
+        if(removeSymbol.get(4)!=-1)
+        {
+            font.draw(sb, ""+symbol4, originX, originY-edgeSize);
+        }
+        if(removeSymbol.get(5)!=-1)
+        {
+            font.draw(sb, ""+symbol5, originX-altitudeSize, (float)(originY-0.5*edgeSize));
+        }
     }
+
     void drawWideSymbol(ShapeRenderer sr, float originX, float originY, float edgeSize)
     {
         //draws the highlighted symbol
@@ -315,6 +340,25 @@ public class HexWide extends Actor {
         }//end if highlightSymbol
 
     }
+    void highlightNonMatchingSymbols(ArrayList<Integer> removeSymbol)
+    {
+        // we pass in alist of symbols that dont match,
+        for(int i =0; i< removeSymbol.size();i++)
+        {
+            this.removeSymbol.set(removeSymbol.get(i),-1);// for each symbol that doesnt match , set the corresponding index of our array to -1
+        }
+    }//end of method
 
+
+    void unHighlightNonMatchingSymbols()
+    {
+        for(int i =0;i<removeSymbol.size();i++) {// this can have more than 6, so remove everything then add 6 back in
+            removeSymbol.clear();
+
+        }
+        for(int i =0;i<6;i++) {
+            removeSymbol.add(0,1);
+
+        }
+    }//end of method
 }
-

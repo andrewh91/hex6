@@ -49,7 +49,7 @@ public class HexTall extends Actor {
     public int selectedSymbol=-1;
     public boolean highlightSymbol = false;
     public int touchX = 0, touchY = 0, touchRadius = 10;
-
+    int[] removeSymbol= new int[]{1,1,1,1,1,1};
 
     public HexTall(final float edgeSize, final float centreX, final float centreY, final int index, final GameStage gs, final Database db) {
         indexNo = "" + index;
@@ -270,13 +270,31 @@ sr.rect(posX-altitudeSize,posY-edgeSize,altitudeSize*2,edgeSize*2);
 
     public void drawSymbols (SpriteBatch sb, float originX, float originY , float edgeSize, float altitudeSize)
     {
-        font.draw(sb, ""+symbol0,(float)(originX - 0.5*edgeSize), (float)(originY+altitudeSize));
-        font.draw(sb, ""+symbol1, (float)(originX + 0.5*edgeSize), originY+altitudeSize);
-        font.draw(sb, ""+symbol2, originX + edgeSize, originY);
-        font.draw(sb, ""+symbol3,(float)(originX + 0.5*edgeSize), originY-altitudeSize);
-        font.draw(sb, ""+symbol4, (float)(originX - 0.5*edgeSize), originY-altitudeSize);
-        font.draw(sb, ""+symbol5, originX-edgeSize, originY);
+        if(removeSymbol[0]!=-1)
+        {
+            font.draw(sb, ""+symbol0,(float)(originX - 0.5*edgeSize), (float)(originY+altitudeSize));
+        }
+        if(removeSymbol[1]!=-1)
+        {
+            font.draw(sb, ""+symbol1, (float)(originX + 0.5*edgeSize), originY+altitudeSize);
+        }
+        if(removeSymbol[2]!=-1)
+        {
+            font.draw(sb, ""+symbol2, originX + edgeSize, originY);
+        }
+        if(removeSymbol[3]!=-1)
+        {
+            font.draw(sb, ""+symbol3,(float)(originX + 0.5*edgeSize), originY-altitudeSize);
+        }
+        if(removeSymbol[4]!=-1)
+        {
+            font.draw(sb, ""+symbol4, (float)(originX - 0.5*edgeSize), originY-altitudeSize);
+        }
+        if(removeSymbol[5]!=-1)
+        {
+            font.draw(sb, ""+symbol5, originX-edgeSize, originY);}
     }
+
     void drawTallSymbol(ShapeRenderer sr, float originX, float originY, float edgeSize)
     {
         //draws the highlighted symbol
@@ -317,5 +335,14 @@ sr.rect(posX-altitudeSize,posY-edgeSize,altitudeSize*2,edgeSize*2);
         }//end if highlightSymbol
 
     }
+    void highlightNonMatchingSymbols(int[] removeSymbol)
+    {
+        this.removeSymbol=removeSymbol;
+    }//end of method
+
+    void unHighlightNonMatchingSymbols()
+    {
+        removeSymbol= new int[]{-1,-1,-1,-1,-1,-1};
+    }//end of method
 
 }

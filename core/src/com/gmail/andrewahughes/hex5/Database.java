@@ -58,10 +58,17 @@ public class Database{
 
     int noOfColumns,noOfRows,totalHexes;
 
-    public Database( int noOfSymbols,int columns ,int rows)
+    public Database( int noOfSymbols,int columns ,int rows, int portrait1Landscape2)
     {
-        noOfColumns=columns;
-        noOfRows = rows;
+        if(portrait1Landscape2==1) {
+            noOfColumns = columns;
+            noOfRows = rows;
+        }
+
+        else if(portrait1Landscape2==2) {
+            noOfColumns = rows;
+            noOfRows = columns;
+        }
         totalHexes=rows*columns;
 //we need exactly 31 symbols. if we have a set of more than 31 symbols we need to play without some
 //assign each datum a random symbol
@@ -256,6 +263,49 @@ else //if (odd)
             }
         }
     }
+
+    ArrayList<Integer> findNonMatchingSymbols(int hex1, int hex2, int noToRemove)
+    {//can remove up to 10 symbols from the 2 hexes 
+        ArrayList<Integer> randomSymbols1= new ArrayList<Integer>();
+        ArrayList<Integer> randomSymbols2= new ArrayList<Integer>();
+        ArrayList<Integer> nonMatchingSymbols= new ArrayList<Integer>();
+        randomSymbols1= randomlySortedList(6);
+        randomSymbols2= randomlySortedList(6);
+
+        for(int i = 0 ; i < 12;i++)//for all 12 symbols
+        {
+            if(nonMatchingSymbols.size()>=noToRemove)
+        {
+            break;//break i for loop because we have enough nonMatching symbols
+        }
+            if(i%2==0)//if i is even
+            {
+                for(int j =0;j<6;j++)//for 6 symbols
+                {
+                    if(!compareSymbols(hex1,randomSymbols1.get((int)(i/2)),hex2,j))//check if the first random symbol on the first hex does not match any of the symbols on the other hex. if it does not ...
+                    {
+                        nonMatchingSymbols.add(randomSymbols1.get((int)(i/2)));//add the random symbol to a list plus 6 so we can later figure out which hex it belonged to
+                        break;//break the j for loop because we found a symbol that did not match
+                    }//end if compare
+//if we did find a symbol that matched then carry on looking - loop will continue
+                }//end j loop
+            }//end if even
+            else//if i is odd
+            {
+                for(int j =0;j<6;j++)//for 6 symbols
+                {
+                    if(!compareSymbols(hex2,randomSymbols2.get((int)(i/2)),hex1,j))//check if the first random symbol on the second hex does not match any of the symbols on the other hex. if it does not ...
+                    {
+                        nonMatchingSymbols.add(6+randomSymbols2.get((int)(i/2)));//add the random symbol to a list plus 6 so we can later figure out which hex it belonged to
+                        break;//break the j for loop because we found a symbol that did not match 
+                    }//end if compare
+//if we did find a symbol that matched then carry on looking - loop will continue 
+                }//end j for loop
+            }//end else if odd
+
+        }//end i for loop
+        return nonMatchingSymbols;
+    }//end method
 
 }//end class
 

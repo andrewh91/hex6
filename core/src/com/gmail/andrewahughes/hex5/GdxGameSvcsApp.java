@@ -47,7 +47,6 @@ Platform platform;
     GamePauseStage gamePauseStage;
     Texture badlogic;
     private boolean visible = true;
-int portrait=2;
     public IGameServiceClient gsClient;
     Skin skin;
     Stage mainStage;//main menu
@@ -61,6 +60,7 @@ int portrait=2;
     OrthographicCamera cam;
     StretchViewport stretchViewport;
     public int vpWidth,vpHeight,vpShort,vpLong;
+    int portrait=1;
 
    public GdxGameSvcsApp(Platform platform)
    {
@@ -82,7 +82,7 @@ vpHeight=vpShort;
         mainStage = new Stage(stretchViewport);
         Gdx.input.setInputProcessor(mainStage);
         Gdx.input.setCatchBackKey(true);
-        setLandscape();
+        setPortrait();
 
         prepareSkin();
 
@@ -638,7 +638,10 @@ vpHeight=vpShort;
         platform.SetOrientation("landscape");
     }
     @Override
-    public void updateOptionsGoToGameStage(int newNoOfRows, int newNoOfColumns, int newPortrait1Landscape2, int newFieldPosX, int newFieldPosY, int newFieldWidth, int newFieldHeight,int newZoom) {
+    public void updateOptionsGoToGameStage(int newNoOfRows, int newNoOfColumns,
+                                           int newPortrait1Landscape2, int newFieldPosX,
+                                           int newFieldPosY, int newFieldWidth,
+                                           int newFieldHeight,int newZoom,int newDifficulty) {
         gameStage.setVisible(true);
         //certain options require the entire field to be recalculated, if any of those options are altered, recalculate new field,
         if(  newNoOfRows+newNoOfColumns+ newPortrait1Landscape2+ newFieldPosX+ newFieldPosY+  newFieldWidth+ newFieldHeight>0) {
@@ -653,9 +656,10 @@ vpHeight=vpShort;
             gameStage.updateField(newNoOfRows, newNoOfColumns, newPortrait1Landscape2, newFieldPosX, newFieldPosY, newFieldWidth, newFieldHeight);
         }
         //these options can be changed without recalculating the field
-        if(newZoom>0)
+        if(newZoom+newDifficulty>0)
         {
             gameStage.updateZoom(newZoom);
+            gameStage.updateDifficulty(newDifficulty);
         }
         setVisible(false);
         gamePauseStage.setVisible(false);
