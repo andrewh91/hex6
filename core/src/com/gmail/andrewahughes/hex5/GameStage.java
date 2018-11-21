@@ -515,6 +515,9 @@ public boolean compareAll(int touchedHex,int otherHex, int touchedSector)
     {
         if(selectedHex!=-1)
         {
+
+            hexTallField.hexTallArray[selectedHex].unHighlightNonMatchingSymbols();
+
             hexTallField.hexTallArray[selectedHex].unselect(0);
             hexTallField.hexTallArray[selectedHex].unhighlightSymbol();
             adjacentArray = hexTallField.getAdjacent(selectedHex,noOfColumns, noOfRows);
@@ -522,6 +525,8 @@ public boolean compareAll(int touchedHex,int otherHex, int touchedSector)
         }
         if(selectedHex2!=-1)
         {
+            hexTallField.hexTallArray[selectedHex2].unHighlightNonMatchingSymbols();
+
             hexTallField.hexTallArray[selectedHex2].unselect(0);
             hexTallField.hexTallArray[selectedHex2].unhighlightSymbol();
             adjacentArray = hexTallField.getAdjacent(selectedHex2,noOfColumns, noOfRows);
@@ -559,6 +564,22 @@ public boolean compareAll(int touchedHex,int otherHex, int touchedSector)
 
             selectedHex2 = proposedSelectedHex;
             hexTallField.hexTallArray[selectedHex2].select(200);
+            nonMatchingSymbolsHex1.clear();
+            nonMatchingSymbolsHex2.clear();
+            nonMatchingSymbols=database.findNonMatchingSymbols(selectedHex,selectedHex2,difficulty);
+            for(int i =0;i<nonMatchingSymbols.size();i++)//this list could have size up to 11, so divide it into 2 below
+            {
+                if(nonMatchingSymbols.get(i)>5)//the values in the array should refer to symbols (0-5) but some are +6to indicate its in the second hex
+                {
+                    nonMatchingSymbolsHex2.add(nonMatchingSymbols.get(i)-6);//add the ones over 5 to the second hex list, obviously subtract 6 so the value is between 0-5
+                }
+                else
+                {
+                    nonMatchingSymbolsHex1.add(nonMatchingSymbols.get(i));
+                }
+            }
+            hexTallField.hexTallArray[selectedHex].highlightNonMatchingSymbols(nonMatchingSymbolsHex1);
+            hexTallField.hexTallArray[selectedHex2].highlightNonMatchingSymbols(nonMatchingSymbolsHex2);
             if (zoomSelectionMode) {
                 // zoom to fit pair of selected hexes
             } else {

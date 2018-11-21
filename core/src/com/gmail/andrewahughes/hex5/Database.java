@@ -263,6 +263,34 @@ else //if (odd)
             }
         }
     }
+    public boolean testSymbolDoesntMatch (int hexId1, int symbolsId1,  int hexId2)//test given symbol from first hex against all symbols of second hex, return true if it doesn't match
+    {
+        // its possible for arguments above to be negative, which would be bad
+        if(hexId1<0||symbolsId1<0||hexId2<0)//if error
+        {
+            return false;
+        }
+        else {//else no error
+            //needed to randomise the access to the database otherwise hex location becomes predictable. so now i have to unrandomise it to compare
+            hexId1 = getRandFromIndex(hexId1);
+            hexId2 = getRandFromIndex(hexId2);
+//for loop will cycle through each symbol on hex2 and compare with the given symbol from hex 1
+            for(int i = 0; i<6;i++)
+            {
+//the symbols of each hex are also randomised,need to unrandomise that too
+                if (randData[hexId1][symbolShuffle[hexId1].get(symbolsId1)] == randData[hexId2][symbolShuffle[hexId2].get(i)])
+                {//if the symbols match we can stop early and return false
+                    return false; //the symbols match
+                }
+
+            }//end for loop
+//if we complete the for loop that means we tested the given symbol with all 6 symbols of the other hex and didn't find a match, so return true.
+            return true;
+        }//end else if no error
+    }//end method
+
+
+
 
     ArrayList<Integer> findNonMatchingSymbols(int hex1, int hex2, int noToRemove)
     {//can remove up to 10 symbols from the 2 hexes 
@@ -280,27 +308,17 @@ else //if (odd)
         }
             if(i%2==0)//if i is even
             {
-                for(int j =0;j<6;j++)//for 6 symbols
-                {
-                    if(!compareSymbols(hex1,randomSymbols1.get((int)(i/2)),hex2,j))//check if the first random symbol on the first hex does not match any of the symbols on the other hex. if it does not ...
+                    if(testSymbolDoesntMatch(hex1,randomSymbols1.get((int)(i/2)),hex2))//check if the first random symbol on the first hex does not match any of the symbols on the other hex. if it does not ...
                     {
                         nonMatchingSymbols.add(randomSymbols1.get((int)(i/2)));//add the random symbol to a list plus 6 so we can later figure out which hex it belonged to
-                        break;//break the j for loop because we found a symbol that did not match
                     }//end if compare
-//if we did find a symbol that matched then carry on looking - loop will continue
-                }//end j loop
             }//end if even
             else//if i is odd
             {
-                for(int j =0;j<6;j++)//for 6 symbols
-                {
-                    if(!compareSymbols(hex2,randomSymbols2.get((int)(i/2)),hex1,j))//check if the first random symbol on the second hex does not match any of the symbols on the other hex. if it does not ...
+                    if(testSymbolDoesntMatch(hex2,randomSymbols2.get((int)(i/2)),hex1))//check if the first random symbol on the second hex does not match any of the symbols on the other hex. if it does not ...
                     {
                         nonMatchingSymbols.add(6+randomSymbols2.get((int)(i/2)));//add the random symbol to a list plus 6 so we can later figure out which hex it belonged to
-                        break;//break the j for loop because we found a symbol that did not match 
                     }//end if compare
-//if we did find a symbol that matched then carry on looking - loop will continue 
-                }//end j for loop
             }//end else if odd
 
         }//end i for loop
