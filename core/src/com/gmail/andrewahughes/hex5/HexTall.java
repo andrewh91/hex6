@@ -66,7 +66,7 @@ public class HexTall extends Actor {
         this.posX = centreX;
         this.posY = centreY;
         visible = true;
-
+font.getData().setScale(3f);
         for(int i =0;i<6;i++) {
             removeSymbol.add(1);
 
@@ -233,9 +233,8 @@ public class HexTall extends Actor {
             sr.setColor(Color.RED);
             sr.circle(touchX+posX-altitudeSize,touchY+posY-edgeSize,touchRadius);
             sr.circle(touchX+posX-altitudeSize,touchY+posY-edgeSize,2);
-sr.rect(posX-altitudeSize,posY-edgeSize,altitudeSize*2,edgeSize*2);
-            sr.line(posX,posY-edgeSize,posX+altitudeSize,
-        posY-edgeSize+altitudeSize/altitudeSize/2*edgeSize);
+//sr.rect(posX-altitudeSize,posY-edgeSize,altitudeSize*2,edgeSize*2);
+       //     sr.line(posX,posY-edgeSize,posX+altitudeSize,posY-edgeSize+altitudeSize/altitudeSize/2*edgeSize);
 
             //renderer.rect(posX-edgeSize,posY-altitudeSize,edgeSize*2,altitudeSize*2);
             //sr.end();
@@ -251,7 +250,7 @@ sr.rect(posX-altitudeSize,posY-edgeSize,altitudeSize*2,edgeSize*2);
 
 
             //font.draw(sb, "a "+indexNo+" x "+(int)posX +" y "+ (int)posY+ " edge "+(int)edgeSize+text+text1+text2, posX, posY);
-            font.draw(sb,  text3, posX, posY+20);
+            //font.draw(sb,  text3, posX, posY+20);
             drawSymbols(sb,posX,posY,edgeSize*.7f,altitudeSize*.7f);
 
 

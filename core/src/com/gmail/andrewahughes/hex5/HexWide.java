@@ -66,7 +66,7 @@ public class HexWide extends Actor {
         this.posX = centreX;
         this.posY = centreY;
         visible = true;
-
+font.getData().setScale(3f);
         for(int i =0;i<6;i++) {
             removeSymbol.add(1);
 
@@ -247,7 +247,7 @@ public class HexWide extends Actor {
 
 
             //font.draw(sb, "a "+indexNo+" x "+(int)posX +" y "+ (int)posY+ " edge "+(int)edgeSize+text+text1+text2, posX, posY);
-            font.draw(sb,  text3, posX, posY+20);
+          //  font.draw(sb,  text3, posX, posY+20);
             drawSymbols(sb,posX,posY,edgeSize*.7f,altitudeSize*.7f);
 
 

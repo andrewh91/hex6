@@ -54,6 +54,8 @@ public class GamePauseStage extends Stage {
     private Label portrait1Landscape2;
     private TextField difficultyValue;
     private Label difficulty;
+    private TextField gameModeValue;
+    private Label gameMode;
 
 
     public GamePauseStage(Viewport viewport, Texture texture, final StageInterface stageInterface) {
@@ -128,16 +130,18 @@ public class GamePauseStage extends Stage {
         portrait1Landscape2= new Label("portrait1Landscape2:", skin);
         difficultyValue= new TextField("", skin);
         difficulty= new Label("difficulty:", skin);
+        gameModeValue= new TextField("", skin);
+        gameMode= new Label("gameMode:", skin);
 
         TextButton button3 = new TextButton("return to main menu", skin);
         button3.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
 
-                    setPause(false);
-                    black=1.0f;
-                    setVisible(false);
-                    GamePauseStage.this.stageInterface.goToMainStage();
+                setPause(false);
+                black=1.0f;
+                setVisible(false);
+                GamePauseStage.this.stageInterface.goToMainStage();
 
             }
         });
@@ -149,7 +153,7 @@ public class GamePauseStage extends Stage {
 
                 GamePauseStage.this.stageInterface.updateOptionsGoToGameStage(0,
                         0,0,0,0,
-                        0,0,0,0);
+                        0,0,0,0,0);
 
             }
         });
@@ -157,7 +161,7 @@ public class GamePauseStage extends Stage {
         button1.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                int posX,posY,rows,columns,width,height,portrait1Landscape2,zoom,difficulty;
+                int posX,posY,rows,columns,width,height,portrait1Landscape2,zoom,difficulty, gameMode;
                 try {
                     zoom= Integer.valueOf(zoomModeValue.getText());
                 } catch (NumberFormatException nfe) {
@@ -203,8 +207,13 @@ public class GamePauseStage extends Stage {
                 } catch (NumberFormatException nfe) {
                     difficulty= 0;
                 }
+                try {
+                    gameMode= Integer.valueOf(gameModeValue.getText());
+                } catch (NumberFormatException nfe) {
+                    gameMode= 0;
+                }
                 GamePauseStage.this.stageInterface.updateOptionsGoToGameStage(rows,columns,
-                        portrait1Landscape2,posX,posY,width,height,zoom,difficulty);
+                        portrait1Landscape2,posX,posY,width,height,zoom,difficulty, gameMode);
 
             }
         });
@@ -241,6 +250,9 @@ public class GamePauseStage extends Stage {
         table.add(difficultyValue);
         table.add(difficulty);
         table.row();
+        table.add(gameModeValue);
+        table.add(gameMode);
+        table.row();
         table.add(button1);
 
         table.add(button2);
@@ -260,11 +272,11 @@ public class GamePauseStage extends Stage {
     public boolean keyDown(int keycode) {
         if(keycode == Input.Keys.BACK){
 
-                setPause(false);
-                //pauseImg1.setVisible(false);
-                setVisible(false);
-                //black = 1.f;
-                GamePauseStage.this.stageInterface.goToGameStage();
+            setPause(false);
+            //pauseImg1.setVisible(false);
+            setVisible(false);
+            //black = 1.f;
+            GamePauseStage.this.stageInterface.goToGameStage();
 
 
 

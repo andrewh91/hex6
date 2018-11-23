@@ -10,5 +10,5 @@ public interface StageInterface {
     void goToGamePauseStage();
     void updateOptionsGoToGameStage(int newNoOfRows, int newNoOfColumns, int newPortrait1Landscape2,
                                     int newFieldPosX, int newFieldPosY, int newFieldWidth,
-                                    int newFieldHeight,int zoom,int difficulty);
+                                    int newFieldHeight,int zoom,int difficulty, int gameMode);
 }

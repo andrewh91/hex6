@@ -39,21 +39,25 @@ public class GameStage extends Stage {
     HexTallField hexTallField ;
 
     Database database;
-    RectTest rectTest;
+    RectTest resetGameButton;
     Viewport viewport;
     Vector2 v1,v2,v3,v4 ;
 
     BitmapFont font = new BitmapFont();
+
     String text = new String();
     String state = new String();
     int selectedSector=-1, selectedHex=-1;
     int selectedSector2=-1, selectedHex2=-1;
 
-
+    int score =0, targetScore=2;
+    float timer =0f,timerFinal=0f;
+float green=0;
+float red=0;
     //recommended number of rows for portrait mode using hexwide in screens with 16:9 aspect ratio
     //can be found using noOfRows =roundup(noOfColumns*2-noOfColumns/2)
     public int noOfRows=3,noOfColumns=4;
-    int noOfSelected=0;
+
 
     ArrayList<Integer> adjacentArray=new ArrayList<Integer>();
     ArrayList<Integer> nonMatchingSymbols=new ArrayList<Integer>();
@@ -63,11 +67,14 @@ public class GameStage extends Stage {
     int proposedSelectedHex = -1;
     int proposedSelectedSector = -1;
 
-    boolean zoomSelectionMode =true;
+    boolean zoomSelectionMode =true,gameOver=false;
 
-    int portrait1Landscape2=1, fieldPosX=50, fieldPosY=50, fieldWidth=620, fieldHeight=1180;
+    int portrait1Landscape2=1, fieldPosX=50, fieldPosY=50, fieldWidth=620, fieldHeight=1180, gameMode=0;
 int difficulty=0;
 
+
+
+    int noOfSelected=0;
 
     public GameStage(Viewport viewport, Texture texture,final StageInterface stageInterface, int portrait) {
         super( viewport );
@@ -78,7 +85,9 @@ int difficulty=0;
         v3=new Vector2(50,50);
         v4=new Vector2(100,100);
 
-        updateField(noOfRows,noOfColumns,portrait,fieldPosX,fieldPosY,fieldWidth,fieldHeight);
+        font.setColor(Color.WHITE);
+        font.getData().setScale(3f);
+        updateField(noOfRows,noOfColumns,portrait,fieldPosX,fieldPosY,fieldWidth,fieldHeight, gameMode);
 
         //viewport.getCamera().translate(viewport.getScreenWidth()/2,viewport.getScreenHeight()/2,0);
         //viewport.update(viewport.getScreenWidth(),viewport.getScreenHeight(),true);
@@ -89,8 +98,6 @@ int difficulty=0;
         addHexesToStage(hexWideField);*/
 //hexTall = new HexTall(150,400,400,0,this,database);
 //this.addActor(hexTall);
-        rectTest = new RectTest(0,0,0,0);
-        this.addActor(rectTest);
 
         this.stageInterface =stageInterface;
         //this.addActor(hexWide);
@@ -113,6 +120,16 @@ int difficulty=0;
                     black=1.0f;
                     setVisible(false);
                     GameStage.this.stageInterface.goToMainStage();
+                }
+            }
+        });
+        resetGameButton = new RectTest(0,0,0,0);
+resetGameButton.setBounds(0,0,0,0);
+        resetGameButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                if (gameOver) {
+resetGame();
                 }
             }
         });
@@ -237,18 +254,22 @@ int difficulty=0;
             if (hexWideField.hexWideArray[proposedSelectedHex].select) {
                 if (selectedHex == proposedSelectedHex) {
                     if(compareAll(selectedHex,selectedHex2,proposedSelectedSector)){
-                        resetSelection();
+
+                      increaseScore();  resetSelection();
                     }
                     else
                     {
+                        decreaseScore();
                         swapSector1(selectedHex,selectedSector,proposedSelectedSector);
                     }
                 } else if (selectedHex2 == proposedSelectedHex) {
                     if(compareAll(selectedHex2,selectedHex,proposedSelectedSector)){
+                        increaseScore();
                         resetSelection();
                     }
                     else
                     {
+                        decreaseScore();
                         swapSector2(selectedHex2,selectedSector2,proposedSelectedSector);
 
                     }
@@ -261,30 +282,45 @@ int difficulty=0;
     }
     public void resetSelection()
     {
-        if(selectedHex!=-1)
-        {
-            hexWideField.hexWideArray[selectedHex].unHighlightNonMatchingSymbols();
 
-            hexWideField.hexWideArray[selectedHex].unselect(0);
-            hexWideField.hexWideArray[selectedHex].unhighlightSymbol();
-            adjacentArray = hexWideField.getAdjacent(selectedHex,noOfColumns, noOfRows);
-            hexWideField.unhighlightAdjacent(adjacentArray);
-        }
-        if(selectedHex2!=-1)
+
+            if(selectedHex!=-1)
+            {
+                hexWideField.hexWideArray[selectedHex].unHighlightNonMatchingSymbols();
+
+                hexWideField.hexWideArray[selectedHex].unselect(0);
+                hexWideField.hexWideArray[selectedHex].unhighlightSymbol();
+                adjacentArray = hexWideField.getAdjacent(selectedHex,noOfColumns, noOfRows);
+                hexWideField.unhighlightAdjacent(adjacentArray);
+            }
+            if(selectedHex2!=-1)
+            {
+                hexWideField.hexWideArray[selectedHex2].unHighlightNonMatchingSymbols();
+                hexWideField.hexWideArray[selectedHex2].unselect(0);
+                hexWideField.hexWideArray[selectedHex2].unhighlightSymbol();
+                adjacentArray = hexWideField.getAdjacent(selectedHex2,noOfColumns, noOfRows);
+                hexWideField.unhighlightAdjacent(adjacentArray);
+            }
+            selectedHex=-1;
+            selectedHex2=-1;
+            if(zoomSelectionMode)
+            {
+                //zoom out
+            }
+            noOfSelected = 0;
+
+        if(gameMode==1)
         {
-            hexWideField.hexWideArray[selectedHex2].unHighlightNonMatchingSymbols();
-            hexWideField.hexWideArray[selectedHex2].unselect(0);
-            hexWideField.hexWideArray[selectedHex2].unhighlightSymbol();
-            adjacentArray = hexWideField.getAdjacent(selectedHex2,noOfColumns, noOfRows);
-            hexWideField.unhighlightAdjacent(adjacentArray);
+            // dont reset if playing singles
+            // re select the first 2 hexes and set the nooselected to 2
+            selectedHex=0;
+            selectedHex2=1;
+            hexWideField.hexWideArray[selectedHex].select(0);
+            hexWideField.hexWideArray[selectedHex2].select(0);
+
+
+            noOfSelected=2;
         }
-        selectedHex=-1;
-        selectedHex2=-1;
-        if(zoomSelectionMode)
-        {
-            //zoom out
-        }
-        noOfSelected=0;
     }
 
     public void selectFirstHex()
@@ -488,18 +524,22 @@ public boolean compareAll(int touchedHex,int otherHex, int touchedSector)
             if (hexTallField.hexTallArray[proposedSelectedHex].select) {
                 if (selectedHex == proposedSelectedHex) {
                     if(compareAllTall(selectedHex,selectedHex2,proposedSelectedSector)){
+                        increaseScore();
                         resetSelectionTall();
                     }
                     else
                     {
+                        decreaseScore();
                         swapSector1Tall(selectedHex,selectedSector,proposedSelectedSector);
                     }
                 } else if (selectedHex2 == proposedSelectedHex) {
                     if(compareAllTall(selectedHex2,selectedHex,proposedSelectedSector)){
+                        increaseScore();
                         resetSelectionTall();
                     }
                     else
                     {
+                        decreaseScore();
                         swapSector2Tall(selectedHex2,selectedSector2,proposedSelectedSector);
 
                     }
@@ -513,34 +553,43 @@ public boolean compareAll(int touchedHex,int otherHex, int touchedSector)
 
     public void resetSelectionTall()
     {
-        if(selectedHex!=-1)
+        if(gameMode==1)
         {
+            // dont reset if playing singles
+            // re select the first 2 hexes and set the nooselected to 2
+            selectedHex=0;
+            selectedHex2=1;
 
-            hexTallField.hexTallArray[selectedHex].unHighlightNonMatchingSymbols();
+            noOfSelected=2;
+        }
+        else {
+            if (selectedHex != -1) {
 
-            hexTallField.hexTallArray[selectedHex].unselect(0);
-            hexTallField.hexTallArray[selectedHex].unhighlightSymbol();
-            adjacentArray = hexTallField.getAdjacent(selectedHex,noOfColumns, noOfRows);
-            hexTallField.unhighlightAdjacent(adjacentArray);
-        }
-        if(selectedHex2!=-1)
-        {
-            hexTallField.hexTallArray[selectedHex2].unHighlightNonMatchingSymbols();
+                hexTallField.hexTallArray[selectedHex].unHighlightNonMatchingSymbols();
 
-            hexTallField.hexTallArray[selectedHex2].unselect(0);
-            hexTallField.hexTallArray[selectedHex2].unhighlightSymbol();
-            adjacentArray = hexTallField.getAdjacent(selectedHex2,noOfColumns, noOfRows);
-            hexTallField.unhighlightAdjacent(adjacentArray);
+                hexTallField.hexTallArray[selectedHex].unselect(0);
+                hexTallField.hexTallArray[selectedHex].unhighlightSymbol();
+                adjacentArray = hexTallField.getAdjacent(selectedHex, noOfColumns, noOfRows);
+                hexTallField.unhighlightAdjacent(adjacentArray);
+            }
+            if (selectedHex2 != -1) {
+                hexTallField.hexTallArray[selectedHex2].unHighlightNonMatchingSymbols();
+
+                hexTallField.hexTallArray[selectedHex2].unselect(0);
+                hexTallField.hexTallArray[selectedHex2].unhighlightSymbol();
+                adjacentArray = hexTallField.getAdjacent(selectedHex2, noOfColumns, noOfRows);
+                hexTallField.unhighlightAdjacent(adjacentArray);
+            }
+            selectedHex = -1;
+            selectedHex2 = -1;
+            proposedSelectedHex = -1;
+            if (zoomSelectionMode) {
+                //zoom out
+            }
+            noOfSelected = 0;
         }
-        selectedHex=-1;
-        selectedHex2=-1;
-        proposedSelectedHex=-1;
-        if(zoomSelectionMode)
-        {
-            //zoom out
-        }
-        noOfSelected=0;
     }
+
 
     public void selectFirstHexTall()
     {
@@ -630,54 +679,81 @@ public boolean compareAll(int touchedHex,int otherHex, int touchedSector)
     @Override
     public void draw() {
         act(Gdx.graphics.getDeltaTime());
+if(gameOver)
+{
 
-        if (visible) {
+    Gdx.gl.glClearColor(0 , 100, 0, 1);
+    Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+    viewport.getCamera().update();
+    renderer.setProjectionMatrix(viewport.getCamera().combined);
+    renderer.begin(ShapeRenderer.ShapeType.Filled);
+    renderer.setColor(255,255,255,1);
+    renderer.rect(resetGameButton.getX(),resetGameButton.getY(),resetGameButton.getWidth(),resetGameButton.getHeight());
+    this.act();
 
-            Gdx.gl.glClearColor(0.9f*black, 0.9f*black, 0.7f*black, 1);
-            Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-            viewport.getCamera().update();
-            renderer.setProjectionMatrix(viewport.getCamera().combined);
-            renderer.begin(ShapeRenderer.ShapeType.Line);
-            renderer.setColor(Color.BLUE);
-            //renderer.line(viewport.unproject(v1),viewport.unproject(v2));
-            //renderer.setColor(Color.RED);
-            //renderer.line(v3,v4);
-            //renderer.rect(50,50,700,350);
-            //drawWideHex(renderer,150,100,90);
-            //drawTallHex(renderer,70,200,70);
-            this.act();
-            //hexWide.draw(renderer);
-            if(portrait1Landscape2==1){
-                    hexWideField.draw(renderer);
+    renderer.end();
+    spriteBatch.begin();
+
+    font.draw(spriteBatch, "finish!   timer: " + Math.round(timerFinal*10 )/10 + " score: " + score+" difficulty: " +difficulty, 5, 640);
+    spriteBatch.end();
+}
+else {
+    if (visible) {
+            timer = timer + Gdx.graphics.getDeltaTime();
+
+        if (green > 0) {
+            green = green - (512 * Gdx.graphics.getDeltaTime());
+        } else {
+            green = 0;
         }
-        else if(portrait1Landscape2==2) {
+        if (red > 0) {
+            red = red - (512 * Gdx.graphics.getDeltaTime());
+        } else {
+            red = 0;
+        }
+
+        Gdx.gl.glClearColor(0 + red, 0 + green, 0, 1);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        viewport.getCamera().update();
+        renderer.setProjectionMatrix(viewport.getCamera().combined);
+        renderer.begin(ShapeRenderer.ShapeType.Line);
+        renderer.setColor(Color.BLUE);
+        //renderer.line(viewport.unproject(v1),viewport.unproject(v2));
+        //renderer.setColor(Color.RED);
+        //renderer.line(v3,v4);
+        //renderer.rect(50,50,700,350);
+        //drawWideHex(renderer,150,100,90);
+        //drawTallHex(renderer,70,200,70);
+        this.act();
+        //hexWide.draw(renderer);
+        if (portrait1Landscape2 == 1) {
+            hexWideField.draw(renderer);
+        } else if (portrait1Landscape2 == 2) {
             hexTallField.draw(renderer);
         }
 
-            //rectTest.draw(renderer);
+        //resetGameButton.draw(renderer);
 
-            renderer.end();
-            spriteBatch.setProjectionMatrix(viewport.getCamera().combined);
-            spriteBatch.begin();
-            //hexWide.drawSprites(spriteBatch);
-            //hexTall.drawSprites(spriteBatch);
-            if(portrait1Landscape2==1) {
-                hexWideField.drawSprites(spriteBatch);
-            }
-            else if(portrait1Landscape2==2)
-            {
-                hexTallField.drawSprites(spriteBatch);
+        renderer.end();
+        spriteBatch.setProjectionMatrix(viewport.getCamera().combined);
+        spriteBatch.begin();
+        //hexWide.drawSprites(spriteBatch);
+        //hexTall.drawSprites(spriteBatch);
+        if (portrait1Landscape2 == 1) {
+            hexWideField.drawSprites(spriteBatch);
+        } else if (portrait1Landscape2 == 2) {
+            hexTallField.drawSprites(spriteBatch);
 
-            }
-
-
-            font.draw(spriteBatch,text+ " sh "+selectedHex+" sh2 "+selectedHex2+" s1 "+selectedSector+" s2 "+selectedSector2+" ph "+proposedSelectedHex+" ps "+proposedSelectedSector+" state "+state,30,690);
-            spriteBatch.end();
-
-
-
-            super.draw();
         }
+
+
+        font.draw(spriteBatch, "timer: " + Math.round(timer) + " score: " + score, 30, 30);
+        spriteBatch.end();
+
+
+        super.draw();
+    }
+}
     }
 
     public void setVisible(boolean visible) {
@@ -725,7 +801,9 @@ public boolean compareAll(int touchedHex,int otherHex, int touchedSector)
             actor.addAction(Actions.removeActor());
         }
     }
-    public void updateField(int newNoOfRows, int newNoOfColumns, int newPortrait1Landscape2, int newFieldPosX, int newFieldPosY, int newFieldWidth, int newFieldHeight)
+    public void updateField(int newNoOfRows, int newNoOfColumns, int newPortrait1Landscape2,
+                            int newFieldPosX, int newFieldPosY, int newFieldWidth,
+                            int newFieldHeight,int newGameMode)
     {
         if(newNoOfColumns!=0){noOfColumns=newNoOfColumns;}
         if(newNoOfRows!=0){noOfRows=newNoOfRows;}
@@ -734,20 +812,45 @@ public boolean compareAll(int touchedHex,int otherHex, int touchedSector)
         if(newFieldPosY!=0){ fieldPosY=newFieldPosY;}
         if(newFieldWidth!=0){ fieldWidth=newFieldWidth;}
         if(newFieldHeight!=0){ fieldHeight=newFieldHeight;}
-
+        if(newGameMode!=0){ gameMode=newGameMode;}
 //reset / reload everything 
         removeAllActors();
+        if(gameMode==1)//if aingles mode overwrite nomber of rows and columns,
+        {
+            if(portrait1Landscape2==1)
+            {
+                noOfColumns =1;
+                noOfRows=2;
+            }
+            else if(portrait1Landscape2==2)
+            {
+                noOfRows=1;
+                noOfColumns=2;
+            }
+        }
         database = new Database(31,noOfColumns,noOfRows,portrait1Landscape2);
         if(portrait1Landscape2==1) {
             resetSelection();
             hexWideField = new HexWideField(fieldPosX, fieldPosY, fieldWidth, fieldHeight, noOfRows, noOfColumns, this, database);
             addHexesToStage(hexWideField);
+            if(gameMode==1)
+            {
+
+                hexWideField.hexWideArray[selectedHex].select(0);
+                hexWideField.hexWideArray[selectedHex2].select(0);
+            }
         }
         else if(portrait1Landscape2==2)
         {
             resetSelectionTall();
             hexTallField = new HexTallField(fieldPosX,fieldPosY,fieldWidth,fieldHeight,noOfRows,noOfColumns,this,database);
             addHexesToStage(hexTallField);
+            if(gameMode==1)
+            {
+
+                hexTallField.hexTallArray[selectedHex].select(0);
+                hexTallField.hexTallArray[selectedHex2].select(0);
+            }
         }
     }
     public void updateZoom(int newZoom)
@@ -760,6 +863,53 @@ public boolean compareAll(int touchedHex,int otherHex, int touchedSector)
         {
             zoomSelectionMode=true;
         }
+    }
+
+    void increaseScore()
+    {
+        score++;
+        flashGreenBackground();
+        isTargetReached(score);
+        //create new database to get more hexes
+updateField(0,0,0,0,
+        0,0,0,0);
+    }
+    void decreaseScore()
+    {
+        score--;
+        flashRedBackground();
+    }
+
+    void isTargetReached(int currentScore)
+    {
+        if(currentScore==targetScore)
+        {
+            gameOver();
+        }
+    }
+    void gameOver()
+    {
+        gameOver=true;
+timerFinal=timer;
+        resetGameButton = new RectTest(200,0,200,200);
+        resetGameButton.setBounds(200,0,200,200);
+        this.addActor(resetGameButton);
+    }
+    void resetGame()
+    {
+        gameOver=false;
+        score=0;
+        timer=0;
+    }
+
+    void flashGreenBackground()
+    {
+green=255;
+    }
+
+    void flashRedBackground()
+    {
+red= 255;
     }
 
     public void updateDifficulty(int newDifficulty)
