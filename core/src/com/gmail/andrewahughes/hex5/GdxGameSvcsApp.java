@@ -643,6 +643,13 @@ vpHeight=vpShort;
                                            int newFieldPosY, int newFieldWidth,
                                            int newFieldHeight,int newZoom,int newDifficulty, int newGameMode) {
         gameStage.setVisible(true);
+
+        //these options can be changed without recalculating the field
+        if(newZoom+newDifficulty>0)
+        {
+            gameStage.updateZoom(newZoom);
+            gameStage.updateDifficulty(newDifficulty);
+        }
         //certain options require the entire field to be recalculated, if any of those options are altered, recalculate new field,
         if(  newNoOfRows+newNoOfColumns+ newPortrait1Landscape2+ newFieldPosX+ newFieldPosY+  newFieldWidth+ newFieldHeight+newGameMode>0) {
             if(newPortrait1Landscape2==1)
@@ -654,12 +661,6 @@ vpHeight=vpShort;
                 setLandscape();
             }
             gameStage.updateField(newNoOfRows, newNoOfColumns, newPortrait1Landscape2, newFieldPosX, newFieldPosY, newFieldWidth, newFieldHeight,newGameMode);
-        }
-        //these options can be changed without recalculating the field
-        if(newZoom+newDifficulty>0)
-        {
-            gameStage.updateZoom(newZoom);
-            gameStage.updateDifficulty(newDifficulty);
         }
         setVisible(false);
         gamePauseStage.setVisible(false);

@@ -39,7 +39,6 @@ public class GameStage extends Stage {
     HexTallField hexTallField ;
 
     Database database;
-    RectTest resetGameButton;
     Viewport viewport;
     Vector2 v1,v2,v3,v4 ;
 
@@ -50,7 +49,7 @@ public class GameStage extends Stage {
     int selectedSector=-1, selectedHex=-1;
     int selectedSector2=-1, selectedHex2=-1;
 
-    int score =0, targetScore=2;
+    int score =0, targetScore=10;
     float timer =0f,timerFinal=0f;
 float green=0;
 float red=0;
@@ -123,16 +122,7 @@ int difficulty=0;
                 }
             }
         });
-        resetGameButton = new RectTest(0,0,0,0);
-resetGameButton.setBounds(0,0,0,0);
-        resetGameButton.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                if (gameOver) {
-resetGame();
-                }
-            }
-        });
+
 
         table.add(pauseImg);
 
@@ -255,7 +245,9 @@ resetGame();
                 if (selectedHex == proposedSelectedHex) {
                     if(compareAll(selectedHex,selectedHex2,proposedSelectedSector)){
 
-                      increaseScore();  resetSelection();
+                      increaseScore();
+                      resetSelection();
+                      highlightNonMatching();
                     }
                     else
                     {
@@ -266,6 +258,7 @@ resetGame();
                     if(compareAll(selectedHex2,selectedHex,proposedSelectedSector)){
                         increaseScore();
                         resetSelection();
+                        highlightNonMatching();
                     }
                     else
                     {
@@ -347,22 +340,8 @@ resetGame();
 
             selectedHex2 = proposedSelectedHex;
             hexWideField.hexWideArray[selectedHex2].select(200);
-nonMatchingSymbolsHex1.clear();
-nonMatchingSymbolsHex2.clear();
-            nonMatchingSymbols=database.findNonMatchingSymbols(selectedHex,selectedHex2,difficulty);
-for(int i =0;i<nonMatchingSymbols.size();i++)//this list could have size up to 11, so divide it into 2 below
-{
-    if(nonMatchingSymbols.get(i)>5)//the values in the array should refer to symbols (0-5) but some are +6to indicate its in the second hex
-    {
-        nonMatchingSymbolsHex2.add(nonMatchingSymbols.get(i)-6);//add the ones over 5 to the second hex list, obviously subtract 6 so the value is between 0-5
-    }
-    else
-    {
-        nonMatchingSymbolsHex1.add(nonMatchingSymbols.get(i));
-    }
-}
-            hexWideField.hexWideArray[selectedHex].highlightNonMatchingSymbols(nonMatchingSymbolsHex1);
-            hexWideField.hexWideArray[selectedHex2].highlightNonMatchingSymbols(nonMatchingSymbolsHex2);
+
+            highlightNonMatching();
             if (zoomSelectionMode) {
                 // zoom to fit pair of selected hexes
             } else {
@@ -372,7 +351,27 @@ for(int i =0;i<nonMatchingSymbols.size();i++)//this list could have size up to 1
             noOfSelected = 2;
         }
     }
-
+void highlightNonMatching()
+{
+    nonMatchingSymbolsHex1.clear();
+    nonMatchingSymbolsHex2.clear();
+    nonMatchingSymbols=database.findNonMatchingSymbols(selectedHex,selectedHex2,difficulty);
+    for(int i =0;i<nonMatchingSymbols.size();i++)//this list could have size up to 11, so divide it into 2 below
+    {
+        if(nonMatchingSymbols.get(i)>5)//the values in the array should refer to symbols (0-5) but some are +6to indicate its in the second hex
+        {
+            nonMatchingSymbolsHex2.add(nonMatchingSymbols.get(i)-6);//add the ones over 5 to the second hex list, obviously subtract 6 so the value is between 0-5
+        }
+        else
+        {
+            nonMatchingSymbolsHex1.add(nonMatchingSymbols.get(i));
+        }
+    }
+    if(gameMode==1) {
+        hexWideField.hexWideArray[selectedHex].highlightNonMatchingSymbols(nonMatchingSymbolsHex1);
+        hexWideField.hexWideArray[selectedHex2].highlightNonMatchingSymbols(nonMatchingSymbolsHex2);
+    }
+}
     public void removeOneSelected(int givenHex, int givenSector, int remainingHex, int remainingSector)
     {
         hexWideField.hexWideArray[givenHex].unselect(0);
@@ -526,6 +525,7 @@ public boolean compareAll(int touchedHex,int otherHex, int touchedSector)
                     if(compareAllTall(selectedHex,selectedHex2,proposedSelectedSector)){
                         increaseScore();
                         resetSelectionTall();
+                        highlightNonMatchingTall();
                     }
                     else
                     {
@@ -536,6 +536,7 @@ public boolean compareAll(int touchedHex,int otherHex, int touchedSector)
                     if(compareAllTall(selectedHex2,selectedHex,proposedSelectedSector)){
                         increaseScore();
                         resetSelectionTall();
+                        highlightNonMatchingTall();
                     }
                     else
                     {
@@ -613,22 +614,7 @@ public boolean compareAll(int touchedHex,int otherHex, int touchedSector)
 
             selectedHex2 = proposedSelectedHex;
             hexTallField.hexTallArray[selectedHex2].select(200);
-            nonMatchingSymbolsHex1.clear();
-            nonMatchingSymbolsHex2.clear();
-            nonMatchingSymbols=database.findNonMatchingSymbols(selectedHex,selectedHex2,difficulty);
-            for(int i =0;i<nonMatchingSymbols.size();i++)//this list could have size up to 11, so divide it into 2 below
-            {
-                if(nonMatchingSymbols.get(i)>5)//the values in the array should refer to symbols (0-5) but some are +6to indicate its in the second hex
-                {
-                    nonMatchingSymbolsHex2.add(nonMatchingSymbols.get(i)-6);//add the ones over 5 to the second hex list, obviously subtract 6 so the value is between 0-5
-                }
-                else
-                {
-                    nonMatchingSymbolsHex1.add(nonMatchingSymbols.get(i));
-                }
-            }
-            hexTallField.hexTallArray[selectedHex].highlightNonMatchingSymbols(nonMatchingSymbolsHex1);
-            hexTallField.hexTallArray[selectedHex2].highlightNonMatchingSymbols(nonMatchingSymbolsHex2);
+           highlightNonMatchingTall();
             if (zoomSelectionMode) {
                 // zoom to fit pair of selected hexes
             } else {
@@ -637,6 +623,25 @@ public boolean compareAll(int touchedHex,int otherHex, int touchedSector)
             }
             noOfSelected = 2;
         }
+    }
+    void highlightNonMatchingTall()
+    {
+        nonMatchingSymbolsHex1.clear();
+        nonMatchingSymbolsHex2.clear();
+        nonMatchingSymbols=database.findNonMatchingSymbols(selectedHex,selectedHex2,difficulty);
+        for(int i =0;i<nonMatchingSymbols.size();i++)//this list could have size up to 11, so divide it into 2 below
+        {
+            if(nonMatchingSymbols.get(i)>5)//the values in the array should refer to symbols (0-5) but some are +6to indicate its in the second hex
+            {
+                nonMatchingSymbolsHex2.add(nonMatchingSymbols.get(i)-6);//add the ones over 5 to the second hex list, obviously subtract 6 so the value is between 0-5
+            }
+            else
+            {
+                nonMatchingSymbolsHex1.add(nonMatchingSymbols.get(i));
+            }
+        }
+        hexTallField.hexTallArray[selectedHex].highlightNonMatchingSymbols(nonMatchingSymbolsHex1);
+        hexTallField.hexTallArray[selectedHex2].highlightNonMatchingSymbols(nonMatchingSymbolsHex2);
     }
 
     public void removeOneSelectedTall(int givenHex, int givenSector, int remainingHex, int remainingSector)
@@ -685,17 +690,11 @@ if(gameOver)
     Gdx.gl.glClearColor(0 , 100, 0, 1);
     Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
     viewport.getCamera().update();
-    renderer.setProjectionMatrix(viewport.getCamera().combined);
-    renderer.begin(ShapeRenderer.ShapeType.Filled);
-    renderer.setColor(255,255,255,1);
-    renderer.rect(resetGameButton.getX(),resetGameButton.getY(),resetGameButton.getWidth(),resetGameButton.getHeight());
-    this.act();
-
-    renderer.end();
     spriteBatch.begin();
 
     font.draw(spriteBatch, "finish!   timer: " + Math.round(timerFinal*10 )/10 + " score: " + score+" difficulty: " +difficulty, 5, 640);
     spriteBatch.end();
+    super.draw();
 }
 else {
     if (visible) {
@@ -812,7 +811,12 @@ else {
         if(newFieldPosY!=0){ fieldPosY=newFieldPosY;}
         if(newFieldWidth!=0){ fieldWidth=newFieldWidth;}
         if(newFieldHeight!=0){ fieldHeight=newFieldHeight;}
-        if(newGameMode!=0){ gameMode=newGameMode;}
+        if(newGameMode!=0)
+        {
+            gameMode=newGameMode;
+        resetGame();// reset the score and timer when starting a new game modes
+
+        }
 //reset / reload everything 
         removeAllActors();
         if(gameMode==1)//if aingles mode overwrite nomber of rows and columns,
@@ -835,9 +839,10 @@ else {
             addHexesToStage(hexWideField);
             if(gameMode==1)
             {
-
+//we want the 2 hexes to be selected automatically
                 hexWideField.hexWideArray[selectedHex].select(0);
                 hexWideField.hexWideArray[selectedHex2].select(0);
+                highlightNonMatching();
             }
         }
         else if(portrait1Landscape2==2)
@@ -850,6 +855,7 @@ else {
 
                 hexTallField.hexTallArray[selectedHex].select(0);
                 hexTallField.hexTallArray[selectedHex2].select(0);
+                highlightNonMatchingTall();
             }
         }
     }
@@ -870,10 +876,14 @@ else {
         score++;
         flashGreenBackground();
         isTargetReached(score);
+        if(gameMode==1){
         //create new database to get more hexes
 updateField(0,0,0,0,
         0,0,0,0);
+
+        }
     }
+
     void decreaseScore()
     {
         score--;
@@ -891,9 +901,7 @@ updateField(0,0,0,0,
     {
         gameOver=true;
 timerFinal=timer;
-        resetGameButton = new RectTest(200,0,200,200);
-        resetGameButton.setBounds(200,0,200,200);
-        this.addActor(resetGameButton);
+
     }
     void resetGame()
     {
