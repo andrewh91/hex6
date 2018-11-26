@@ -220,7 +220,61 @@ public float deriveEdgeSize(int width, int height,int noOfRows, int noOfColumns)
                 }
         }
 
+        public ArrayList<Integer> getIsolated(int hex, int hex2,int noOfColumns, int noOfRows)
+        {
 
+                ArrayList<Integer> adjacentArray = new ArrayList<Integer>();
+                ArrayList<Integer> toBeRemoved = new ArrayList<Integer>();
+
+                ArrayList<Integer> adjacentArray2 = new ArrayList<Integer>();
+                ArrayList<Integer> isolatedArray = new ArrayList<Integer>();
+
+//add all the indexes of the hexes that are adjacent to both the selected hexes to a list
+                adjacentArray= getAdjacent(hex, noOfColumns, noOfRows);
+                adjacentArray.addAll(getAdjacent(hex2, noOfColumns, noOfRows));
+//set each hex in the array as being adjacent to the match. remove any that are selected or not visible 
+                for(int i =0;i<adjacentArray.size();i++)
+                {
+
+
+                        if(hexWideArray[adjacentArray.get(i)].select ||
+                                !hexWideArray[adjacentArray.get(i)].visible )
+                        {
+                                toBeRemoved.add(adjacentArray.get(i));
+                        }
+
+                }// end i for loop 
+
+                adjacentArray.removeAll(toBeRemoved);
+//adjacentArray contains all adjacents of the 2 selected hexes excluding selected hexes and hexes that are not visible 
+
+                toBeRemoved.clear();
+
+//so we have a list of hexes that were adjacent to either of the two selected hexes and that are not selected themselves and are visible, for each of these count how many hexes are adjacent and are not selected or not visible  
+                for(int j = 0; j<adjacentArray.size();j++)
+                {
+                        adjacentArray2= getAdjacent(adjacentArray.get(j), noOfColumns, noOfRows);
+//remove any that are selected or not visible or are adjacent to the selected hexes
+                        for(int i =0;i<adjacentArray2.size();i++)
+                        {
+                                if(hexWideArray[adjacentArray2.get(i)].select ||
+                                        !hexWideArray[adjacentArray2.get(i)].visible)
+                                {
+                                        toBeRemoved.add(adjacentArray2.get(i));
+
+                                }
+                        }// end i for loop 
+                        adjacentArray2.removeAll(toBeRemoved);
+                        toBeRemoved.clear();
+//if the hex that was adjacent to the selected hex has no adjacents that are visible and not selected and not adjacent to the selected then add it to the list
+                        if(adjacentArray2.size()==0)
+                        {
+                                isolatedArray.add(adjacentArray.get(j));
+                        }
+                }//end j for loop
+
+                return isolatedArray;
+        }//end method
 
 
 

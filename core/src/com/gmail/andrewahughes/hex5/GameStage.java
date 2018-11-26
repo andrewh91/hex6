@@ -554,16 +554,7 @@ public boolean compareAll(int touchedHex,int otherHex, int touchedSector)
 
     public void resetSelectionTall()
     {
-        if(gameMode==1)
-        {
-            // dont reset if playing singles
-            // re select the first 2 hexes and set the nooselected to 2
-            selectedHex=0;
-            selectedHex2=1;
 
-            noOfSelected=2;
-        }
-        else {
             if (selectedHex != -1) {
 
                 hexTallField.hexTallArray[selectedHex].unHighlightNonMatchingSymbols();
@@ -583,12 +574,23 @@ public boolean compareAll(int touchedHex,int otherHex, int touchedSector)
             }
             selectedHex = -1;
             selectedHex2 = -1;
-            proposedSelectedHex = -1;
             if (zoomSelectionMode) {
                 //zoom out
             }
             noOfSelected = 0;
+
+        if(gameMode==1)
+        {
+            // dont reset if playing singles
+            // re select the first 2 hexes and set the nooselected to 2
+            selectedHex=0;
+            selectedHex2=1;
+            hexTallField.hexTallArray[selectedHex].select(0);
+            hexTallField.hexTallArray[selectedHex2].select(0);
+
+            noOfSelected=2;
         }
+
     }
 
 
@@ -640,8 +642,10 @@ public boolean compareAll(int touchedHex,int otherHex, int touchedSector)
                 nonMatchingSymbolsHex1.add(nonMatchingSymbols.get(i));
             }
         }
-        hexTallField.hexTallArray[selectedHex].highlightNonMatchingSymbols(nonMatchingSymbolsHex1);
-        hexTallField.hexTallArray[selectedHex2].highlightNonMatchingSymbols(nonMatchingSymbolsHex2);
+        if(gameMode==1) {
+            hexTallField.hexTallArray[selectedHex].highlightNonMatchingSymbols(nonMatchingSymbolsHex1);
+            hexTallField.hexTallArray[selectedHex2].highlightNonMatchingSymbols(nonMatchingSymbolsHex2);
+        }
     }
 
     public void removeOneSelectedTall(int givenHex, int givenSector, int remainingHex, int remainingSector)
@@ -881,6 +885,34 @@ else {
 updateField(0,0,0,0,
         0,0,0,0);
 
+        }
+        else// if not singles mode, make matched hexes disappear
+        {
+            if(portrait1Landscape2==1)
+            {
+                hexWideField.hexWideArray[selectedHex].hide();
+                hexWideField.hexWideArray[selectedHex2].hide();
+                ArrayList<Integer> list = new ArrayList<Integer>();
+                list=hexWideField.getIsolated(selectedHex,selectedHex2,noOfColumns,noOfRows);
+                for(int i =0;i<list.size();i++)
+                {
+                    hexWideField.hexWideArray[list.get(i)].hide();
+
+                }
+
+            }
+            else
+            {
+                hexTallField.hexTallArray[selectedHex].hide();
+                hexTallField.hexTallArray[selectedHex2].hide();
+                ArrayList<Integer> list = new ArrayList<Integer>();
+                list=hexTallField.getIsolated(selectedHex,selectedHex2,noOfColumns,noOfRows);
+                for(int i =0;i<list.size();i++)
+                {
+                    hexTallField.hexTallArray[list.get(i)].hide();
+
+                }
+            }
         }
     }
 

@@ -83,9 +83,10 @@ font.getData().setScale(3f);
                 //worldCoordinates = orthographicCamera.unproject(new Vector3(x,y,0));
                 //x=worldCoordinates.x;
                 //y=worldCoordinates.y;
-
-                touchLogic( event,  x,  y);
-                gs.setSelectedTall(index, selectedSector);
+if(visible) {
+    touchLogic(event, x, y);
+    gs.setSelectedTall(index, selectedSector);
+}
                 //approx sector will indicate where the potential overlaps, need to check if the is a hex there then select the hex
 
             }
@@ -187,8 +188,11 @@ font.getData().setScale(3f);
 
     public void highlight(int value)
     {
-        red = value;
-        highlight=true;
+        if(visible) {
+            red = value;
+
+            highlight = true;
+        }
     }
     public void unhighlight(int value)
     {
@@ -259,6 +263,10 @@ font.getData().setScale(3f);
         }
     }
 
+    public void hide()
+    {
+        visible=false;
+    }
     void drawTallHex(ShapeRenderer sr, float originX, float originY, float edgeSize)
     {
         // draws a ‘tall’ hex hex with flat sides. originX and originY are the coordinates passed in which will determine the centre of the hex, edge size will determine the size of the edges, altitudeSize is the height (or altitude) of an equilateral triangle with edge size defined by edgeSize, so the width we be defined as 2 *altitudeSize

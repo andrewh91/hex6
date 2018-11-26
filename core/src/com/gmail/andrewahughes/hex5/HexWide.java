@@ -81,11 +81,11 @@ font.getData().setScale(3f);
                 //worldCoordinates = orthographicCamera.unproject(new Vector3(x,y,0));
                 //x=worldCoordinates.x;
                 //y=worldCoordinates.y;
-
-                touchLogic( event,  x,  y);
-                    gs.setSelected(index, selectedSector);
-                    //approx sector will indicate where the potential overlaps, need to check if the is a hex there then select the hex
-
+if(visible) {
+    touchLogic(event, x, y);
+    gs.setSelected(index, selectedSector);
+    //approx sector will indicate where the potential overlaps, need to check if the is a hex there then select the hex
+}
             }
         });
 
@@ -184,9 +184,12 @@ font.getData().setScale(3f);
 
     public void highlight(int value)
     {
+        if(visible){
         red = value;
         highlight=true;
     }
+    }
+
     public void unhighlight(int value)
     {
         red = value;
@@ -254,6 +257,10 @@ font.getData().setScale(3f);
 
 
         }
+    }
+    public void hide()
+    {
+        visible=false;
     }
 
     void drawWideHex(ShapeRenderer sr, float originX, float originY, float edgeSize)
