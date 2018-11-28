@@ -10,7 +10,7 @@ public class GpgsMappers {
 
         if (leaderboardId != null) {
             if (leaderboardId.equals(GdxGameSvcsApp.LEADERBOARD1))
-                gpgsId = "CgkIu46Sr-8fEAIQAw";
+                gpgsId = "CgkIhbawkZcMEAIQAQ";
         }
 
         return gpgsId;

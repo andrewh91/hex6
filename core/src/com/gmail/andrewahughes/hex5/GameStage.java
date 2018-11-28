@@ -760,7 +760,7 @@ Col’s  	rows	total	orientation
             Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
             viewport.getCamera().update();
             spriteBatch.begin();
-            //display the results, the timer is supposed to show decimals but it doesn’t TODO investigate that
+            //display the results
             font.draw(spriteBatch, "finish!   timer: " + (float)(((int)(timer*100)))/100f  + " score: " + score+" difficulty: " +difficulty, 5, 640);
             spriteBatch.end();
             super.draw();
