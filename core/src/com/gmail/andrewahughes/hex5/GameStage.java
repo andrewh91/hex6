@@ -1013,7 +1013,12 @@ Col’s  	rows	total	orientation
     {
         gameOver=true;
         timerFinal=timer;
+int timerInt = (int)(timer*1000);
+int diffInt = difficulty;
+        resetGame();
+        GameStage.this.stageInterface.setScore(timerInt, diffInt);
 
+        GameStage.this.stageInterface.goToGameOverStage();
     }
     void resetGame()
     {

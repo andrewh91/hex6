@@ -45,6 +45,7 @@ public class GdxGameSvcsApp extends ApplicationAdapter implements IGameServiceLi
 Platform platform;
     GameStage gameStage;
     GamePauseStage gamePauseStage;
+    GameOverStage gameOverStage;
     Texture badlogic;
     private boolean visible = true;
     public IGameServiceClient gsClient;
@@ -77,6 +78,7 @@ vpHeight=vpShort;
         badlogic = new Texture("badlogic.jpg");
         gameStage = new GameStage(stretchViewport,badlogic,this,portrait);
         gamePauseStage = new GamePauseStage(stretchViewport,badlogic,this);
+        gameOverStage = new GameOverStage(stretchViewport,badlogic,this);
         //Gdx.input.setInputProcessor(gameStage);
 
         mainStage = new Stage(stretchViewport);
@@ -522,6 +524,7 @@ vpHeight=vpShort;
 
             gameStage.draw();
             gamePauseStage.draw();
+            gameOverStage.draw();
 
     }
 
@@ -597,10 +600,8 @@ vpHeight=vpShort;
     @Override
     public void goToGameStage() {
 
-
+hideAllStages();
         gameStage.setVisible(true);
-        setVisible(false);
-        gamePauseStage.setVisible(false);
         Gdx.input.setInputProcessor(gameStage);
         Gdx.input.setCatchBackKey(true);
     }
@@ -642,7 +643,8 @@ vpHeight=vpShort;
                                            int newPortrait1Landscape2, int newFieldPosX,
                                            int newFieldPosY, int newFieldWidth,
                                            int newFieldHeight,int newZoom,int newDifficulty, int newGameMode) {
-        gameStage.setVisible(true);
+       hideAllStages();
+       gameStage.setVisible(true);
 
         //these options can be changed without recalculating the field
         if(newZoom+newDifficulty>0)
@@ -669,22 +671,38 @@ vpHeight=vpShort;
     }
     @Override
     public void goToGamePauseStage() {
+       hideAllStages();
         gamePauseStage.setVisible(true);
-        gameStage.setVisible(false);
-        setVisible(false);
         Gdx.input.setInputProcessor(gamePauseStage);
         Gdx.input.setCatchBackKey(true);
     }
     @Override
     public void goToMainStage() {
+       hideAllStages();
         setVisible(true);
-        gameStage.setVisible(false);
-        gamePauseStage.setVisible(false);
         Gdx.input.setInputProcessor(mainStage);
         Gdx.input.setCatchBackKey(true);
     }
+    @Override
+    public void setScore(int timeValueArg, int difficultyValueArg)
+    {
+        gameOverStage.setScore(timeValueArg,difficultyValueArg);
+    }
+    @Override
+    public void goToGameOverStage() {
 
-
+hideAllStages();
+        gameOverStage.setVisible(true);
+        Gdx.input.setInputProcessor(gameOverStage);
+        Gdx.input.setCatchBackKey(true);
+    }
+    void hideAllStages()
+    {
+        gameStage.setVisible(false);
+        setVisible(false);//main stage
+        gamePauseStage.setVisible(false);
+        gameOverStage.setVisible(false);
+    }
     public void setVisible(boolean visible) {
         this.visible = visible;
     }
