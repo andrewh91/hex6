@@ -50,7 +50,7 @@ public class GameStage extends Stage {
     //whether we need to run the camera movement logic
     boolean camSnapOutdated=false;
     //the period of time over which the camera movements will happen
-    float camSnapTimePeriod=2f;
+    float camSnapTimePeriod=0.1f;
     //the current progress through the camera transition
     float camSnapTime=0f;
     //the speed to move the camera
@@ -139,7 +139,7 @@ Col’s  	rows	total	orientation
         this.portrait1Landscape2 = portrait;
         //the font isn’t really final, the symbols will be replaced with pictures eventually
         font.setColor(Color.WHITE);
-        font.getData().setScale(3f);
+        font.getData().setScale(1f);
         //create the field with the given default values which we set above
         updateField(noOfRows, noOfColumns, portrait, fieldPosX, fieldPosY, fieldWidth, fieldHeight, gameMode);
         //the stage interface is used to go from one stage to another and pass variables over
@@ -329,8 +329,43 @@ Col’s  	rows	total	orientation
         setCamSnapSpeed();
 
     }
-    void setCamSnapSpeed()
+    public void snapCameraToField() {
+
+        setNewCameraZoomTarget(defaultCamZoom);
+
+        setNewCameraPosTarget(defaultCamPosX,defaultCamPosY);
+        camSnapOutdated=true;
+        setCamSnapSpeed();
+
+    }
+    public void snapCameraToAdjacents() {
+        int posArray[] ={0,0};
+        if(portrait1Landscape2==1)
+        {
+//this just gets the selected hex's centre coords
+            posArray=  hexWideField.getNextHexPairCoords( selectedHex, selectedHex);
+            setNewCameraZoomTarget(hexWideField.getAdjacentZoom(selectedHex));
+
+        }
+        else if(portrait1Landscape2==2)
+        {
+            posArray=  hexTallField.getNextHexPairCoords( selectedHex, selectedHex);
+            setNewCameraZoomTarget(hexTallField.getAdjacentZoom(selectedHex));
+
+        }
+        hexPairPosX=posArray[0];
+        hexPairPosY=posArray[1];
+        setNewCameraPosTarget(hexPairPosX,hexPairPosY);
+        camSnapOutdated=true;
+        setCamSnapSpeed();
+
+    }
+
+
+
+    void setCamSnapSpeed( )
     {
+
 //work out the distance that needs to be covered to move the camera into the target position, then divide it by the amount of time you want the translation to take, then times by the delta time 
         camSnapSpeedX= (float)(newCamPosX - viewport.getCamera().position.x)/camSnapTimePeriod;
         camSnapSpeedY= (float)(newCamPosY - viewport.getCamera().position.y)/camSnapTimePeriod;
@@ -399,6 +434,7 @@ Col’s  	rows	total	orientation
         if(zoomSelectionMode)
         {
             //TODO zoom out
+            snapCameraToField();
         }
 //reset the number of selected back to 0 so our next touch event is free to select a new first hex
         noOfSelected = 0;
@@ -434,6 +470,7 @@ Col’s  	rows	total	orientation
             if(zoomSelectionMode)
             {
                 //TODO zoom to fit adjacents
+                snapCameraToAdjacents();
             }
 //set the number of selected to 1 so the next touch will be handled differently
             noOfSelected=1;
@@ -457,6 +494,8 @@ Col’s  	rows	total	orientation
 //zoom in even further so that just the 2 selected hexes will fill the whole screen
             if (zoomSelectionMode) {
                 // TODO zoom to fit pair of selected hexes
+                snapCameraToHex();
+
             }
             //if quick mode – aka if not zoom mode
             else {
@@ -712,6 +751,7 @@ Col’s  	rows	total	orientation
         selectedHex2 = -1;
         if (zoomSelectionMode) {
             //zoom out
+            snapCameraToField();
         }
         noOfSelected = 0;
 
@@ -739,6 +779,7 @@ Col’s  	rows	total	orientation
             hexTallField.highlightAdjacent(adjacentArray);
             if (zoomSelectionMode) {
                 // zoom to fit adjacents
+                snapCameraToAdjacents();
             }
             noOfSelected = 1;
         }
@@ -754,6 +795,7 @@ Col’s  	rows	total	orientation
             hexTallField.hexTallArray[selectedHex2].select(200);
             highlightNonMatchingTall();
             if (zoomSelectionMode) {
+                snapCameraToHex();
                 // zoom to fit pair of selected hexes
             } else {
                 selectedSector2 = proposedSelectedSector;
@@ -1008,6 +1050,7 @@ Col’s  	rows	total	orientation
 //apply the difficulty level too
                 highlightNonMatching();
                 //point the camera at the selected hexes
+                camSnapTime=camSnapTimePeriod;
                 snapCameraToHex();
 
             }
@@ -1024,6 +1067,7 @@ Col’s  	rows	total	orientation
                 hexTallField.hexTallArray[selectedHex].select(0);
                 hexTallField.hexTallArray[selectedHex2].select(0);
                 highlightNonMatchingTall();
+                camSnapTime=camSnapTimePeriod;
                 snapCameraToHex();
             }
         }
@@ -1116,6 +1160,7 @@ int diffInt = difficulty;
     }
     void resetGame()
     {
+        //this updates the camera return position to the default  position
         gameOver=false;
         score=0;
         timer=0;

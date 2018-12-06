@@ -320,8 +320,8 @@ this.marginX=marginX;
                 posX, posY, marginX,marginY);
 
         //considering we use wide hexes, get the width and the height of the 2 hexes together
-        int pairHeight = Math.abs(pos1[0]-pos2[0])+(int)(edgeSize*2);
-        int pairWidth = Math.abs(pos1[1]-pos2[1])+(int)(edgeSize*0.866025403784439*2);
+        int pairHeight = Math.abs(pos1[1]-pos2[1])+(int)(edgeSize*2);
+        int pairWidth = Math.abs(pos1[0]-pos2[0])+(int)(edgeSize*0.866025403784439*2);
 //see which one is greater in percent of available space and return it
         if(pairHeight/(height)<pairWidth/(width))
         {
@@ -330,6 +330,25 @@ this.marginX=marginX;
         else
         {
             return pairHeight/(height);
+        }
+    }
+    float getAdjacentZoom(int firstHex)
+    {
+
+        //considering we use tallhexes, get the width and the height of all the adjacents
+        int adjacentsHeight = (int)(edgeSize*2*3);
+        int adjacentsWidth = (int)(edgeSize*0.866025403784439*2*3);
+        //see which one is greater in percent of available space and return it
+
+        float h =(float)(adjacentsHeight )/(float)(height);
+        float w = (float)(adjacentsWidth )/(float)(width);
+        if(h<w)
+        {
+            return w;
+        }
+        else
+        {
+            return h;
         }
     }
 

@@ -240,6 +240,8 @@ vpHeight=vpShort;
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 //gsClient.submitEvent(EVENT1, 1);
+
+                //reset the camera since we are starting a new game
                 goToGameStage();
             }
         });
@@ -530,7 +532,7 @@ vpHeight=vpShort;
 
     @Override
     public void resize(int width, int height) {
-        mainStage.getViewport().update(vpWidth, vpHeight, true);
+        //mainStage.getViewport().update(vpWidth, vpHeight, true);
     }
 
     @Override

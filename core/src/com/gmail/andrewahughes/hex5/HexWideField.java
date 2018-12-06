@@ -341,7 +341,25 @@ public float deriveEdgeSize(int width, int height,int noOfRows, int noOfColumns)
                         return h;
                 }
         }
+        float getAdjacentZoom(int firstHex)
+        {
 
+                //considering we use wide hexes, get the width and the height of all the adjacents
+                int adjacentsHeight = (int)(edgeSize*0.866025403784439*2*3);
+                int adjacentsWidth = (int)(edgeSize*2*3);
+                //see which one is greater in percent of available space and return it
+
+                float h =(float)(adjacentsHeight )/(float)(height);
+                float w = (float)(adjacentsWidth )/(float)(width);
+                if(h<w)
+                {
+                        return w;
+                }
+                else
+                {
+                        return h;
+                }
+        }
         int[] getHexCoords( int edgeSize, int index, int noOfRows,
                            int noOfColumns, int posX, int posY, int marginX, int marginY)
         {
