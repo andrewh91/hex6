@@ -13,7 +13,7 @@ import java.util.ArrayList;
 public class HexWideField
 {
 public float edgeSize;
-public int noOfColumns,noOfRows ,noOfHexes;
+public int noOfColumns,noOfRows ,noOfHexes,posX,  posY, marginX,  marginY, edgeSizeInt,width, height;
 
 HexWide hexWideArray[];
 
@@ -21,6 +21,11 @@ HexWide hexWideArray[];
                 this.edgeSize = deriveEdgeSize(width, height, noOfRows, noOfColumns);
                 this.noOfColumns = noOfColumns;
                 this.noOfRows = noOfRows;
+                this.posX = posX;
+                this.posY = posY;
+                this.width=width;
+                this.height=height;
+                edgeSizeInt=(int)edgeSize;
                 hexWideArray = new HexWide[noOfColumns * noOfRows];
 //unless the specified argument result in the ideal ratio of number of hexes across and down then the hex feild will be offset in either the x or y axis, record that to counteract it
                 int marginX = (int) ((width - (0.5 * edgeSize + (noOfColumns * 1.5 * edgeSize))) / 2);
@@ -33,7 +38,8 @@ HexWide hexWideArray[];
                          marginY = (int)((height - (edgeSize*noOfRows*0.866025403784439*2))/2);
 
                 }
-
+this.marginX=marginX;
+                this.marginY=marginY;
 
          noOfHexes=0;
 //create a field of hexes starting from the bottom left, moving right across the columns the back to the far left and up one then start again
@@ -276,6 +282,91 @@ public float deriveEdgeSize(int width, int height,int noOfRows, int noOfColumns)
                 return isolatedArray;
         }//end method
 
+
+
+        /**
+         * For use in Singles Game Mode when a match is found, we want the camera to go to
+         * the next pair of hexes. This will calculate the x and y position of  the next 2 hexes,
+         * considering if we are in portrait or landscape, the size of the hexes etc
+         * This method might also be useful for snapping to and zooming in on pairs that the
+         * user selects in game modes other than singles.
+         */
+        int[] getNextHexPairCoords( int firstHex,
+                                   int secondHex)
+        {
+                int[] pos1;
+                int[] pos2;
+                int[] pos3;
+//get the x and y pos of the first hex
+                pos1 = getHexCoords( edgeSizeInt, firstHex, noOfRows, noOfColumns,
+                        posX, posY, marginX,marginY);
+//get the x and y pos of the second hex
+                pos2 = getHexCoords( edgeSizeInt, secondHex, noOfRows, noOfColumns,
+                        posX, posY, marginX,marginY);
+
+//now find the point inbetween the 2 positions 
+                int x= (pos1[0] + pos2[0])/2;
+                int y= (pos1[1] + pos2[1])/2;
+
+                pos3 =new int[] {x,y};
+                return pos3;
+
+//need to start the zoom logic
+
+        }//end of method 
+
+        float getNextHexZoom(int firstHex, int secondHex)
+        {
+                int[] pos1;
+                int[] pos2;
+               pos1 = getHexCoords( edgeSizeInt, secondHex, noOfRows, noOfColumns,
+                       posX, posY, marginX,marginY);
+
+                pos2 = getHexCoords( edgeSizeInt, firstHex, noOfRows, noOfColumns,
+                        posX, posY, marginX,marginY);
+
+                //considering we use wide hexes, get the width and the height of the 2 hexes together
+                int pairHeight = Math.abs(pos1[1]-pos2[1])+(int)(edgeSize*0.866025403784439*2);
+                int pairWidth = Math.abs(pos1[0]-pos2[0])+(int)(edgeSize*2);
+                //see which one is greater in percent of available space and return it
+
+                float h =(float)(pairHeight)/(float)(height);
+                float w = (float)(pairWidth)/(float)(width);
+                if(h<w)
+                {
+                        return w;
+                }
+                else
+                {
+                        return h;
+                }
+        }
+
+        int[] getHexCoords( int edgeSize, int index, int noOfRows,
+                           int noOfColumns, int posX, int posY, int marginX, int marginY)
+        {
+                int[] pos = {0,0};
+/* first of all turn the index number of the hex back into i and j coords which indicate
+* it's row and column in the field respectively
+* portrait mode, hexes start bottom left then move right, go back to start and up one
+* then right again etc
+* the hexes will have been given indexes from 0 to noOfRows*noOfColumns-1, the
+* following turns that index number back into the number in the row and column
+*/
+
+                        int i=(int)(index/noOfColumns);
+                        int j=index%noOfColumns;
+
+//now calculate the position of the given hex
+                        int x = (int)(posX+marginX+(0.5*edgeSize+((j+1)*1.5*edgeSize))-edgeSize);
+                        int y = (int)(posY+marginY-(edgeSize*0.866025403784439)+(edgeSize*0.866025403784439*2)*(i+1)
+                                +(edgeSize*0.866025403784439)*(j%2));
+                        pos = new int[]{x,y};
+
+
+
+                return pos;
+        }
 
 
 

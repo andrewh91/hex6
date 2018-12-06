@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -31,8 +32,8 @@ public class GameStage extends Stage {
     private ShapeRenderer renderer = new ShapeRenderer();
     SpriteBatch spriteBatch = new SpriteBatch();
     public StageInterface stageInterface;
-    HexWideField hexWideField ;
-    HexTallField hexTallField ;
+    HexWideField hexWideField;
+    HexTallField hexTallField;
     Database database;
     Viewport viewport;
     BitmapFont font = new BitmapFont();
@@ -40,26 +41,25 @@ public class GameStage extends Stage {
     String state = new String();
     //ints to store the selected hex’s index position in the field of hexes
     //and the selected sector which will be 0 - 5
-    int selectedSector=-1, selectedHex=-1;
-    int selectedSector2=-1, selectedHex2=-1;
+    int selectedSector = -1, selectedHex = -1;
+    int selectedSector2 = -1, selectedHex2 = -1;
     //proposedSelectedHex and symbol stores the touched hex and symbol in the touch logic which is used to help figure out which hex is actually selected in the case of hexes bounding boxes overlapping
     int proposedSelectedHex = -1;
     int proposedSelectedSector = -1;
     //holds the number of selected hexes, will be 0,1 or 2, what a touch does changes depending on how many hexes are selected
-    int noOfSelected=0;
+    int noOfSelected = 0;
     //an array list to hold the index values of the hexes adjacent to the given hex
-    ArrayList<Integer> adjacentArray=new ArrayList<Integer>();
-
+    ArrayList<Integer> adjacentArray = new ArrayList<Integer>();
 
 
     //score is incremented when matching when target score is reached we end some game modes
-    int score =0, targetScore=10;
-    boolean gameOver=false;
+    int score = 0, targetScore = 10;
+    boolean gameOver = false;
     //timer is incremented when not paused, timerFinal was just a way to stop the timer when we get gameover
-    float timer =0f,timerFinal=0f;
+    float timer = 0f, timerFinal = 0f, penaltyTime = 2f;
     //green and red are used when drawing the coloured background, they are altered when scoring to change background colour
-    float green=0;
-    float red=0;
+    float green = 0;
+    float red = 0;
 
     //recommended number of rows for portrait mode using hexwide in screens with 16:9 aspect ratio
 //can be found using noOfRows =roundup(noOfColumns*2-noOfColumns/2)
@@ -86,10 +86,10 @@ Col’s  	rows	total	orientation
 9	14	126	portrait
 */
     //default values for the field
-    public int noOfRows=3,noOfColumns=4;
+    public int noOfRows = 3, noOfColumns = 4;
     //prefer not to use Boolean for the orientation, when changing the options in game we can use 0 to show no change, 1 portrait 2 landscape
     //game mode is 0 by default, this is the field mode, many hexes on screen, hexes disappear when matched, game mode 1 would be singles mode, 2 hexes on screen, symbols are replaced when matching
-    int portrait1Landscape2=1, fieldPosX=50, fieldPosY=50, fieldWidth=620, fieldHeight=1180, gameMode=0;
+    int portrait1Landscape2 = 1, fieldPosX = 50, fieldPosY = 50, fieldWidth = 620, fieldHeight = 1180, gameMode = 0;
 
 
     //haven’t properly implemented the zoom mode yet, the alternative is called quickMode – or just zoomSelectionMode false
@@ -97,31 +97,29 @@ Col’s  	rows	total	orientation
 //test symbol, quick mode sort of combines the 2nd and 3rd touch, so there is only 2 touches, 1 to select first hex, 2 to select
 //second hex as well as symbol and compare symbol so you have to be careful what you’re touching, which would be hard if the
 //camera was zoomed out too far which is why zoom mode is more useful in large hexfields
-    boolean zoomSelectionMode =true;
-
+    boolean zoomSelectionMode = true;
+    int hexPairPosX, hexPairPosY;
     //difficulty will remove some of the symbols so there are less wrong answers, and less to look at when
     //trying to compare matches, high difficulty value will make it more easy
-    int difficulty=0;
+    int difficulty = 0;
 
     //arrayList to store which symbols are false matches – we use this to remove symbols to make the difficulty easier
-    ArrayList<Integer> nonMatchingSymbols=new ArrayList<Integer>();
-    ArrayList<Integer> nonMatchingSymbolsHex1=new ArrayList<Integer>();
-    ArrayList<Integer> nonMatchingSymbolsHex2=new ArrayList<Integer>();
+    ArrayList<Integer> nonMatchingSymbols = new ArrayList<Integer>();
+    ArrayList<Integer> nonMatchingSymbolsHex1 = new ArrayList<Integer>();
+    ArrayList<Integer> nonMatchingSymbolsHex2 = new ArrayList<Integer>();
 
 
-
-
-    public GameStage(Viewport viewport, Texture texture,final StageInterface stageInterface, int portrait) {
-        super( viewport );
-        this.viewport=viewport;
-        this.portrait1Landscape2 =portrait;
+    public GameStage(Viewport viewport, Texture texture, final StageInterface stageInterface, int portrait) {
+        super(viewport);
+        this.viewport = viewport;
+        this.portrait1Landscape2 = portrait;
         //the font isn’t really final, the symbols will be replaced with pictures eventually
         font.setColor(Color.WHITE);
         font.getData().setScale(3f);
         //create the field with the given default values which we set above
-        updateField(noOfRows,noOfColumns,portrait,fieldPosX,fieldPosY,fieldWidth,fieldHeight, gameMode);
+        updateField(noOfRows, noOfColumns, portrait, fieldPosX, fieldPosY, fieldWidth, fieldHeight, gameMode);
         //the stage interface is used to go from one stage to another and pass variables over
-        this.stageInterface =stageInterface;
+        this.stageInterface = stageInterface;
 
     }
 
@@ -165,7 +163,7 @@ Col’s  	rows	total	orientation
             if ((index % noOfColumns) % 2 == 0) {
                 if (sector == 10) {
                     //if not on left edge - doesnt matter if its on the top because even column
-                    if (index % noOfColumns > 0 ) {
+                    if (index % noOfColumns > 0) {
                         proposedSelectedHex = index - 1;
                     }
                 }
@@ -176,8 +174,7 @@ Col’s  	rows	total	orientation
                     if (index % noOfColumns < noOfColumns - 1 && index - noOfColumns >= 0) {
                         proposedSelectedHex = index - noOfColumns + 1;
                     }
-                }
-                else if (sector == 15) {
+                } else if (sector == 15) {
                     //if not on left edge AND not on bottom edge
                     if (index % noOfColumns > 0 && index - noOfColumns >= 0) {
                         proposedSelectedHex = index - noOfColumns - 1;
@@ -194,7 +191,7 @@ Col’s  	rows	total	orientation
                 //only need one of these for odd columns most of the surrounding overlapping hexes are created more recently so they will handle touch, don’t need logic for sector 10, 12, or 13, just for 15
                 if (sector == 15) {
                     //if not on left edge - on wide field odd column adjacents can go below left and below right
-                    if (index % noOfColumns > 0 ) {
+                    if (index % noOfColumns > 0) {
                         proposedSelectedHex = index - 1;// bottom left
                     }
                 }
@@ -227,8 +224,7 @@ Col’s  	rows	total	orientation
 //this is where quick mode and zoom mode differ, if we are using quick mode we select the second hex and compare the touched
 //symbol at the same time, we will take the touched symbol on the second hex and compare it will all symbols on the first hex
                 if (!zoomSelectionMode) {
-                    if( compareAll(selectedHex2,selectedHex,proposedSelectedSector))
-                    {
+                    if (compareAll(selectedHex2, selectedHex, proposedSelectedSector)) {
 //TODO need to complete this, need to add increase score at the least and test it
                         resetSelection();
                     }
@@ -249,38 +245,34 @@ Col’s  	rows	total	orientation
         }//end else if(noOfSelected==1)
 //if we have 2 hexes selected already
         else if (noOfSelected == 2) {
-//if the hex we touched is one of the two that is already selected
+            //if the hex we touched is one of the two that is already selected
             if (hexWideField.hexWideArray[proposedSelectedHex].select) {
 //we need to figure out which of the 2 selected hexes was touched so we know which hex’s symbol was touched
                 if (selectedHex == proposedSelectedHex) {
 //if the touched symbol matches one of the symbols on the other hex then increase score and reset selection and if game mode
 //is singles highlightNonMatching so the difficulty level is applied to the next set of hexes
-                    if(compareAll(selectedHex,selectedHex2,proposedSelectedSector)){
+                    if (compareAll(selectedHex, selectedHex2, proposedSelectedSector)) {
 
                         increaseScore();
                         resetSelection();
-                        if(gameMode==1)
-                        {
+                        if (gameMode == 1) {
                             highlightNonMatching();
                         }
                     }
 //if the touched symbol does not match any of the symbols on the other hex then decrease score and swap sector which will unhighlight the previous selected sector (if there was one) and select the new one.
-                    else
-                    {
+                    else {
                         decreaseScore();
-                        swapSector1(selectedHex,selectedSector,proposedSelectedSector);
+                        swapSector1(selectedHex, selectedSector, proposedSelectedSector);
                     }
 //this is the same logic but for if we touched the symbol on the other hex
                 } else if (selectedHex2 == proposedSelectedHex) {
-                    if(compareAll(selectedHex2,selectedHex,proposedSelectedSector)){
+                    if (compareAll(selectedHex2, selectedHex, proposedSelectedSector)) {
                         increaseScore();
                         resetSelection();
                         highlightNonMatching();
-                    }
-                    else
-                    {
+                    } else {
                         decreaseScore();
-                        swapSector2(selectedHex2,selectedSector2,proposedSelectedSector);
+                        swapSector2(selectedHex2, selectedSector2, proposedSelectedSector);
 
                     }
                 }
@@ -290,6 +282,28 @@ Col’s  	rows	total	orientation
                 resetSelection();
             }
         }//end else if(noOfSelected==2)
+    }
+
+    public void snapCameraToHex() {
+        int posArray[] ={0,0};
+    if(portrait1Landscape2==1)
+    {
+
+     posArray=  hexWideField.getNextHexPairCoords( selectedHex, selectedHex2);
+        ((OrthographicCamera)viewport.getCamera()).zoom=hexWideField.getNextHexZoom(selectedHex,selectedHex2);
+
+    }
+    else if(portrait1Landscape2==2)
+    {
+        posArray=  hexTallField.getNextHexPairCoords( selectedHex, selectedHex2);
+        ((OrthographicCamera)viewport.getCamera()).zoom=hexTallField.getNextHexZoom(selectedHex,selectedHex2);
+
+    }
+    hexPairPosX=posArray[0];
+        hexPairPosY=posArray[1];
+        viewport.getCamera().position.set(hexPairPosX,hexPairPosY,
+                viewport.getCamera().position.z);
+
     }
     //method for reseting the selection so we can start looking for symbols all over again
 //if called after scoring but also if we have touched a hex indicative of wanting to cancel the selection
@@ -337,8 +351,8 @@ Col’s  	rows	total	orientation
             // re select the first 2 hexes and set the nooselected to 2, this means we won’t have to tap the hexes before
 //looking for a symbol that matches, it would be pointless requiring the player to tap the hexes to select them since there
 //are only 2 hexes to select
-            selectedHex=0;
-            selectedHex2=1;
+            selectedHex=score;
+            selectedHex2=score+targetScore;
             hexWideField.hexWideArray[selectedHex].select(0);
             hexWideField.hexWideArray[selectedHex2].select(0);
             noOfSelected=2;
@@ -647,8 +661,8 @@ Col’s  	rows	total	orientation
         {
             // dont reset if playing singles
             // re select the first 2 hexes and set the nooselected to 2
-            selectedHex=0;
-            selectedHex2=1;
+            selectedHex=score;
+            selectedHex2=score+targetScore;
             hexTallField.hexTallArray[selectedHex].select(0);
             hexTallField.hexTallArray[selectedHex2].select(0);
 
@@ -758,6 +772,7 @@ Col’s  	rows	total	orientation
             //green backgroudn
             Gdx.gl.glClearColor(0 , 0.8f, 0, 1);
             Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
             viewport.getCamera().update();
             spriteBatch.begin();
             //display the results
@@ -771,6 +786,13 @@ Col’s  	rows	total	orientation
             if (visible) {
 //increase the timer
                 timer = timer + Gdx.graphics.getDeltaTime();
+                //test camera translate
+                /*
+                if(viewport.getCamera().position.x>1280) {
+                    viewport.getCamera().position.set(0, viewport.getCamera().position.y, viewport.getCamera().position.y);
+                }
+                viewport.getCamera().translate(5f, 0f, 0f);
+                */
 
                 //when we get an answer right of wrong we set green or red to 1 which in turn is used to colour the screen so the
 //background flashes to show you got it right or wrong, the below controls how long the screen stays that colour before going
@@ -868,6 +890,10 @@ Col’s  	rows	total	orientation
             actor.addAction(Actions.removeActor());
         }
     }
+
+
+
+
     //create or update the field, when changing options only some of them require the field be updated, all the options that do require a field change will be handled here
     public void updateField(int newNoOfRows, int newNoOfColumns, int newPortrait1Landscape2,
                             int newFieldPosX, int newFieldPosY, int newFieldWidth,
@@ -894,12 +920,12 @@ Col’s  	rows	total	orientation
         {
             if(portrait1Landscape2==1)
             {
-                noOfColumns =1;
+                noOfColumns =targetScore;
                 noOfRows=2;
             }
             else if(portrait1Landscape2==2)
             {
-                noOfRows=1;
+                noOfRows=targetScore;
                 noOfColumns=2;
             }
         }
@@ -908,22 +934,28 @@ Col’s  	rows	total	orientation
 //set new wide or tall field depending on if we are in portrait or landscape mode
         if(portrait1Landscape2==1) {
             resetSelection();
-            hexWideField = new HexWideField(fieldPosX, fieldPosY, fieldWidth, fieldHeight, noOfRows, noOfColumns, this, database);
+            hexWideField = new HexWideField(fieldPosX, fieldPosY, fieldWidth, fieldHeight,
+                    noOfRows, noOfColumns, this, database);
             addHexesToStage(hexWideField);
 //some specific things if in singles game mode
             if(gameMode==1)
             {
+
                 //we want the 2 hexes to be selected automatically
                 hexWideField.hexWideArray[selectedHex].select(0);
                 hexWideField.hexWideArray[selectedHex2].select(0);
 //apply the difficulty level too
                 highlightNonMatching();
+                //point the camera at the selected hexes
+                snapCameraToHex();
+
             }
         }
         else if(portrait1Landscape2==2)
         {
             resetSelectionTall();
-            hexTallField = new HexTallField(fieldPosX,fieldPosY,fieldWidth,fieldHeight,noOfRows,noOfColumns,this,database);
+            hexTallField = new HexTallField(fieldPosX,fieldPosY,fieldWidth,fieldHeight,
+                    noOfRows,noOfColumns,this,database);
             addHexesToStage(hexTallField);
             if(gameMode==1)
             {
@@ -931,6 +963,7 @@ Col’s  	rows	total	orientation
                 hexTallField.hexTallArray[selectedHex].select(0);
                 hexTallField.hexTallArray[selectedHex2].select(0);
                 highlightNonMatchingTall();
+                snapCameraToHex();
             }
         }
     }
@@ -955,10 +988,9 @@ Col’s  	rows	total	orientation
         isTargetReached(score);
 //if in singles game mode we need to get some new symbols etc so we can’t just match the same symbols again
         if(gameMode==1){
-            //create new database to get more hexes, just use 0s so nothing changes
-            updateField(0,0,0,0,
-                    0,0,0,0);
-
+            selectedHex =score;
+            selectedHex2 =score+targetScore;
+            snapCameraToHex();
         }
         else// if not singles mode, make matched hexes disappear
         {
@@ -998,7 +1030,8 @@ Col’s  	rows	total	orientation
 
     void decreaseScore()
     {
-        score--;
+        //score--;
+        timer=timer+penaltyTime;//plus 2 seconds to timer
         flashRedBackground();
     }
 
