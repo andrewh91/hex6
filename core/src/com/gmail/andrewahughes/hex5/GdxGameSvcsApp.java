@@ -601,6 +601,8 @@ vpHeight=vpShort;
     public void goToGameStage() {
 
 hideAllStages();
+        gameStage.returnCameraZoom();
+        gameStage.returnCameraPos();
         gameStage.setVisible(true);
         Gdx.input.setInputProcessor(gameStage);
         Gdx.input.setCatchBackKey(true);
@@ -618,7 +620,10 @@ hideAllStages();
         gameStage.getViewport().getCamera().viewportWidth = vpWidth;
 
         gameStage.getViewport().getCamera().position.set(vpWidth/2,vpHeight/2,0);
-
+        gameStage.setNewCameraPos(vpWidth/2,vpHeight/2);
+        gameStage.setDefaultCameraPos(vpWidth/2,vpHeight/2);
+        gameStage.setNewCameraZoomTarget(1);
+        gameStage.setDefaultCameraZoom(1);
         gameStage.getViewport().getCamera().update();
         platform.SetOrientation("portrait");
     }
@@ -634,7 +639,10 @@ hideAllStages();
         gameStage.getViewport().getCamera().viewportWidth = vpWidth;
 
         gameStage.getViewport().getCamera().position.set(vpWidth/2,vpHeight/2,0);
-
+        gameStage.setNewCameraPos(vpWidth/2,vpHeight/2);
+        gameStage.setDefaultCameraPos(vpWidth/2,vpHeight/2);
+        gameStage.setNewCameraZoomTarget(1);
+        gameStage.setDefaultCameraZoom(1);
         gameStage.getViewport().getCamera().update();
         platform.SetOrientation("landscape");
     }
@@ -644,6 +652,8 @@ hideAllStages();
                                            int newFieldPosY, int newFieldWidth,
                                            int newFieldHeight,int newZoom,int newDifficulty, int newGameMode) {
        hideAllStages();
+        gameStage.returnCameraZoom();
+        gameStage.returnCameraPos();
        gameStage.setVisible(true);
 
         //these options can be changed without recalculating the field
@@ -702,6 +712,8 @@ hideAllStages();
         setVisible(false);//main stage
         gamePauseStage.setVisible(false);
         gameOverStage.setVisible(false);
+        gameStage.resetCameraZoom();
+        gameStage.resetCameraPos();
     }
     public void setVisible(boolean visible) {
         this.visible = visible;

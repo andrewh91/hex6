@@ -36,6 +36,30 @@ public class GameStage extends Stage {
     HexTallField hexTallField;
     Database database;
     Viewport viewport;
+
+    int defaultCamPosX;
+    int  defaultCamPosY;
+
+    float defaultCamZoom;
+
+    int newCamPosX;
+    int  newCamPosY;
+
+    float  newCamZoom;
+
+    //whether we need to run the camera movement logic
+    boolean camSnapOutdated=false;
+    //the period of time over which the camera movements will happen
+    float camSnapTimePeriod=2f;
+    //the current progress through the camera transition
+    float camSnapTime=0f;
+    //the speed to move the camera
+    float  camSnapSpeedX;
+    float  camSnapSpeedY;
+    float  camSnapSpeedZ;
+
+
+
     BitmapFont font = new BitmapFont();
     String text = new String();
     String state = new String();
@@ -283,28 +307,62 @@ Col’s  	rows	total	orientation
             }
         }//end else if(noOfSelected==2)
     }
-
     public void snapCameraToHex() {
         int posArray[] ={0,0};
-    if(portrait1Landscape2==1)
-    {
+        if(portrait1Landscape2==1)
+        {
 
-     posArray=  hexWideField.getNextHexPairCoords( selectedHex, selectedHex2);
-        ((OrthographicCamera)viewport.getCamera()).zoom=hexWideField.getNextHexZoom(selectedHex,selectedHex2);
+            posArray=  hexWideField.getNextHexPairCoords( selectedHex, selectedHex2);
+            setNewCameraZoomTarget(hexWideField.getNextHexZoom(selectedHex,selectedHex2));
 
-    }
-    else if(portrait1Landscape2==2)
-    {
-        posArray=  hexTallField.getNextHexPairCoords( selectedHex, selectedHex2);
-        ((OrthographicCamera)viewport.getCamera()).zoom=hexTallField.getNextHexZoom(selectedHex,selectedHex2);
+        }
+        else if(portrait1Landscape2==2)
+        {
+            posArray=  hexTallField.getNextHexPairCoords( selectedHex, selectedHex2);
+            setNewCameraZoomTarget(hexTallField.getNextHexZoom(selectedHex,selectedHex2));
 
-    }
-    hexPairPosX=posArray[0];
+        }
+        hexPairPosX=posArray[0];
         hexPairPosY=posArray[1];
-        viewport.getCamera().position.set(hexPairPosX,hexPairPosY,
-                viewport.getCamera().position.z);
+        setNewCameraPosTarget(hexPairPosX,hexPairPosY);
+        camSnapOutdated=true;
+        setCamSnapSpeed();
 
     }
+    void setCamSnapSpeed()
+    {
+//work out the distance that needs to be covered to move the camera into the target position, then divide it by the amount of time you want the translation to take, then times by the delta time 
+        camSnapSpeedX= (float)(newCamPosX - viewport.getCamera().position.x)/camSnapTimePeriod;
+        camSnapSpeedY= (float)(newCamPosY - viewport.getCamera().position.y)/camSnapTimePeriod;
+        camSnapSpeedZ= (float)(newCamZoom - ((OrthographicCamera)viewport.getCamera()).zoom)/camSnapTimePeriod;
+    }
+
+    /**
+     * method to slowly move the camera into the target position
+     */
+    void updateCamSnap()
+    {
+        if(camSnapOutdated)
+        {
+//increment this timer so we know when to stop
+            camSnapTime+=Gdx.graphics.getDeltaTime();
+//increment the position of the camera by the speed times delta time, so it should reach the target position in the defined period of time
+            viewport.getCamera().translate(camSnapSpeedX*Gdx.graphics.getDeltaTime(),camSnapSpeedY*Gdx.graphics.getDeltaTime(),0f);
+
+//do the same for the zoom
+            ((OrthographicCamera)viewport.getCamera()).zoom+=camSnapSpeedZ*Gdx.graphics.getDeltaTime();
+
+//if the timer has exceeded the time in which we wanted the transition to take place then finish
+            if(camSnapTime>=camSnapTimePeriod)
+            {
+                setNewCameraPos(newCamPosX,newCamPosY);
+                setNewCameraZoom(newCamZoom);
+                camSnapOutdated=false;
+                camSnapTime=0f;
+            }//end if camSnapTime>=camSnapTimePeriod
+        }//end if cam snap outdated
+
+    }//end method
     //method for reseting the selection so we can start looking for symbols all over again
 //if called after scoring but also if we have touched a hex indicative of wanting to cancel the selection
     public void resetSelection()
@@ -794,6 +852,9 @@ Col’s  	rows	total	orientation
                 viewport.getCamera().translate(5f, 0f, 0f);
                 */
 
+                //handle camera transition
+                updateCamSnap();
+
                 //when we get an answer right of wrong we set green or red to 1 which in turn is used to colour the screen so the
 //background flashes to show you got it right or wrong, the below controls how long the screen stays that colour before going
 //back to what it was. Use the delta time for effect consistent throughout all frame rates.
@@ -1092,7 +1153,61 @@ int diffInt = difficulty;
 
     }
 
+    void setNewCameraPos(int x, int y)
+    {
+        newCamPosX=x;
+        newCamPosY=y;
+        viewport.getCamera().position.set(newCamPosX,newCamPosY,
+                viewport.getCamera().position.z);
+    }
+    void setNewCameraZoom(float z)
+    {
+        newCamZoom = z;
+        ((OrthographicCamera)viewport.getCamera()).zoom=newCamZoom ;
+    }
+    void setNewCameraPosTarget(int x, int y)
+    {
+        newCamPosX=x;
+        newCamPosY=y;
+    }
+    void setNewCameraZoomTarget(float z)
+    {
+        newCamZoom = z;
+    }
 
+    void setDefaultCameraPos(int x, int y)
+    {
+        defaultCamPosX=x;
+        defaultCamPosY=y;
+
+        newCamPosX=x;
+        newCamPosY=y;
+    }
+    void setDefaultCameraZoom(float z)
+    {
+        newCamZoom =z;
+        defaultCamZoom = z;
+    }
+
+    void resetCameraPos()
+    {
+        viewport.getCamera().position.set(defaultCamPosX,defaultCamPosY,
+                viewport.getCamera().position.z);
+    }
+    void resetCameraZoom()
+    {
+        ((OrthographicCamera)viewport.getCamera()).zoom=defaultCamZoom;
+    }
+
+    void returnCameraPos()
+    {
+        viewport.getCamera().position.set(newCamPosX,newCamPosY,
+                viewport.getCamera().position.z);
+    }
+    void returnCameraZoom()
+    {
+        ((OrthographicCamera)viewport.getCamera()).zoom=newCamZoom;
+    }
     @Override
     public boolean keyDown(int keycode) {
         if(keycode == Input.Keys.BACK){
