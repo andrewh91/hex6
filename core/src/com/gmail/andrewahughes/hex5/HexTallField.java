@@ -17,9 +17,18 @@ public class HexTallField
 
     HexTall hexTallArray[];
 
-    public HexTallField(int posX, int posY, int width, int height, int noOfRows, int noOfColumns,final GameStage gs, final Database db) {
-        this.edgeSize = deriveEdgeSize(width, height, noOfRows, noOfColumns);
-        this.noOfColumns = noOfColumns;
+    public HexTallField(int posX, int posY, int width, int height, int noOfRows, int noOfColumns,int gameMode, final GameStage gs, final Database db) {
+// if singles game mode
+        if(gameMode==1)
+        {
+            this.edgeSize = deriveEdgeSize(width, height, 1, 2);
+        }
+        else
+        {
+            this.edgeSize = deriveEdgeSize(width, height, noOfRows, noOfColumns);
+
+
+        }        this.noOfColumns = noOfColumns;
         this.noOfRows = noOfRows;
         this.posX=posX;
         this.posY=posY;
@@ -323,25 +332,9 @@ this.marginX=marginX;
         int pairHeight = Math.abs(pos1[1]-pos2[1])+(int)(edgeSize*2);
         int pairWidth = Math.abs(pos1[0]-pos2[0])+(int)(edgeSize*0.866025403784439*2);
 //see which one is greater in percent of available space and return it
-        if(pairHeight/(height)<pairWidth/(width))
-        {
-            return pairWidth/(width);
-        }
-        else
-        {
-            return pairHeight/(height);
-        }
-    }
-    float getAdjacentZoom(int firstHex)
-    {
 
-        //considering we use tallhexes, get the width and the height of all the adjacents
-        int adjacentsHeight = (int)(edgeSize*2*3);
-        int adjacentsWidth = (int)(edgeSize*0.866025403784439*2*3);
-        //see which one is greater in percent of available space and return it
-
-        float h =(float)(adjacentsHeight )/(float)(height);
-        float w = (float)(adjacentsWidth )/(float)(width);
+        float h =(float)(pairHeight)/(float)(height);
+        float w = (float)(pairWidth)/(float)(width);
         if(h<w)
         {
             return w;
@@ -350,6 +343,115 @@ this.marginX=marginX;
         {
             return h;
         }
+    }
+
+
+    float getAdjacentZoom(int firstHex)
+{
+    ArrayList<Integer> adjacentArray = new ArrayList<Integer>();
+//2d array to hold the x and y coords of each hex
+    int[][] posArray= {
+            {0, 0},
+            {0, 0},
+            {0, 0},
+            {0, 0},
+            {0, 0},
+            {0, 0},
+            {0, 0}
+    };
+//get all the hexes adjacent to the given hex
+    adjacentArray =getAdjacent(firstHex,noOfColumns, noOfRows);
+    adjacentArray.add(firstHex);
+
+    int lowX=0;
+    int lowY=0;
+    int highX=0;
+    int highY=0;
+
+//store the coords of each adjacent hex in the posArray, there might not be 6 adjacents, but adjacentArray.size gives how many adjacents there are
+    for(int i = 0; i<adjacentArray.size();i++)
+    {
+        if(hexTallArray[adjacentArray.get(i)].visible) {
+
+            posArray[i] = getHexCoords(edgeSizeInt, adjacentArray.get(i), noOfRows, noOfColumns,
+                    posX, posY, marginX, marginY);
+//if current x is lowest record it in lowX variable ; if x is lower or equal to the first x or if x is lower than the currently recorded x set the lowX to x. lowX starts off as 0, so the x will never be lower, so we just have a condition to set lowX if the x is the first x
+            if (lowX==0 || posArray[i][0] <= lowX) {
+                lowX = posArray[i][0];
+            }
+//if the x is highest on record, record it
+            if (posArray[i][0] >= highX) {
+                highX = posArray[i][0];
+            }
+
+//if the y is lowest on record, record it
+            if (lowX==0 || posArray[i][1] <= lowY) {
+                lowY = posArray[i][1];
+            }
+//if the y is highest on record, record it
+            if (posArray[i][1] >= highY) {
+                highY = posArray[i][1];
+            }
+        }
+    }
+//work out the width of all the hexes together, the lowX and highX show the coords of the centre of the leftmost and rightmost hex, so to get total width we need to factor in how wide each hex is
+    float adjacentsWidth= (float)(highX-lowX+edgeSize*2*0.866025403784439);
+    float adjacentsHeight=(float)( highY-lowY+edgeSize*2);
+
+    //see which one is greater in percent of available space and return it
+
+    float h =(float)(adjacentsHeight )/(float)(height);
+    float w = (float)(adjacentsWidth )/(float)(width);
+    if(h<w)
+    {
+        return w;
+    }
+    else
+    {
+        return h;
+    }
+}
+
+    int[] getAdjacentCoords(int firstHex)
+    {
+        ArrayList<Integer> adjacentArray = new ArrayList<Integer>();
+//2d array to hold the x and y coords of each hex 
+
+        int[][] posArray= {
+                {0, 0},
+                {0, 0},
+                {0, 0},
+                {0, 0},
+                {0, 0},
+                {0, 0},
+                {0, 0}
+        };
+//get all the hexes adjacent to the given hex
+        adjacentArray =getAdjacent(firstHex,noOfColumns, noOfRows);
+adjacentArray.add(firstHex);
+
+        int meanX=0;
+        int meanY=0;
+        int noOfVisible=0;
+        int[] pos;
+//store the coords of each adjacent hex in the posArray, there might not be 6 adjacents, but adjacentArray.size gives how many adjacents there are
+        for(int i = 0; i<adjacentArray.size();i++)
+        {
+            if(hexTallArray[adjacentArray.get(i)].visible) {
+                posArray[i] = getHexCoords(edgeSizeInt, adjacentArray.get(i), noOfRows, noOfColumns,
+                        posX, posY, marginX, marginY);
+                meanX += posArray[i][0];
+                meanY += posArray[i][1];
+                noOfVisible++;
+            }
+        }
+        if(noOfVisible==0){noOfVisible=1;}
+
+        meanX = (int)(meanX/noOfVisible);
+        meanY = (int)(meanY/noOfVisible);
+
+        pos= new int[] {meanX,meanY};
+        return pos;
     }
 
     int[] getHexCoords( int edgeSize, int index, int noOfRows,

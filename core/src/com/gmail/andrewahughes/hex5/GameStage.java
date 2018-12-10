@@ -343,13 +343,13 @@ Col’s  	rows	total	orientation
         if(portrait1Landscape2==1)
         {
 //this just gets the selected hex's centre coords
-            posArray=  hexWideField.getNextHexPairCoords( selectedHex, selectedHex);
+            posArray=  hexWideField.getAdjacentCoords(selectedHex);
             setNewCameraZoomTarget(hexWideField.getAdjacentZoom(selectedHex));
 
         }
         else if(portrait1Landscape2==2)
         {
-            posArray=  hexTallField.getNextHexPairCoords( selectedHex, selectedHex);
+            posArray=  hexTallField.getAdjacentCoords( selectedHex);
             setNewCameraZoomTarget(hexTallField.getAdjacentZoom(selectedHex));
 
         }
@@ -429,11 +429,10 @@ Col’s  	rows	total	orientation
 //reset the selected hex
         selectedHex=-1;
         selectedHex2=-1;
-//I’ve not implemented this yet but the camera should zoom out to show the full field, or zoom out to the maximum zoom out
+//the camera should zoom out to show the full field, or zoom out to the maximum zoom out
 //amount if the field is so big zooming all the way out would not be helpful
-        if(zoomSelectionMode)
+        if(zoomSelectionMode&&gameMode!=1)
         {
-            //TODO zoom out
             snapCameraToField();
         }
 //reset the number of selected back to 0 so our next touch event is free to select a new first hex
@@ -465,11 +464,10 @@ Col’s  	rows	total	orientation
             hexWideField.hexWideArray[selectedHex].select(200);
             adjacentArray = hexWideField.getAdjacent(selectedHex,noOfColumns, noOfRows);
             hexWideField.highlightAdjacent(adjacentArray);
-//not done this yet but this should set the zoom level and camera position so that all the adjacents to the selected hex fill
+//this should set the zoom level and camera position so that all the adjacents to the selected hex fill
 //the screen
             if(zoomSelectionMode)
             {
-                //TODO zoom to fit adjacents
                 snapCameraToAdjacents();
             }
 //set the number of selected to 1 so the next touch will be handled differently
@@ -493,7 +491,6 @@ Col’s  	rows	total	orientation
             highlightNonMatching();
 //zoom in even further so that just the 2 selected hexes will fill the whole screen
             if (zoomSelectionMode) {
-                // TODO zoom to fit pair of selected hexes
                 snapCameraToHex();
 
             }
@@ -749,7 +746,7 @@ Col’s  	rows	total	orientation
         }
         selectedHex = -1;
         selectedHex2 = -1;
-        if (zoomSelectionMode) {
+        if (zoomSelectionMode&&gameMode!=1) {
             //zoom out
             snapCameraToField();
         }
@@ -1017,6 +1014,13 @@ Col’s  	rows	total	orientation
             resetGame();// reset the score and timer when starting a new game modes
 
         }
+        if(portrait1Landscape2==1) {
+resetSelection();
+        }
+        else if(portrait1Landscape2==2)
+        {
+            resetSelectionTall();
+        }
         //reset / reload everything
         removeAllActors();
         if(gameMode==1)//if singles mode overwrite number of rows and columns,
@@ -1036,9 +1040,8 @@ Col’s  	rows	total	orientation
         database = new Database(31,noOfColumns,noOfRows,portrait1Landscape2);
 //set new wide or tall field depending on if we are in portrait or landscape mode
         if(portrait1Landscape2==1) {
-            resetSelection();
             hexWideField = new HexWideField(fieldPosX, fieldPosY, fieldWidth, fieldHeight,
-                    noOfRows, noOfColumns, this, database);
+                    noOfRows, noOfColumns,gameMode, this, database);
             addHexesToStage(hexWideField);
 //some specific things if in singles game mode
             if(gameMode==1)
@@ -1057,9 +1060,8 @@ Col’s  	rows	total	orientation
         }
         else if(portrait1Landscape2==2)
         {
-            resetSelectionTall();
             hexTallField = new HexTallField(fieldPosX,fieldPosY,fieldWidth,fieldHeight,
-                    noOfRows,noOfColumns,this,database);
+                    noOfRows,noOfColumns,gameMode,this,database);
             addHexesToStage(hexTallField);
             if(gameMode==1)
             {
