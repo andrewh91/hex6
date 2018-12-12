@@ -133,6 +133,16 @@ public class GamePauseStage extends Stage {
         gameModeValue= new TextField("", skin);
         gameMode= new Label("gameMode:", skin);
 
+
+        TextButton button4 = new TextButton("swap orientation", skin);
+        button4.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+
+                GamePauseStage.this.stageInterface.updateFieldSwapOrientation();
+
+            }
+        });
         TextButton button3 = new TextButton("return to main menu", skin);
         button3.addListener(new ClickListener() {
             @Override
@@ -253,6 +263,7 @@ public class GamePauseStage extends Stage {
         table.add(gameModeValue);
         table.add(gameMode);
         table.row();
+        table.add(button4);
         table.add(button1);
 
         table.add(button2);

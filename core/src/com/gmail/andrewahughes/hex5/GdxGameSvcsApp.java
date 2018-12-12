@@ -242,7 +242,7 @@ vpHeight=vpShort;
                 //gsClient.submitEvent(EVENT1, 1);
 
                 //reset the camera since we are starting a new game
-                goToGameStage();
+                goToGameStageRefresh();
             }
         });
 
@@ -610,6 +610,21 @@ hideAllStages();
         Gdx.input.setCatchBackKey(true);
     }
 
+
+    @Override
+    public void goToGameStageRefresh() {
+
+        hideAllStages();
+        gameStage.returnCameraZoom();
+        gameStage.returnCameraPos();
+        gameStage.setVisible(true);
+        gameStage.updateFieldRefresh();
+        Gdx.input.setInputProcessor(gameStage);
+        Gdx.input.setCatchBackKey(true);
+    }
+
+
+    @Override
     public void setPortrait()
     {
         vpWidth =vpShort;
@@ -629,6 +644,7 @@ hideAllStages();
         gameStage.getViewport().getCamera().update();
         platform.SetOrientation("portrait");
     }
+    @Override
     public void setLandscape()
     {
         vpWidth =vpLong;
@@ -648,6 +664,13 @@ hideAllStages();
         gameStage.getViewport().getCamera().update();
         platform.SetOrientation("landscape");
     }
+
+    @Override
+    public void updateFieldSwapOrientation()
+    {
+        gameStage.updateFieldSwapOrientation();
+    }
+
     @Override
     public void updateOptionsGoToGameStage(int newNoOfRows, int newNoOfColumns,
                                            int newPortrait1Landscape2, int newFieldPosX,

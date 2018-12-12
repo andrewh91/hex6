@@ -158,9 +158,7 @@ public void updateUI()
             @Override
             public void clicked(InputEvent event, float x, float y) {
 
-                GameOverStage.this.stageInterface.updateOptionsGoToGameStage(0,
-                        0,0,0,0,
-                        0,0,0,0,0);
+                GameOverStage.this.stageInterface.goToGameStageRefresh();
 //before going to the gameover stage from the game stage i should ahve reset the game, so returning to it now should just start the game again
 
             }

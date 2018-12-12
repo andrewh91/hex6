@@ -78,6 +78,7 @@ public class GameStage extends Stage {
 
     //score is incremented when matching when target score is reached we end some game modes
     int score = 0, targetScore = 10;
+    int scoreFieldMode=0, targetScoreFieldMode=0;
     boolean gameOver = false;
     //timer is incremented when not paused, timerFinal was just a way to stop the timer when we get gameover
     float timer = 0f, timerFinal = 0f, penaltyTime = 2f;
@@ -935,7 +936,8 @@ Col’s  	rows	total	orientation
 
                 }
 
-                font.draw(spriteBatch, "timer: " + (int)(timer) + " score: " + score, 30, 30);
+                font.draw(spriteBatch, "timer: " + (int)(timer) + " score: " + score
+                        +" fieldmode score: "+scoreFieldMode+" target: "+targetScoreFieldMode,30, 30);
                 spriteBatch.end();
 
 
@@ -990,6 +992,110 @@ Col’s  	rows	total	orientation
             actor.addAction(Actions.removeActor());
         }
     }
+    void updateFieldRefresh() {
+        resetGame();
+        updateField(noOfRows, noOfColumns, portrait1Landscape2, fieldPosX, fieldPosY, fieldWidth, fieldHeight, gameMode);
+
+    }
+
+    void updateFieldSwapOrientation()
+    {
+
+        resetGame();
+
+
+
+        if(portrait1Landscape2==1) {
+            resetSelection();
+//swap the orientation to the alternative
+            portrait1Landscape2=2;
+            stageInterface.setLandscape();
+//this is an attempt to keep the same aspect ratio - 16:9, maximise the space used
+            noOfRows = noOfColumns ;
+            noOfColumns  =noOfRows *2+1;
+
+        }
+        else if(portrait1Landscape2==2)
+        {
+            resetSelectionTall();
+//swap the orientation to the alternative
+            portrait1Landscape2=1;
+            stageInterface.setPortrait();
+//this is an attempt to keep the same aspect ratio - 16:9, maximise the space used
+            noOfColumns  = noOfRows ;
+            noOfRows  = noOfColumns  *2-((noOfColumns+1)  /2);
+
+        }
+        //reset / reload everything
+        removeAllActors();
+
+//swap orientation , swap all the values, the portrait1Landscape2 is swapped above
+        int tempCol = noOfColumns;
+        int tempWidth= fieldWidth;
+        int tempFieldPosX = fieldPosX;
+
+        noOfColumns = noOfRows;
+        noOfRows = tempCol ;
+        fieldWidth = fieldHeight;
+        fieldHeight = tempWidth;
+        fieldPosX = fieldPosY;
+        fieldPosY = tempFieldPosX ;
+
+        if(gameMode==1)//if singles mode overwrite number of rows and columns,
+        {
+            if(portrait1Landscape2==1)
+            {
+                noOfColumns =targetScore;
+                noOfRows =2;
+            }
+            else if(portrait1Landscape2==2)
+            {
+                noOfRows =targetScore;
+                noOfColumns =2;
+            }
+        }
+        targetScoreFieldMode=noOfColumns*noOfRows;
+
+//create a new database, if singles the number of columns and rows has been set to 1 and 2
+        database = new Database(31,noOfColumns ,noOfRows ,portrait1Landscape2);
+//set new wide or tall field depending on if we are in portrait or landscape mode
+        if(portrait1Landscape2==1) {
+            hexWideField = new HexWideField(fieldPosX, fieldPosY, fieldWidth, fieldHeight,
+                    noOfRows , noOfColumns ,gameMode, this, database);
+            addHexesToStage(hexWideField);
+//some specific things if in singles game mode
+            if(gameMode==1)
+            {
+
+                //we want the 2 hexes to be selected automatically
+                hexWideField.hexWideArray[selectedHex].select(0);
+                hexWideField.hexWideArray[selectedHex2].select(0);
+//apply the difficulty level too
+                highlightNonMatching();
+                //point the camera at the selected hexes
+                camSnapTime=camSnapTimePeriod;
+                snapCameraToHex();
+
+            }
+        }
+        else if(portrait1Landscape2==2)
+        {
+            hexTallField = new HexTallField(fieldPosX,fieldPosY,fieldWidth,fieldHeight,
+                    noOfRows,noOfColumns ,gameMode,this,database);
+            addHexesToStage(hexTallField);
+            if(gameMode==1)
+            {
+
+                hexTallField.hexTallArray[selectedHex].select(0);
+                hexTallField.hexTallArray[selectedHex2].select(0);
+                highlightNonMatchingTall();
+                camSnapTime=camSnapTimePeriod;
+                snapCameraToHex();
+            }
+        }
+    }
+
+
 
 
 
@@ -1023,6 +1129,7 @@ resetSelection();
         }
         //reset / reload everything
         removeAllActors();
+
         if(gameMode==1)//if singles mode overwrite number of rows and columns,
         {
             if(portrait1Landscape2==1)
@@ -1036,6 +1143,7 @@ resetSelection();
                 noOfColumns=2;
             }
         }
+        targetScoreFieldMode=noOfColumns*noOfRows;
 //create a new database, if singles the number of columns and rows has been set to 1 and 2
         database = new Database(31,noOfColumns,noOfRows,portrait1Landscape2);
 //set new wide or tall field depending on if we are in portrait or landscape mode
@@ -1092,7 +1200,6 @@ resetSelection();
         score++;
 //display green background which will automatically fade out
         flashGreenBackground();
-        isTargetReached(score);
 //if in singles game mode we need to get some new symbols etc so we can’t just match the same symbols again
         if(gameMode==1){
             selectedHex =score;
@@ -1106,6 +1213,8 @@ resetSelection();
 //hide both hexes
                 hexWideField.hexWideArray[selectedHex].hide();
                 hexWideField.hexWideArray[selectedHex2].hide();
+                scoreFieldMode++;
+                scoreFieldMode++;
 //create a list for temporary use
                 ArrayList<Integer> list = new ArrayList<Integer>();
 //use the get isolated method to find out if removing the two selected hexes has resulted in any hexes
@@ -1114,8 +1223,10 @@ resetSelection();
                 for(int i =0;i<list.size();i++)
                 {
 //if any are isolated we should hide them too, consider increasing score?
-                    hexWideField.hexWideArray[list.get(i)].hide();
-
+                    if(hexWideField.hexWideArray[list.get(i)].visible) {
+                        hexWideField.hexWideArray[list.get(i)].hide();
+                        scoreFieldMode++;
+                    }
                 }
 
             }
@@ -1124,15 +1235,23 @@ resetSelection();
             {
                 hexTallField.hexTallArray[selectedHex].hide();
                 hexTallField.hexTallArray[selectedHex2].hide();
+                scoreFieldMode++;
+                scoreFieldMode++;
                 ArrayList<Integer> list = new ArrayList<Integer>();
                 list=hexTallField.getIsolated(selectedHex,selectedHex2,noOfColumns,noOfRows);
                 for(int i =0;i<list.size();i++)
                 {
+                    if(hexTallField.hexTallArray[list.get(i)].visible)
+                    {
                     hexTallField.hexTallArray[list.get(i)].hide();
 
+                    scoreFieldMode++;
+                    }
                 }
             }
         }
+        isTargetReached(score);
+
     }
 
     void decreaseScore()
@@ -1148,6 +1267,10 @@ resetSelection();
         {
             gameOver();
         }
+        else if(scoreFieldMode==targetScoreFieldMode)
+        {
+            gameOver();
+        }
     }
     void gameOver()
     {
@@ -1156,15 +1279,19 @@ resetSelection();
 int timerInt = (int)(timer*1000);
 int diffInt = difficulty;
         resetGame();
+        updateField(noOfRows, noOfColumns, portrait1Landscape2, fieldPosX, fieldPosY, fieldWidth, fieldHeight, gameMode);
+
         GameStage.this.stageInterface.setScore(timerInt, diffInt);
 
         GameStage.this.stageInterface.goToGameOverStage();
     }
     void resetGame()
     {
+
         //this updates the camera return position to the default  position
         gameOver=false;
         score=0;
+        scoreFieldMode=0;
         timer=0;
     }
 
