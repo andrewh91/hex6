@@ -293,38 +293,43 @@ else //if (odd)
 
 
     ArrayList<Integer> findNonMatchingSymbols(int hex1, int hex2, int noToRemove)
-    {//can remove up to 10 symbols from the 2 hexes 
+    {//can remove up to 10 symbols from the 2 hexes
         ArrayList<Integer> randomSymbols1= new ArrayList<Integer>();
         ArrayList<Integer> randomSymbols2= new ArrayList<Integer>();
         ArrayList<Integer> nonMatchingSymbols= new ArrayList<Integer>();
         randomSymbols1= randomlySortedList(6);
         randomSymbols2= randomlySortedList(6);
 
-        for(int i = 0 ; i < 12;i++)//for all 12 symbols
-        {
-            if(nonMatchingSymbols.size()>=noToRemove)
-        {
-            break;//break i for loop because we have enough nonMatching symbols
-        }
-            if(i%2==0)//if i is even
-            {
-                    if(testSymbolDoesntMatch(hex1,randomSymbols1.get((int)(i/2)),hex2))//check if the first random symbol on the first hex does not match any of the symbols on the other hex. if it does not ...
-                    {
-                        nonMatchingSymbols.add(randomSymbols1.get((int)(i/2)));//add the random symbol to a list plus 6 so we can later figure out which hex it belonged to
-                    }//end if compare
-            }//end if even
-            else//if i is odd
-            {
-                    if(testSymbolDoesntMatch(hex2,randomSymbols2.get((int)(i/2)),hex1))//check if the first random symbol on the second hex does not match any of the symbols on the other hex. if it does not ...
-                    {
-                        nonMatchingSymbols.add(6+randomSymbols2.get((int)(i/2)));//add the random symbol to a list plus 6 so we can later figure out which hex it belonged to
-                    }//end if compare
-            }//end else if odd
+        int matchesFound=0;
+        int matchesFound2=0;
 
+        for(int i = 0 ; i < 6;i++)//for all 6 symbols on first hex
+        {
+
+            if(testSymbolDoesntMatch(hex1,randomSymbols1.get(i),hex2))//check if the first random symbol on the first hex does not match any of the symbols on the other hex. if it does not ...
+            {
+                nonMatchingSymbols.add(randomSymbols1.get(i));//add the random symbol to a list
+            }//end if compare
+//if we removed all the symbols we intend to remove
+            if(nonMatchingSymbols.size()>=noToRemove)
+            {
+                break;//break i for loop because we have enough nonMatching symbols
+            }
+
+            if(testSymbolDoesntMatch(hex2,randomSymbols2.get(i),hex1))//check if the first random symbol on the second hex does not match any of the symbols on the other hex. if it does not ...
+            {
+                nonMatchingSymbols.add(6+randomSymbols2.get(i));//add the random symbol to a list plus 6 so we can later figure out which hex it belonged to
+            }//end if compare
+
+//if we removed all the symbols we intend to remove 
+            if(nonMatchingSymbols.size()>=noToRemove)
+            {
+                break;//break i for loop because we have enough nonMatching symbols
+            }
         }//end i for loop
+
         return nonMatchingSymbols;
     }//end method
-
 }//end class
 
 

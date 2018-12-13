@@ -404,7 +404,7 @@ Col’s  	rows	total	orientation
     public void resetSelection()
     {
 //if the selected hex is not -1
-        if(selectedHex!=-1)
+        if(selectedHex!=-1&&selectedHex!=hexWideField.hexWideArray.length)
         {
 //get the selected hex and unhighlight the non matching symbols this means show all the symbols that were hidden during the
 //difficulty level being applied
@@ -419,7 +419,7 @@ Col’s  	rows	total	orientation
             hexWideField.unhighlightAdjacent(adjacentArray);
         }
 //do the same for the other hex
-        if(selectedHex2!=-1)
+        if(selectedHex2!=-1&&selectedHex2!=hexWideField.hexWideArray.length)
         {
             hexWideField.hexWideArray[selectedHex2].unHighlightNonMatchingSymbols();
             hexWideField.hexWideArray[selectedHex2].unselect(0);
@@ -427,9 +427,6 @@ Col’s  	rows	total	orientation
             adjacentArray = hexWideField.getAdjacent(selectedHex2,noOfColumns, noOfRows);
             hexWideField.unhighlightAdjacent(adjacentArray);
         }
-//reset the selected hex
-        selectedHex=-1;
-        selectedHex2=-1;
 //the camera should zoom out to show the full field, or zoom out to the maximum zoom out
 //amount if the field is so big zooming all the way out would not be helpful
         if(zoomSelectionMode&&gameMode!=1)
@@ -445,11 +442,26 @@ Col’s  	rows	total	orientation
             // re select the first 2 hexes and set the nooselected to 2, this means we won’t have to tap the hexes before
 //looking for a symbol that matches, it would be pointless requiring the player to tap the hexes to select them since there
 //are only 2 hexes to select
-            selectedHex=score;
-            selectedHex2=score+targetScore;
+            if(score<targetScore) {//if we ran reset sele tion twice this could lead to out of bouns, selectedHex2 should no exceed target score*2
+                selectedHex = score;
+                selectedHex2 = score + targetScore;
+            }
+
+            else//if we have reached the target score set the selected hexes to something other than -1
+            {
+                selectedHex=0;
+                selectedHex2=0;
+            }
             hexWideField.hexWideArray[selectedHex].select(0);
             hexWideField.hexWideArray[selectedHex2].select(0);
             noOfSelected=2;
+        }
+        else//game mode field
+        {
+
+//reset the selected hex
+            selectedHex=-1;
+            selectedHex2=-1;
         }
     }
     //select first hex, called if we have touched a hex when there were not any hexes selected already
@@ -728,7 +740,7 @@ Col’s  	rows	total	orientation
     public void resetSelectionTall()
     {
 
-        if (selectedHex != -1) {
+        if (selectedHex != -1&&selectedHex!=hexTallField.hexTallArray.length) {
 
             hexTallField.hexTallArray[selectedHex].unHighlightNonMatchingSymbols();
 
@@ -737,7 +749,7 @@ Col’s  	rows	total	orientation
             adjacentArray = hexTallField.getAdjacent(selectedHex, noOfColumns, noOfRows);
             hexTallField.unhighlightAdjacent(adjacentArray);
         }
-        if (selectedHex2 != -1) {
+        if (selectedHex2 != -1&&selectedHex2!=hexTallField.hexTallArray.length) {
             hexTallField.hexTallArray[selectedHex2].unHighlightNonMatchingSymbols();
 
             hexTallField.hexTallArray[selectedHex2].unselect(0);
@@ -745,8 +757,6 @@ Col’s  	rows	total	orientation
             adjacentArray = hexTallField.getAdjacent(selectedHex2, noOfColumns, noOfRows);
             hexTallField.unhighlightAdjacent(adjacentArray);
         }
-        selectedHex = -1;
-        selectedHex2 = -1;
         if (zoomSelectionMode&&gameMode!=1) {
             //zoom out
             snapCameraToField();
@@ -757,12 +767,25 @@ Col’s  	rows	total	orientation
         {
             // dont reset if playing singles
             // re select the first 2 hexes and set the nooselected to 2
-            selectedHex=score;
-            selectedHex2=score+targetScore;
+            if(score<targetScore) {
+                selectedHex = score;
+                selectedHex2 = score + targetScore;
+            }
+            else//if we have reached the target score set the selected hexes to something other than -1
+            {
+                selectedHex=0;
+                selectedHex2=0;
+            }
             hexTallField.hexTallArray[selectedHex].select(0);
             hexTallField.hexTallArray[selectedHex2].select(0);
 
             noOfSelected=2;
+        }
+        else
+        {
+
+            selectedHex = -1;
+            selectedHex2 = -1;
         }
 
     }
@@ -1038,7 +1061,6 @@ Col’s  	rows	total	orientation
         noOfRows = tempCol ;
         fieldWidth = fieldHeight;
         fieldHeight = tempWidth;
-        fieldPosX = fieldPosY;
         fieldPosY = tempFieldPosX ;
 
         if(gameMode==1)//if singles mode overwrite number of rows and columns,
