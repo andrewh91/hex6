@@ -1329,7 +1329,9 @@ int diffInt = difficulty;
 
     public void updateDifficulty(int newDifficulty)
     {
-        difficulty=newDifficulty;
+        //if the new difficulty value is 0 then it will assume no change rather than set as 0, so
+        // so just minus 1 so that if we set difficulty to 1 it will couny as changing th e difficulty but will set it to 0,
+        difficulty=newDifficulty-1;
     }
     public void drawTallHex(ShapeRenderer sr, int originX, int originY, int edgeSize)
     {

@@ -302,32 +302,30 @@ else //if (odd)
 
         int matchesFound=0;
         int matchesFound2=0;
+if(noToRemove>0) {
+    for (int i = 0; i < 6; i++)//for all 6 symbols on first hex
+    {
 
-        for(int i = 0 ; i < 6;i++)//for all 6 symbols on first hex
+        if (testSymbolDoesntMatch(hex1, randomSymbols1.get(i), hex2))//check if the first random symbol on the first hex does not match any of the symbols on the other hex. if it does not ...
         {
-
-            if(testSymbolDoesntMatch(hex1,randomSymbols1.get(i),hex2))//check if the first random symbol on the first hex does not match any of the symbols on the other hex. if it does not ...
-            {
-                nonMatchingSymbols.add(randomSymbols1.get(i));//add the random symbol to a list
-            }//end if compare
+            nonMatchingSymbols.add(randomSymbols1.get(i));//add the random symbol to a list
+        }//end if compare
 //if we removed all the symbols we intend to remove
-            if(nonMatchingSymbols.size()>=noToRemove)
-            {
-                break;//break i for loop because we have enough nonMatching symbols
-            }
+        if (nonMatchingSymbols.size() >= noToRemove) {
+            break;//break i for loop because we have enough nonMatching symbols
+        }
 
-            if(testSymbolDoesntMatch(hex2,randomSymbols2.get(i),hex1))//check if the first random symbol on the second hex does not match any of the symbols on the other hex. if it does not ...
-            {
-                nonMatchingSymbols.add(6+randomSymbols2.get(i));//add the random symbol to a list plus 6 so we can later figure out which hex it belonged to
-            }//end if compare
+        if (testSymbolDoesntMatch(hex2, randomSymbols2.get(i), hex1))//check if the first random symbol on the second hex does not match any of the symbols on the other hex. if it does not ...
+        {
+            nonMatchingSymbols.add(6 + randomSymbols2.get(i));//add the random symbol to a list plus 6 so we can later figure out which hex it belonged to
+        }//end if compare
 
 //if we removed all the symbols we intend to remove 
-            if(nonMatchingSymbols.size()>=noToRemove)
-            {
-                break;//break i for loop because we have enough nonMatching symbols
-            }
-        }//end i for loop
-
+        if (nonMatchingSymbols.size() >= noToRemove) {
+            break;//break i for loop because we have enough nonMatching symbols
+        }
+    }//end i for loop
+}
         return nonMatchingSymbols;
     }//end method
 }//end class

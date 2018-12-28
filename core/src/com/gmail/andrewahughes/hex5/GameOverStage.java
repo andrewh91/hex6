@@ -49,7 +49,7 @@ public class GameOverStage extends Stage {
     String modeString= " ";
     String difficultyString= " ";
     String scoreString= " ";
-    Label nameLabel;
+    Label nameLabel,scoreLabel;
     TextField nameField;
 
     int modeValue ;
@@ -119,9 +119,11 @@ public class GameOverStage extends Stage {
     }
 public void updateUI()
 {
-
-nameField.setMessageText(name);
-nameLabel.setText(name);
+    if(Gdx.files.local("scoreLog.txt").exists()) {
+        String s = Gdx.files.local("scoreLog.txt").readString();
+        //s = Gdx.files.getLocalStoragePath();
+        scoreLabel.setText(s);
+    }
 
 
     timer.setText("Time: "+timeValue);
@@ -135,6 +137,7 @@ nameLabel.setText(name);
         timer=new Label("Time: "+timeValue, skin);
         difficulty=new Label("Difficulty: "+difficultyValue, skin);
         nameLabel= new Label("Enter name: ", skin);
+        scoreLabel= new Label("", skin);
         name="name";
         dateString= " ";
         timeString= " ";
@@ -142,7 +145,7 @@ nameLabel.setText(name);
         difficultyString= " ";
         scoreString= " ";
         nameField= new TextField(name, skin);
-
+updateUI();
         TextButton submitToLog = new TextButton("Submit to log", skin);
         submitToLog.addListener(new ChangeListener() {
             @Override
@@ -254,6 +257,9 @@ nameLabel.setText(name);
 table.add(nameLabel);
         table.add(nameField);
 table.add(submitToLog);
+table.row();
+
+table.add(scoreLabel).colspan(3).center();
 
     }
 
@@ -288,12 +294,10 @@ table.add(submitToLog);
             {
 //read the file 
 FileHandle file = Gdx.files.local("scoreLog.txt");
-name = file.readString();
 
+                writeData();
                 updateUI();
 
-//write to the file
-                //writeData();
 
 
             }
@@ -333,6 +337,7 @@ name = file.readString();
 
 
                             file.writeString(dateString+","+timeString+","+name+","+difficultyString+","+modeString+","+scoreString+"\n", true);
+
         }
 
 
