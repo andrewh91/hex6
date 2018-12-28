@@ -2,6 +2,7 @@ package com.gmail.andrewahughes.hex5;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
@@ -21,6 +22,9 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 
 
 public class GameOverStage extends Stage {
@@ -38,6 +42,17 @@ public class GameOverStage extends Stage {
     private Label timer;
     private Label difficulty;
     int timeValue, difficultyValue;
+
+    String name = "name";
+    String dateString= " ";
+    String timeString= " ";
+    String modeString= " ";
+    String difficultyString= " ";
+    String scoreString= " ";
+    Label nameLabel;
+    TextField nameField;
+
+    int modeValue ;
 
 
 
@@ -95,14 +110,18 @@ public class GameOverStage extends Stage {
     }
 
 
-    public void setScore(int timeValueArg, int difficultyValueArg)
+    public void setScore(int timeValueArg, int difficultyValueArg, int modeValueArg)
     {
         timeValue = timeValueArg;
         difficultyValue= difficultyValueArg;
-        updateUI();//prepare ui again to set the score values to the text displayed on acreen
+        modeValue = modeValueArg;
+        updateUI();//prepare ui again to set the score values to the text displayed on screen
     }
 public void updateUI()
 {
+
+nameField.setMessageText(name);
+nameLabel.setText(name);
 
 
     timer.setText("Time: "+timeValue);
@@ -115,6 +134,41 @@ public void updateUI()
         gameOver= new Label("Game Over!", skin);
         timer=new Label("Time: "+timeValue, skin);
         difficulty=new Label("Difficulty: "+difficultyValue, skin);
+        nameLabel= new Label("Enter name: ", skin);
+        name="name";
+        dateString= " ";
+        timeString= " ";
+        modeString= " ";
+        difficultyString= " ";
+        scoreString= " ";
+        nameField= new TextField(name, skin);
+
+        TextButton submitToLog = new TextButton("Submit to log", skin);
+        submitToLog.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+
+                try
+                {
+                    name= (nameField.getText());
+                } catch (NumberFormatException nfe)
+                {
+                    name= "name";
+                }
+
+                modeString= modeValue+"";
+                difficultyString= difficultyValue+"";
+                scoreString= timeValue+"";
+//write to the text file
+                writeScoreToLog();
+
+
+               /* if (score > 0)
+                    //gsClient.submitToLeaderboard(LEADERBOARD1, score, gsClient.getGameServiceId());
+            }*/
+            }});
+
+
 
 /*
         zoomModeValue= new TextField("", skin);
@@ -195,8 +249,14 @@ public void updateUI()
         table.add(submitScoreBtn);
         addActor(table);
 
+        table.row();
+
+table.add(nameLabel);
+        table.add(nameField);
+table.add(submitToLog);
 
     }
+
 
     @Override
     public void dispose() {
@@ -219,5 +279,62 @@ public void updateUI()
         }
         return false;
     }
-}
+
+
+        void writeScoreToLog()
+        {
+            boolean exists = Gdx.files.local("scoreLog.txt").exists();
+            if(exists)
+            {
+//read the file 
+FileHandle file = Gdx.files.local("scoreLog.txt");
+name = file.readString();
+
+                updateUI();
+
+//write to the file
+                //writeData();
+
+
+            }
+            else//if it doesn't exist create it and create this header
+            {
+
+                FileHandle file = Gdx.files.local("scoreLog.txt");
+                file.writeString("Date,Time,Name,Difficulty,Mode,Time\n", false);
+                writeData();
+            }
+
+        }
+
+        void writeData()
+        {
+            FileHandle file = Gdx.files.local("scoreLog.txt");
+//Date - time - name - difficulty - mode - time
+            Date date = new Date();
+            Calendar calendarG = new GregorianCalendar();
+            calendarG.setTime(date);
+
+            int minutes = calendarG.get(Calendar.MINUTE);
+            int hours = calendarG.get(Calendar.HOUR_OF_DAY);
+//get the year month and day also 
+            int year = calendarG.get(Calendar.YEAR);
+            int month = calendarG.get(Calendar.MONTH)+1;
+            int day = calendarG.get(Calendar.DAY_OF_MONTH);
+
+
+            dateString= ""+year+""+month+""+day;
+                    timeString= hours+":"+minutes;
+
+//name
+//difficulty
+//mode
+//timer / score
+
+
+                            file.writeString(dateString+","+timeString+","+name+","+difficultyString+","+modeString+","+scoreString+"\n", true);
+        }
+
+
+    }
 

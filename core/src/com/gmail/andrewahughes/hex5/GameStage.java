@@ -81,7 +81,7 @@ public class GameStage extends Stage {
     int scoreFieldMode=0, targetScoreFieldMode=0;
     boolean gameOver = false;
     //timer is incremented when not paused, timerFinal was just a way to stop the timer when we get gameover
-    float timer = 0f, timerFinal = 0f, penaltyTime = 2f;
+    float timer = 0f, timerFinal = 0f, penaltyTime = 5f;
     //green and red are used when drawing the coloured background, they are altered when scoring to change background colour
     float green = 0;
     float red = 0;
@@ -1303,7 +1303,7 @@ int diffInt = difficulty;
         resetGame();
         updateField(noOfRows, noOfColumns, portrait1Landscape2, fieldPosX, fieldPosY, fieldWidth, fieldHeight, gameMode);
 
-        GameStage.this.stageInterface.setScore(timerInt, diffInt);
+        GameStage.this.stageInterface.setScore(timerInt, diffInt,gameMode);
 
         GameStage.this.stageInterface.goToGameOverStage();
     }

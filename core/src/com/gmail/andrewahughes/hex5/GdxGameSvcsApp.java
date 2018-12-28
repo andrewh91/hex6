@@ -719,9 +719,9 @@ hideAllStages();
         Gdx.input.setCatchBackKey(true);
     }
     @Override
-    public void setScore(int timeValueArg, int difficultyValueArg)
+    public void setScore(int timeValueArg, int difficultyValueArg,int gameModeArg)
     {
-        gameOverStage.setScore(timeValueArg,difficultyValueArg);
+        gameOverStage.setScore(timeValueArg,difficultyValueArg,gameModeArg);
     }
     @Override
     public void goToGameOverStage() {

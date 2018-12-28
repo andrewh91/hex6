@@ -13,7 +13,7 @@ public interface StageInterface {
     void setLandscape();
     void setPortrait();
     void goToGameStageRefresh();
-    void setScore(int timeValueArg, int difficultyValueArg);
+    void setScore(int timeValueArg, int difficultyValueArg,int gameModeArg);
     void updateOptionsGoToGameStage(int newNoOfRows, int newNoOfColumns, int newPortrait1Landscape2,
                                     int newFieldPosX, int newFieldPosY, int newFieldWidth,
                                     int newFieldHeight,int zoom,int difficulty, int gameMode);
