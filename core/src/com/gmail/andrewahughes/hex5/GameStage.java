@@ -17,6 +17,7 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 import java.util.ArrayList;
@@ -31,11 +32,14 @@ public class GameStage extends Stage {
     private boolean pause = false;
     private ShapeRenderer renderer = new ShapeRenderer();
     SpriteBatch spriteBatch = new SpriteBatch();
+    SpriteBatch hudBatch = new SpriteBatch();
     public StageInterface stageInterface;
     HexWideField hexWideField;
     HexTallField hexTallField;
     Database database;
     Viewport viewport;
+
+    Viewport hudViewport;
 
     int defaultCamPosX;
     int  defaultCamPosY;
@@ -111,7 +115,7 @@ Col’s  	rows	total	orientation
 9	14	126	portrait
 */
     //default values for the field
-    public int noOfRows = 3, noOfColumns = 4;
+    public int noOfRows = 3, noOfColumns = 2;
     //prefer not to use Boolean for the orientation, when changing the options in game we can use 0 to show no change, 1 portrait 2 landscape
     //game mode is 0 by default, this is the field mode, many hexes on screen, hexes disappear when matched, game mode 1 would be singles mode, 2 hexes on screen, symbols are replaced when matching
     int portrait1Landscape2 = 1, fieldPosX = 50, fieldPosY = 50, fieldWidth = 620, fieldHeight = 1180, gameMode = 0;
@@ -137,6 +141,9 @@ Col’s  	rows	total	orientation
     public GameStage(Viewport viewport, Texture texture, final StageInterface stageInterface, int portrait) {
         super(viewport);
         this.viewport = viewport;
+        hudViewport = new StretchViewport(1280,720);
+        hudViewport.setScreenBounds(0,0,1280,720);
+
         this.portrait1Landscape2 = portrait;
         //the font isn’t really final, the symbols will be replaced with pictures eventually
         font.setColor(Color.WHITE);
@@ -915,8 +922,6 @@ Col’s  	rows	total	orientation
                 viewport.getCamera().translate(5f, 0f, 0f);
                 */
 
-                //handle camera transition
-                updateCamSnap();
 
                 //when we get an answer right of wrong we set green or red to 1 which in turn is used to colour the screen so the
 //background flashes to show you got it right or wrong, the below controls how long the screen stays that colour before going
@@ -936,7 +941,27 @@ Col’s  	rows	total	orientation
 
                 Gdx.gl.glClearColor(0 + red, 0 + green, 0, 1);
                 Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+                //spritebatch without matrix transformations
+
+
+                hudViewport.apply();
+                hudBatch.begin();
+
+                font.draw(hudBatch, "timer: " + (int)(timer) + " score: " + score
+                        +" fieldmode score: "+scoreFieldMode+" target: "+targetScoreFieldMode+" width "+viewport.getCamera().viewportWidth,30, 30);
+
+                hudBatch.end();
+viewport.apply();
+
+                //handle camera transition
+                updateCamSnap();
+
                 viewport.getCamera().update();
+
+
+
+
                 renderer.setProjectionMatrix(viewport.getCamera().combined);
                 renderer.begin(ShapeRenderer.ShapeType.Line);
                 renderer.setColor(Color.BLUE);
@@ -950,6 +975,7 @@ Col’s  	rows	total	orientation
                 }
 
                 renderer.end();
+
                 spriteBatch.setProjectionMatrix(viewport.getCamera().combined);
                 spriteBatch.begin();
                 if (portrait1Landscape2 == 1) {
@@ -958,10 +984,7 @@ Col’s  	rows	total	orientation
                     hexTallField.drawSprites(spriteBatch);
 
                 }
-
-                font.draw(spriteBatch, "timer: " + (int)(timer) + " score: " + score
-                        +" fieldmode score: "+scoreFieldMode+" target: "+targetScoreFieldMode,30, 30);
-                spriteBatch.end();
+ spriteBatch.end();
 
 
                 super.draw();
@@ -1046,19 +1069,16 @@ Col’s  	rows	total	orientation
             stageInterface.setPortrait();
 //this is an attempt to keep the same aspect ratio - 16:9, maximise the space used
             noOfColumns  = noOfRows ;
-            noOfRows  = noOfColumns  *2-((noOfColumns+1)  /2);
+            noOfRows  = (int)(noOfColumns  *1.5)+1;
 
         }
         //reset / reload everything
         removeAllActors();
 
 //swap orientation , swap all the values, the portrait1Landscape2 is swapped above
-        int tempCol = noOfColumns;
         int tempWidth= fieldWidth;
         int tempFieldPosX = fieldPosX;
 
-        noOfColumns = noOfRows;
-        noOfRows = tempCol ;
         fieldWidth = fieldHeight;
         fieldHeight = tempWidth;
         fieldPosY = tempFieldPosX ;
