@@ -118,7 +118,8 @@ Col’s  	rows	total	orientation
     public int noOfRows = 3, noOfColumns = 2;
     //prefer not to use Boolean for the orientation, when changing the options in game we can use 0 to show no change, 1 portrait 2 landscape
     //game mode is 0 by default, this is the field mode, many hexes on screen, hexes disappear when matched, game mode 1 would be singles mode, 2 hexes on screen, symbols are replaced when matching
-    int portrait1Landscape2 = 1, fieldPosX = 50, fieldPosY = 50, fieldWidth = 620, fieldHeight = 1180, gameMode = 0;
+    int portrait1Landscape2 = 1, fieldPosX = 50, fieldPosY = 50, fieldWidth = 620, fieldHeight = 1180
+            , gameMode = 0,symbolType=1;
 
 
     //haven’t properly implemented the zoom mode yet, the alternative is called quickMode – or just zoomSelectionMode false
@@ -149,7 +150,8 @@ Col’s  	rows	total	orientation
         font.setColor(Color.WHITE);
         font.getData().setScale(1f);
         //create the field with the given default values which we set above
-        updateField(noOfRows, noOfColumns, portrait, fieldPosX, fieldPosY, fieldWidth, fieldHeight, gameMode);
+        updateField(noOfRows, noOfColumns, portrait, fieldPosX, fieldPosY, fieldWidth,
+                fieldHeight, gameMode,symbolType);
         //the stage interface is used to go from one stage to another and pass variables over
         this.stageInterface = stageInterface;
 
@@ -459,9 +461,20 @@ Col’s  	rows	total	orientation
                 selectedHex=0;
                 selectedHex2=0;
             }
-            hexWideField.hexWideArray[selectedHex].select(0);
+            // if the field game mode had less hexes than the default target score for the singles game mode
+            // then this would do index out of bounds, use this if statement to prevent that,
+            // might be neccessary to repeat reset selection method  after creating new database for singles mode
+            if(selectedHex!=-1&&
+                    selectedHex<hexWideField.hexWideArray.length&&
+            selectedHex2!=-1&&
+                    selectedHex2<hexWideField.hexWideArray.length)
+
+            {
+
+                hexWideField.hexWideArray[selectedHex].select(0);
             hexWideField.hexWideArray[selectedHex2].select(0);
             noOfSelected=2;
+            }
         }
         else//game mode field
         {
@@ -783,10 +796,16 @@ Col’s  	rows	total	orientation
                 selectedHex=0;
                 selectedHex2=0;
             }
-            hexTallField.hexTallArray[selectedHex].select(0);
-            hexTallField.hexTallArray[selectedHex2].select(0);
+            if(selectedHex!=-1&&
+                    selectedHex<hexTallField.hexTallArray.length&&
+                    selectedHex2!=-1&&
+                    selectedHex2<hexTallField.hexTallArray.length)
 
-            noOfSelected=2;
+            {
+                hexTallField.hexTallArray[selectedHex].select(0);
+                hexTallField.hexTallArray[selectedHex2].select(0);
+                noOfSelected=2;
+            }
         }
         else
         {
@@ -970,8 +989,17 @@ viewport.apply();
 
                 if (portrait1Landscape2 == 1) {
                     hexWideField.draw(renderer);
+                    renderer.end();
+                    renderer.begin(ShapeRenderer.ShapeType.Filled);
+hexWideField.drawFilled(renderer,symbolType);
                 } else if (portrait1Landscape2 == 2) {
+
                     hexTallField.draw(renderer);
+                    renderer.end();
+                    renderer.begin(ShapeRenderer.ShapeType.Filled);
+
+                    hexTallField.drawFilled(renderer,symbolType);
+
                 }
 
                 renderer.end();
@@ -979,9 +1007,9 @@ viewport.apply();
                 spriteBatch.setProjectionMatrix(viewport.getCamera().combined);
                 spriteBatch.begin();
                 if (portrait1Landscape2 == 1) {
-                    hexWideField.drawSprites(spriteBatch);
+                    hexWideField.drawSprites(spriteBatch,symbolType);
                 } else if (portrait1Landscape2 == 2) {
-                    hexTallField.drawSprites(spriteBatch);
+                    hexTallField.drawSprites(spriteBatch,symbolType);
 
                 }
  spriteBatch.end();
@@ -1040,7 +1068,8 @@ viewport.apply();
     }
     void updateFieldRefresh() {
         resetGame();
-        updateField(noOfRows, noOfColumns, portrait1Landscape2, fieldPosX, fieldPosY, fieldWidth, fieldHeight, gameMode);
+        updateField(noOfRows, noOfColumns, portrait1Landscape2, fieldPosX, fieldPosY,
+                fieldWidth, fieldHeight, gameMode,symbolType);
 
     }
 
@@ -1099,7 +1128,7 @@ viewport.apply();
         targetScoreFieldMode=noOfColumns*noOfRows;
 
 //create a new database, if singles the number of columns and rows has been set to 1 and 2
-        database = new Database(31,noOfColumns ,noOfRows ,portrait1Landscape2);
+        database = new Database(35,noOfColumns ,noOfRows ,portrait1Landscape2);
 //set new wide or tall field depending on if we are in portrait or landscape mode
         if(portrait1Landscape2==1) {
             hexWideField = new HexWideField(fieldPosX, fieldPosY, fieldWidth, fieldHeight,
@@ -1145,7 +1174,7 @@ viewport.apply();
     //create or update the field, when changing options only some of them require the field be updated, all the options that do require a field change will be handled here
     public void updateField(int newNoOfRows, int newNoOfColumns, int newPortrait1Landscape2,
                             int newFieldPosX, int newFieldPosY, int newFieldWidth,
-                            int newFieldHeight,int newGameMode)
+                            int newFieldHeight,int newGameMode, int newSymbolType)
     {
 //if any of the arguments are not set to 0 then update the corresponding value
         if(newNoOfColumns!=0){noOfColumns=newNoOfColumns;}
@@ -1162,6 +1191,8 @@ viewport.apply();
             resetGame();// reset the score and timer when starting a new game modes
 
         }
+
+        if(newSymbolType!=0){ symbolType=newSymbolType;}
         if(portrait1Landscape2==1) {
 resetSelection();
         }
@@ -1187,7 +1218,7 @@ resetSelection();
         }
         targetScoreFieldMode=noOfColumns*noOfRows;
 //create a new database, if singles the number of columns and rows has been set to 1 and 2
-        database = new Database(31,noOfColumns,noOfRows,portrait1Landscape2);
+        database = new Database(35,noOfColumns,noOfRows,portrait1Landscape2);
 //set new wide or tall field depending on if we are in portrait or landscape mode
         if(portrait1Landscape2==1) {
             hexWideField = new HexWideField(fieldPosX, fieldPosY, fieldWidth, fieldHeight,
@@ -1200,6 +1231,10 @@ resetSelection();
                 //we want the 2 hexes to be selected automatically
                 hexWideField.hexWideArray[selectedHex].select(0);
                 hexWideField.hexWideArray[selectedHex2].select(0);
+
+                selectedHex = score;
+                selectedHex2 = score + targetScore;
+                noOfSelected=2;
 //apply the difficulty level too
                 highlightNonMatching();
                 //point the camera at the selected hexes
@@ -1218,6 +1253,11 @@ resetSelection();
 
                 hexTallField.hexTallArray[selectedHex].select(0);
                 hexTallField.hexTallArray[selectedHex2].select(0);
+
+                selectedHex = score;
+                selectedHex2 = score + targetScore;
+                noOfSelected=2;
+
                 highlightNonMatchingTall();
                 camSnapTime=camSnapTimePeriod;
                 snapCameraToHex();
@@ -1321,7 +1361,8 @@ resetSelection();
 int timerInt = (int)(timer*1000);
 int diffInt = difficulty;
         resetGame();
-        updateField(noOfRows, noOfColumns, portrait1Landscape2, fieldPosX, fieldPosY, fieldWidth, fieldHeight, gameMode);
+        updateField(noOfRows, noOfColumns, portrait1Landscape2, fieldPosX,
+                fieldPosY, fieldWidth, fieldHeight, gameMode,symbolType);
 
         GameStage.this.stageInterface.setScore(timerInt, diffInt,gameMode);
 
@@ -1352,6 +1393,10 @@ int diffInt = difficulty;
         //if the new difficulty value is 0 then it will assume no change rather than set as 0, so
         // so just minus 1 so that if we set difficulty to 1 it will couny as changing th e difficulty but will set it to 0,
         difficulty=newDifficulty-1;
+    }
+    public void updateSymbolType(int newSymbolType)
+    {
+        symbolType=newSymbolType;
     }
     public void drawTallHex(ShapeRenderer sr, int originX, int originY, int edgeSize)
     {

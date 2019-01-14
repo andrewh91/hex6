@@ -675,17 +675,19 @@ hideAllStages();
     public void updateOptionsGoToGameStage(int newNoOfRows, int newNoOfColumns,
                                            int newPortrait1Landscape2, int newFieldPosX,
                                            int newFieldPosY, int newFieldWidth,
-                                           int newFieldHeight,int newZoom,int newDifficulty, int newGameMode) {
+                                           int newFieldHeight,int newZoom,int newDifficulty,
+                                           int newGameMode, int newSymbolType) {
        hideAllStages();
         gameStage.returnCameraZoom();
         gameStage.returnCameraPos();
        gameStage.setVisible(true);
 
         //these options can be changed without recalculating the field
-        if(newZoom+newDifficulty>0)
+        if(newZoom+newDifficulty+newSymbolType>0)
         {
             gameStage.updateZoom(newZoom);
             gameStage.updateDifficulty(newDifficulty);
+            gameStage.updateSymbolType(newSymbolType);
         }
         //certain options require the entire field to be recalculated, if any of those options are altered, recalculate new field,
         if(  newNoOfRows+newNoOfColumns+ newPortrait1Landscape2+ newFieldPosX+ newFieldPosY+  newFieldWidth+ newFieldHeight+newGameMode>0) {
@@ -697,7 +699,9 @@ hideAllStages();
             {
                 setLandscape();
             }
-            gameStage.updateField(newNoOfRows, newNoOfColumns, newPortrait1Landscape2, newFieldPosX, newFieldPosY, newFieldWidth, newFieldHeight,newGameMode);
+            gameStage.updateField(newNoOfRows, newNoOfColumns, newPortrait1Landscape2,
+                    newFieldPosX, newFieldPosY, newFieldWidth, newFieldHeight,
+                    newGameMode,newSymbolType);
         }
         setVisible(false);
         gamePauseStage.setVisible(false);

@@ -57,6 +57,8 @@ public class GamePauseStage extends Stage {
     private TextField gameModeValue;
     private Label gameMode;
 
+    private TextField symbolTypeValue;
+    private Label symbolType;
 
     public GamePauseStage(Viewport viewport, Texture texture, final StageInterface stageInterface) {
         super( viewport );
@@ -133,6 +135,8 @@ public class GamePauseStage extends Stage {
         gameModeValue= new TextField("", skin);
         gameMode= new Label("gameMode:", skin);
 
+        symbolTypeValue= new TextField("", skin);
+        symbolType= new Label("symbolType:", skin);
 
         TextButton button4 = new TextButton("swap orientation", skin);
         button4.addListener(new ClickListener() {
@@ -163,7 +167,7 @@ public class GamePauseStage extends Stage {
 
                 GamePauseStage.this.stageInterface.updateOptionsGoToGameStage(0,
                         0,0,0,0,
-                        0,0,0,0,0);
+                        0,0,0,0,0,0);
 
             }
         });
@@ -171,7 +175,7 @@ public class GamePauseStage extends Stage {
         button1.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                int posX,posY,rows,columns,width,height,portrait1Landscape2,zoom,difficulty, gameMode;
+                int posX,posY,rows,columns,width,height,portrait1Landscape2,zoom,difficulty, gameMode,symbolType;
                 try {
                     zoom= Integer.valueOf(zoomModeValue.getText());
                 } catch (NumberFormatException nfe) {
@@ -222,8 +226,15 @@ public class GamePauseStage extends Stage {
                 } catch (NumberFormatException nfe) {
                     gameMode= 0;
                 }
+
+                try {
+                    symbolType= Integer.valueOf(symbolTypeValue.getText());
+                } catch (NumberFormatException nfe) {
+                    symbolType= 0;
+                }
                 GamePauseStage.this.stageInterface.updateOptionsGoToGameStage(rows,columns,
-                        portrait1Landscape2,posX,posY,width,height,zoom,difficulty, gameMode);
+                        portrait1Landscape2,posX,posY,width,height,zoom,difficulty, gameMode,
+                        symbolType);
 
             }
         });
@@ -262,6 +273,10 @@ public class GamePauseStage extends Stage {
         table.row();
         table.add(gameModeValue);
         table.add(gameMode);
+
+        table.row();
+        table.add(symbolTypeValue);
+        table.add(symbolType);
         table.row();
         table.add(button4);
         table.add(button1);

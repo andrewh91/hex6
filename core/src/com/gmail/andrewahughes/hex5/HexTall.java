@@ -237,7 +237,17 @@ if(visible) {
             sr.setColor(Color.RED);
             sr.circle(touchX+posX-altitudeSize,touchY+posY-edgeSize,touchRadius);
             sr.circle(touchX+posX-altitudeSize,touchY+posY-edgeSize,2);
-//sr.rect(posX-altitudeSize,posY-edgeSize,altitudeSize*2,edgeSize*2);
+
+
+            sr.end();
+            sr.begin(ShapeRenderer.ShapeType.Filled);
+            drawSymbolsShapes(sr,posX,posY,edgeSize,altitudeSize);
+
+            sr.end();
+            sr.begin(ShapeRenderer.ShapeType.Line);
+
+
+/// /sr.rect(posX-altitudeSize,posY-edgeSize,altitudeSize*2,edgeSize*2);
        //     sr.line(posX,posY-edgeSize,posX+altitudeSize,posY-edgeSize+altitudeSize/altitudeSize/2*edgeSize);
 
             //renderer.rect(posX-edgeSize,posY-altitudeSize,edgeSize*2,altitudeSize*2);
@@ -246,7 +256,19 @@ if(visible) {
         }
     }
 
-    public void drawSprites(SpriteBatch sb) {
+    public void drawFilled(ShapeRenderer sr, int symbolType)
+    {
+        act(Gdx.graphics.getDeltaTime());
+
+        if (visible) {
+
+            if(symbolType==2) {
+                drawSymbolsShapes(sr, posX, posY, edgeSize, altitudeSize);
+
+            }
+        }
+    }
+    public void drawSprites(SpriteBatch sb, int symbolType) {
         act(Gdx.graphics.getDeltaTime());
 
         if (visible) {
@@ -255,9 +277,10 @@ if(visible) {
 
             //font.draw(sb, "a "+indexNo+" x "+(int)posX +" y "+ (int)posY+ " edge "+(int)edgeSize+text+text1+text2, posX, posY);
             //font.draw(sb,  text3, posX, posY+20);
-            drawSymbols(sb,posX,posY,edgeSize*.7f,altitudeSize*.7f);
+            if(symbolType==1) {
+                drawSymbols(sb, posX, posY, edgeSize * .7f, altitudeSize * .7f);
 
-
+            }
 
 
         }
@@ -351,6 +374,148 @@ if(visible) {
         }//end if highlightSymbol
 
     }
+    void drawTriangleSymbol(ShapeRenderer shapeRenderer,float ox,float oy, float r)
+    {
+        float es= 0.707106781186547f*r;
+        float as = 0.866025403784439f*es;
+        shapeRenderer.triangle(ox-es, oy-as, ox+es,oy-as,ox,oy+r);
+    }
+
+
+    void drawRectangleSymbol(ShapeRenderer shapeRenderer,float ox,float oy, float r)
+    {
+        float es = 0.707106781186547f*r;
+        shapeRenderer.triangle(ox-es, oy - es, ox-es, oy+ es, ox+es, oy+ es);
+        shapeRenderer.triangle(ox-es, oy- es, ox+es, oy- es, ox+es, oy+ es);
+    }
+
+    void drawStarSymbol(ShapeRenderer shapeRenderer,float ox,float oy, float r)
+    {
+        float innerRadius=-0.381966011f;
+        float ax=0,	ay=r;
+        float  bx=0.951056516f*r,	by=0.309016994f*r;
+        float  cx=0.587785252f*r,	cy=-0.809016994f*r;
+        float  dx=-0.587785252f*r, dy=-0.809016994f*r;
+        float  ex=-0.951056516f*r,	ey=0.309016994f*r;
+
+
+        shapeRenderer.triangle(ox+ax, oy+ay, ox+dx, oy+dy, ox+ex*innerRadius, oy+ey*innerRadius);
+        shapeRenderer.triangle(ox+bx, oy+by, ox+ex, oy+ey, ox+ax*innerRadius, oy+ay*innerRadius);
+        shapeRenderer.triangle(ox+ax, oy+ay, ox+cx, oy+cy, ox+bx*innerRadius, oy+by*innerRadius);
+
+
+    }
+
+    void drawHexSymbol(ShapeRenderer shapeRenderer,float ox,float oy, float r)
+    {
+        float as = 0.866025403784439f * r;
+
+        shapeRenderer.triangle(ox, oy+r, ox+as, oy+r/2,  ox+as, oy-r/2);
+        shapeRenderer.triangle(ox, oy+r, ox+as, oy-r/2, ox,oy-r);
+        shapeRenderer.triangle(ox, oy+r, ox,oy-r,ox-as,oy-r/2);
+        shapeRenderer.triangle(ox, oy+r, ox-as,oy-r/2, ox-as,oy+r/2);
+    }
+
+    public void drawSymbolsShapes (ShapeRenderer shapeRenderer, float originX, float originY ,
+                                   float edgeSize, float altitudeSize)
+    {
+
+        float r=altitudeSize/3;
+        if(removeSymbol.get(0)!=-1)
+        {
+            drawShape(shapeRenderer,originX - edgeSize/2, (float)(originY+r),edgeSize,altitudeSize,
+                    symbol0);
+        }
+        if(removeSymbol.get(1)!=-1)
+        {
+            drawShape(shapeRenderer,originX,  (float)(originY+r*2),edgeSize,
+                    altitudeSize,symbol1);
+        }
+        if(removeSymbol.get(2)!=-1)
+        {
+            drawShape(shapeRenderer,originX + edgeSize/2, (float)(originY+r),edgeSize,
+                    altitudeSize,symbol2);
+        }
+        if(removeSymbol.get(3)!=-1)
+        {
+            drawShape(shapeRenderer,originX + edgeSize/2, (float)(originY-r),edgeSize,
+                    altitudeSize,symbol3);
+        }
+        if(removeSymbol.get(4)!=-1)
+        {
+            drawShape(shapeRenderer,originX, (float)(originY-r*2),edgeSize,altitudeSize,
+                    symbol4);
+        }
+        if(removeSymbol.get(5)!=-1)
+        {
+
+            drawShape(shapeRenderer,originX-+ edgeSize/2, (float)(originY-r),edgeSize,
+                    altitudeSize ,symbol5);
+        }
+    }
+    public void drawShape(ShapeRenderer shapeRenderer, float originX, float originY,
+                          float edgeSize, float altitudeSize, String symbol)
+    {
+        float r=altitudeSize/3;
+        int sym = Integer.parseInt(symbol);
+        int sym1 = (int)(sym/7);
+
+        int sym2 = sym%7;
+
+
+        if(sym2==0)
+        {
+            shapeRenderer.setColor(Color.RED);
+        }
+        else if(sym2==1)
+        {
+            shapeRenderer.setColor(Color.ORANGE);
+        }
+        else if(sym2==2)
+        {
+            shapeRenderer.setColor(Color.YELLOW);
+        }
+        else if(sym2==3)
+        {
+            shapeRenderer.setColor(Color.GREEN);
+        }
+        else if(sym2==4)
+        {
+            shapeRenderer.setColor(Color.BLUE);
+        }
+        else if(sym2==5)
+        {
+            shapeRenderer.setColor(Color.VIOLET);
+        }
+        else if(sym2==6)
+        {
+            shapeRenderer.setColor(Color.WHITE);
+        }
+
+        if(sym1==0)
+        {
+            drawTriangleSymbol(shapeRenderer,originX,originY,r);
+        }
+        else if (sym1==1)
+        {
+            shapeRenderer.circle(originX, originY, r);
+        }
+        else if (sym1==2)
+        {
+            drawRectangleSymbol(shapeRenderer,originX,originY,r);
+        }
+        else if (sym1==3)
+        {
+            drawStarSymbol(shapeRenderer,originX,originY,r);
+        }
+        else if (sym1==4)
+        {
+            drawHexSymbol(shapeRenderer,originX,originY,r);
+        }
+
+    }
+
+
     void highlightNonMatchingSymbols(ArrayList<Integer> removeSymbol)
     {
         // we pass in alist of symbols that dont match,

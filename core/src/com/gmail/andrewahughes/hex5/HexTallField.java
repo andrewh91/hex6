@@ -74,17 +74,26 @@ this.marginX=marginX;
             hexTallArray[i].draw(sr);
         }
     }
+
+    public void drawFilled(ShapeRenderer sr, int symbolType)
+    {
+        for (int i = 0;i<noOfColumns*noOfRows;i++)
+        {
+            hexTallArray[i].drawFilled(sr,symbolType);
+        }
+    }
+
     public int getNoOfHexes()
     {
         return noOfHexes;
     }
 
 
-    public void drawSprites(SpriteBatch sb)
+    public void drawSprites(SpriteBatch sb,int symbolType)
     {
         for (int i = 0;i<noOfColumns*noOfRows;i++)
         {
-            hexTallArray[i].drawSprites(sb);
+            hexTallArray[i].drawSprites(sb, symbolType);
         }
     }
     public float deriveEdgeSize(int width, int height,int noOfRows, int noOfColumns) {//there are two methods of deriving the edgeSize based on the above arguments, we need whichever method gives the smallest edgeSize as this will guarantee the hexes will be contained in the given space.

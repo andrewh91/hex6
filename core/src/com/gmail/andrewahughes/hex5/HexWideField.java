@@ -75,17 +75,25 @@ public void draw(ShapeRenderer sr)
                 hexWideArray[i].draw(sr);
         }
 }
+
+        public void drawFilled(ShapeRenderer sr,int symbolType)
+        {
+                for (int i = 0;i<noOfColumns*noOfRows;i++)
+                {
+                        hexWideArray[i].drawFilled(sr,symbolType);
+                }
+        }
 public int getNoOfHexes()
 {
         return noOfHexes;
 }
 
 
-        public void drawSprites(SpriteBatch sb)
+        public void drawSprites(SpriteBatch sb,int symbolType)
         {
                 for (int i = 0;i<noOfColumns*noOfRows;i++)
                 {
-                        hexWideArray[i].drawSprites(sb);
+                        hexWideArray[i].drawSprites(sb,symbolType);
                 }
         }
 public float deriveEdgeSize(int width, int height,int noOfRows, int noOfColumns) {//there are two methods of deriving the edgeSize based on the aove arguments, we need whichever method gives the smallest edgeSzie as this will guarentee the hexes will be contained in the given space.

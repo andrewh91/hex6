@@ -54,6 +54,8 @@ public class Database{
     int setOfSymbolIndex;
     ArrayList<Integer> refList= new ArrayList<Integer>();//stores a reference to the  index of the set of symbols each hex uses
     ArrayList<Integer> randomIds = new ArrayList<Integer>();
+    ArrayList<Integer> randDataIndex = new ArrayList<Integer>();
+
     ArrayList<Integer>[] symbolShuffle= new ArrayList[31];//stores a reference to the 31 different random orders the 6 symbols where shuffled into
 
     int noOfColumns,noOfRows,totalHexes;
@@ -78,7 +80,9 @@ public class Database{
     public void assignRandomSymbol(int noOfSymbols)
     {
         //list of number from 0 to30 sorted randomly
-        randomIds=randomlySortedList(31);
+        randomIds=randomlySortedList(noOfSymbols);
+
+        randDataIndex=randomlySortedList(31);
 //this is hardcoding the symbols so that all sets have one symbol in common with each other, the symbols are randomised but still maintain these
         //important characteristics of having exactly one symbol in common
       randData= new int[][]{
@@ -128,7 +132,7 @@ for(int j =0;j<31;j++)
 
     public int[] getHex(int hexId)
     {//gets the specified hex e.g. a set of 6 symbols, un randomises everything so we can get the correct result
-        hexId = getRandFromIndex(hexId);
+        hexId = getRandFromIndex(hexId)%31;
 
         int[] hex= new int[]{randData[hexId][symbolShuffle[hexId].get(0)],randData[hexId][symbolShuffle[hexId].get(1)],
                 randData[hexId][symbolShuffle[hexId].get(2)],randData[hexId][symbolShuffle[hexId].get(3)],
@@ -168,7 +172,7 @@ for(int j =0;j<31;j++)
         {
 
 
-            setOfSymbolIndex= randomIds.get(index);
+            setOfSymbolIndex= randDataIndex.get(index);
         }
         refList.add(index,setOfSymbolIndex);//add the random number to the ref list for easy retrieval later, the random number will coincidentally have the same index number as the hex's index number in the argument for this method, but just incase we will add it at the index position anyway
         return setOfSymbolIndex;
