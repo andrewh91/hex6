@@ -60,9 +60,16 @@ public class GamePauseStage extends Stage {
     private TextField symbolTypeValue;
     private Label symbolType;
 
+    OptionsHandler optionsHandler;
+    HexOptionField hexOptionField;
+    ShapeRenderer shapeRenderer  = new ShapeRenderer();
+
     public GamePauseStage(Viewport viewport, Texture texture, final StageInterface stageInterface) {
         super( viewport );
-
+         optionsHandler =new OptionsHandler();
+         hexOptionField = new HexOptionField(-50,-50,820,1380,6,
+        4,1,optionsHandler);
+         addHexesToStage(hexOptionField);
         this.stageInterface =stageInterface;
 
         Table table = new Table();
@@ -97,12 +104,20 @@ public class GamePauseStage extends Stage {
 
             Gdx.gl.glClearColor(0.9f*black, 0.0f*black, 0.4f*black, 1);
             Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
-
+            shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+            shapeRenderer.setProjectionMatrix(getViewport().getCamera().combined);
+hexOptionField.draw(shapeRenderer);
+shapeRenderer.end();
             super.draw();
         }
     }
-
+    public void addHexesToStage( HexOptionField hwf)
+    {
+        for(int i=0;i<hwf.noOfHexes;i++)
+        {
+            addActor(hwf.hexOptionArray[i]);
+        }
+    }
     public void setVisible(boolean visible) {
         this.visible = visible;
     }

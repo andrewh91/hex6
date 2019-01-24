@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector3;
@@ -26,6 +27,8 @@ public class HexWide extends Actor {
     int blue = 0,red =0,redSymbol=0;
 
     BitmapFont font = new BitmapFont();
+    GlyphLayout glyphLayout = new GlyphLayout();
+
     String text = new String();
     String text1 = new String();
     String text2 = new String();
@@ -293,34 +296,46 @@ if(symbolType==2) {
         sr.line(originX - (edgeSize / 2) , (int)(originY - altitudeSize),originX + (edgeSize / 2) , (int)(originY - altitudeSize));
 
     }
-
     public void drawSymbols (SpriteBatch sb, float originX, float originY , float edgeSize, float altitudeSize)
     {
+        float r=altitudeSize/3;
+
         if(removeSymbol.get(0)!=-1)
         {
-            font.draw(sb, ""+symbol0, originX - altitudeSize, (float)(originY+0.5*edgeSize));
+            glyphLayout.setText(font,symbol0);
+            font.draw(sb, ""+symbol0, originX - edgeSize/2  -glyphLayout.width/2, (float)(originY+r+glyphLayout.height/2));
         }
         if(removeSymbol.get(1)!=-1)
         {
-            font.draw(sb, ""+symbol1, originX, originY+edgeSize);
+            glyphLayout.setText(font,symbol1);
+            font.draw(sb, ""+symbol1, originX -glyphLayout.width/2,  (float)(originY+r*2+glyphLayout.height/2));
         }
         if(removeSymbol.get(2)!=-1)
         {
-            font.draw(sb, ""+symbol2, originX + altitudeSize, (float)(originY+0.5*edgeSize));
+            glyphLayout.setText(font,symbol2);
+            font.draw(sb, ""+symbol2, originX + edgeSize/2 -glyphLayout.width/2, (float)(originY+r+glyphLayout.height/2));
         }
         if(removeSymbol.get(3)!=-1)
         {
-            font.draw(sb, ""+symbol3, originX + altitudeSize, (float)(originY-0.5*edgeSize));
+            glyphLayout.setText(font,symbol3);
+            font.draw(sb, ""+symbol3, originX + edgeSize/2 -glyphLayout.width/2, (float)(originY-r+glyphLayout.height/2));
         }
         if(removeSymbol.get(4)!=-1)
         {
-            font.draw(sb, ""+symbol4, originX, originY-edgeSize);
+            glyphLayout.setText(font,symbol4);
+            font.draw(sb, ""+symbol4, originX -glyphLayout.width/2, (float)(originY-r*2+glyphLayout.height/2));
         }
         if(removeSymbol.get(5)!=-1)
         {
-            font.draw(sb, ""+symbol5, originX-altitudeSize, (float)(originY-0.5*edgeSize));
+            glyphLayout.setText(font,symbol5);
+            font.draw(sb, ""+symbol5, originX-+ edgeSize/2 -glyphLayout.width/2, (float)(originY-r+glyphLayout.height/2));
         }
     }
+
+
+
+
+
 
     public void drawSymbolsShapes (ShapeRenderer shapeRenderer, float originX, float originY ,
                                    float edgeSize, float altitudeSize)

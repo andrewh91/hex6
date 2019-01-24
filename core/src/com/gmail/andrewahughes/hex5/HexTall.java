@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector3;
@@ -26,6 +27,9 @@ public class HexTall extends Actor {
     int blue = 0,red =0,redSymbol=0;
 
     BitmapFont font = new BitmapFont();
+    GlyphLayout glyphLayout = new GlyphLayout();
+
+
     String text = new String();
     String text1 = new String();
     String text2 = new String();
@@ -239,13 +243,6 @@ if(visible) {
             sr.circle(touchX+posX-altitudeSize,touchY+posY-edgeSize,2);
 
 
-            sr.end();
-            sr.begin(ShapeRenderer.ShapeType.Filled);
-            drawSymbolsShapes(sr,posX,posY,edgeSize,altitudeSize);
-
-            sr.end();
-            sr.begin(ShapeRenderer.ShapeType.Line);
-
 
 /// /sr.rect(posX-altitudeSize,posY-edgeSize,altitudeSize*2,edgeSize*2);
        //     sr.line(posX,posY-edgeSize,posX+altitudeSize,posY-edgeSize+altitudeSize/altitudeSize/2*edgeSize);
@@ -308,29 +305,38 @@ if(visible) {
 
     public void drawSymbols (SpriteBatch sb, float originX, float originY , float edgeSize, float altitudeSize)
     {
+        float r=altitudeSize/3;
+
         if(removeSymbol.get(0)!=-1)
         {
-            font.draw(sb, ""+symbol0,(float)(originX - 0.5*edgeSize), (float)(originY+altitudeSize));
+            glyphLayout.setText(font,symbol0);
+            font.draw(sb, ""+symbol0, originX -  r -glyphLayout.width/2, (float)(originY+edgeSize/2+glyphLayout.height/2));
         }
         if(removeSymbol.get(1)!=-1)
         {
-            font.draw(sb, ""+symbol1, (float)(originX + 0.5*edgeSize), originY+altitudeSize);
+            glyphLayout.setText(font,symbol1);
+            font.draw(sb, ""+symbol1, originX+r -glyphLayout.width/2,  (float)(originY+edgeSize/2+glyphLayout.height/2));
         }
         if(removeSymbol.get(2)!=-1)
         {
-            font.draw(sb, ""+symbol2, originX + edgeSize, originY);
+            glyphLayout.setText(font,symbol2);
+            font.draw(sb, ""+symbol2, originX + r*2 -glyphLayout.width/2, (float)(originY+glyphLayout.height/2));
         }
         if(removeSymbol.get(3)!=-1)
         {
-            font.draw(sb, ""+symbol3,(float)(originX + 0.5*edgeSize), originY-altitudeSize);
+            glyphLayout.setText(font,symbol3);
+            font.draw(sb, ""+symbol3, originX +r -glyphLayout.width/2, (float)(originY- edgeSize/2+glyphLayout.height/2));
         }
         if(removeSymbol.get(4)!=-1)
         {
-            font.draw(sb, ""+symbol4, (float)(originX - 0.5*edgeSize), originY-altitudeSize);
+            glyphLayout.setText(font,symbol4);
+            font.draw(sb, ""+symbol4, originX-r -glyphLayout.width/2, (float)(originY- edgeSize/2+glyphLayout.height/2));
         }
         if(removeSymbol.get(5)!=-1)
         {
-            font.draw(sb, ""+symbol5, originX-edgeSize, originY);}
+            glyphLayout.setText(font,symbol5);
+            font.draw(sb, ""+symbol5, originX-r*2  -glyphLayout.width/2, (float)(originY+glyphLayout.height/2));
+        }
     }
 
 
@@ -423,33 +429,33 @@ if(visible) {
         float r=altitudeSize/3;
         if(removeSymbol.get(0)!=-1)
         {
-            drawShape(shapeRenderer,originX - edgeSize/2, (float)(originY+r),edgeSize,altitudeSize,
+            drawShape(shapeRenderer,originX - r, (float)(originY+edgeSize/2),edgeSize,altitudeSize,
                     symbol0);
         }
         if(removeSymbol.get(1)!=-1)
         {
-            drawShape(shapeRenderer,originX,  (float)(originY+r*2),edgeSize,
+            drawShape(shapeRenderer,originX+r,  (float)(originY+edgeSize/2),edgeSize,
                     altitudeSize,symbol1);
         }
         if(removeSymbol.get(2)!=-1)
         {
-            drawShape(shapeRenderer,originX + edgeSize/2, (float)(originY+r),edgeSize,
+            drawShape(shapeRenderer,originX +r*2, (float)(originY),edgeSize,
                     altitudeSize,symbol2);
         }
         if(removeSymbol.get(3)!=-1)
         {
-            drawShape(shapeRenderer,originX + edgeSize/2, (float)(originY-r),edgeSize,
+            drawShape(shapeRenderer,originX + r, (float)(originY- +edgeSize/2),edgeSize,
                     altitudeSize,symbol3);
         }
         if(removeSymbol.get(4)!=-1)
         {
-            drawShape(shapeRenderer,originX, (float)(originY-r*2),edgeSize,altitudeSize,
+            drawShape(shapeRenderer,originX-r, (float)(originY-edgeSize/2),edgeSize,altitudeSize,
                     symbol4);
         }
         if(removeSymbol.get(5)!=-1)
         {
 
-            drawShape(shapeRenderer,originX-+ edgeSize/2, (float)(originY-r),edgeSize,
+            drawShape(shapeRenderer,originX-r*2, (float)(originY),edgeSize,
                     altitudeSize ,symbol5);
         }
     }
