@@ -643,6 +643,8 @@ hideAllStages();
         gameStage.setDefaultCameraZoom(1);
         gameStage.getViewport().getCamera().update();
         platform.SetOrientation("portrait");
+
+        gamePauseStage.changeOrientation();
     }
     @Override
     public void setLandscape()
@@ -663,6 +665,8 @@ hideAllStages();
         gameStage.setDefaultCameraZoom(1);
         gameStage.getViewport().getCamera().update();
         platform.SetOrientation("landscape");
+
+        gamePauseStage.changeOrientation();
     }
 
     @Override

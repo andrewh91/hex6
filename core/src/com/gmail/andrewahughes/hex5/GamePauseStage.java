@@ -2,15 +2,14 @@ package com.gmail.andrewahughes.hex5;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -43,9 +42,9 @@ public class GamePauseStage extends Stage {
     private TextField posYValue;
     private Label posY;
     private TextField widthValue;
-    private Label width;
+    private Label widthLbl;
     private TextField heightValue;
-    private Label height;
+    private Label heightLbl;
     private TextField rowValue;
     private Label row;
     private TextField columnValue;
@@ -64,12 +63,16 @@ public class GamePauseStage extends Stage {
     HexOptionField hexOptionField;
     ShapeRenderer shapeRenderer  = new ShapeRenderer();
 
+    int x=-50,y=-50,width=720+200,height=1280+200,noOfRows = 8,noOfColumns=5;
+    boolean portrait =true;
+
     public GamePauseStage(Viewport viewport, Texture texture, final StageInterface stageInterface) {
         super( viewport );
          optionsHandler =new OptionsHandler();
-         hexOptionField = new HexOptionField(-50,-50,820,1380,6,
-        4,1,optionsHandler);
-         addHexesToStage(hexOptionField);
+        hexOptionField = new HexOptionField(x,y, width, height,noOfRows,noOfColumns,1,
+                optionsHandler,portrait);
+
+        addHexesToStage(hexOptionField);
         this.stageInterface =stageInterface;
 
         Table table = new Table();
@@ -136,9 +139,9 @@ shapeRenderer.end();
         posYValue= new TextField("", skin);
         posY= new Label("posY:", skin);
         widthValue= new TextField("", skin);
-        width= new Label("width:", skin);
+        widthLbl = new Label("widthLbl:", skin);
         heightValue= new TextField("", skin);
-        height= new Label("height:", skin);
+        heightLbl = new Label("heightLbl:", skin);
         rowValue= new TextField("", skin);
         row= new Label("row:", skin);
         columnValue= new TextField("", skin);
@@ -268,10 +271,10 @@ shapeRenderer.end();
         table.add(posY);
         table.row();
         table.add(widthValue);
-        table.add(width);
+        table.add(widthLbl);
         table.row();
         table.add(heightValue);
-        table.add(height);
+        table.add(heightLbl);
 
         table.row();
         table.add(rowValue);
@@ -302,6 +305,32 @@ shapeRenderer.end();
 
 
     }
+
+    public void changeOrientation()
+    {
+        int tempx = x, tempwidth = width, tempnoOfRows=noOfRows;
+        x=y;
+        y=tempx;
+        width= height;
+        height =tempwidth;
+        noOfRows=noOfColumns;
+        noOfColumns = tempnoOfRows;
+        //toggle bool for orientation
+portrait=!portrait;
+        //removeAllActors();
+        hexOptionField = new HexOptionField(x,y,width,height,noOfRows,noOfColumns,
+                1,optionsHandler,portrait);
+        //addHexesToStage(hexOptionField);
+    }
+    public void removeAllActors()
+    {
+        for(Actor actor : getActors()) {
+            //actor.remove();
+            actor.addAction(Actions.removeActor());
+        }
+    }
+
+
 
     @Override
     public void dispose() {
