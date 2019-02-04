@@ -13,9 +13,10 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 public class HexOption extends Actor {
     float width, height, centreX, centreY,edgeSize,altitudeSize,clickTimer=0 ;
     int  hexIndex, fieldIndex;
-
+OptionsHandler optionsHandler;
     public HexOption(final float edgeSize, final float centreX, final float centreY,
                      final int hexIndex, final int fieldIndex, final OptionsHandler optionsHandler) {
+      this.optionsHandler=optionsHandler;
         this.edgeSize=edgeSize;
         this.centreX=centreX;
         this.centreY=centreY;
@@ -27,16 +28,17 @@ public class HexOption extends Actor {
         this.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                if(pointInCircle(edgeSize, altitudeSize, altitudeSize, x, y))
+                //if(pointInCircle(edgeSize, altitudeSize, altitudeSize, x, y))
                 {
                     optionsHandler.click(hexIndex, fieldIndex);
-                    clickTimer=500;
+                    clickTimer=5000;
                 }
             }
         });
 
     }
-    public boolean pointInCircle(float circleOriginX, float circleOriginY, float radius, float pointX, float pointY)
+    public boolean pointInCircle(float circleOriginX, float circleOriginY,
+                                 float radius, float pointX, float pointY)
     {//returns true if given circle contains given point
         if((pointX - circleOriginX)*(pointX - circleOriginX) + (pointY - circleOriginY)*(pointY - circleOriginY)<radius*radius)
         {
@@ -53,6 +55,7 @@ public class HexOption extends Actor {
         {
             sr.setColor(100,100,100,1);
             clickTimer-=Gdx.graphics.getDeltaTime();
+            sr.rect(10,10,300,300);
         }
         else
         {

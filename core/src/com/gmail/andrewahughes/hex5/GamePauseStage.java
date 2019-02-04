@@ -63,13 +63,14 @@ public class GamePauseStage extends Stage {
     HexOptionField hexOptionField;
     ShapeRenderer shapeRenderer  = new ShapeRenderer();
 
-    int x=-50,y=-50,width=720+200,height=1280+200,noOfOptions=6,noOfRows = 8,noOfColumns=5;
+    int x=0,y=0,width=720,height=1280,noOfOptions=7;
     boolean portrait =true;
 
-    public GamePauseStage(Viewport viewport, Texture texture, final StageInterface stageInterface) {
+    public GamePauseStage(Viewport viewport, Texture texture,
+                          final StageInterface stageInterface) {
         super( viewport );
-         optionsHandler =new OptionsHandler();
-        hexOptionField = new HexOptionField(x,y, width, height,noOfOptions,noOfRows,noOfColumns,1,
+         optionsHandler =new OptionsHandler(stageInterface);
+        hexOptionField = new HexOptionField( width, height,noOfOptions,1,
                 optionsHandler,portrait);
 
         addHexesToStage(hexOptionField);
@@ -90,7 +91,7 @@ public class GamePauseStage extends Stage {
         this.pauseImg1.setVisible(false);//start off invisible
 
 
-
+/*
         table.add(pauseImg);
         table.center();
         table.row().pad(40);
@@ -98,6 +99,7 @@ public class GamePauseStage extends Stage {
         prepareUI();
 
         addActor(table);
+        */
     }
     @Override
     public void draw() {
@@ -257,7 +259,7 @@ shapeRenderer.end();
             }
         });
 
-
+/*
         Table table = new Table();
         table.setFillParent(true);
         table.defaults().pad(5);
@@ -302,23 +304,36 @@ shapeRenderer.end();
         table.add(button2);
         table.add(button3);
         addActor(table);
+        */
 
 
     }
 
     public void changeOrientation(boolean orientation)
     {
-        int tempx = x, tempwidth = width, tempnoOfRows=noOfRows;
-        x=y;
-        y=tempx;
-        width= height;
-        height =tempwidth;
-        noOfRows=noOfColumns;
-        noOfColumns = tempnoOfRows;
+        portrait=orientation;
+int longside,shortside;
+
+if(width<height) {
+    longside = height;
+    shortside = width;
+}
+else {
+    longside=width;
+    shortside=height;
+}
+if(portrait)
+{
+    height=longside;
+    width=shortside;
+        }
+        else
+        {
+
+        }
         //toggle bool for orientation
-portrait=orientation;
         //removeAllActors();
-        hexOptionField = new HexOptionField(x,y,width,height,noOfOptions,noOfRows,noOfColumns,
+        hexOptionField = new HexOptionField(width,height,noOfOptions,
                 1,optionsHandler,portrait);
         //addHexesToStage(hexOptionField);
     }

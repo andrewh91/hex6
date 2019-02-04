@@ -5,13 +5,15 @@ package com.gmail.andrewahughes.hex5;
  */
 
 public class OptionsHandler {
+    public StageInterface stageInterface;
 
-    void OptionsHandler()
+    public OptionsHandler(StageInterface stageInterface)
     {
-
+this.stageInterface=stageInterface;
     }
     void click(int hexIndex, int fieldIndex)
     {
+        OptionsHandler.this.stageInterface.goToMainStage();
 
     }
 }

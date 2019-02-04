@@ -8,26 +8,24 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 public class HexOptionField
 {
-    public int noOfColumns,noOfRows ,noOfHexes,posX,  posY,
+    public int noOfColumns,noOfRows ,noOfHexes,
             edgeSize,width, height,noOfOptions;
     HexOption hexOptionArray[];
+    int[] ignore=new int[]{};
     OptionsHandler optionsHandler;
     int fieldIndex;
     boolean portrait;
-    public HexOptionField(int posX, int posY, int width, int height,int noOfOptions, int noOfRows,
-                          int noOfColumns, int index, OptionsHandler optionsHandler, boolean portrait) {
-        this.noOfColumns = noOfColumns;
-        this.noOfRows = noOfRows;
-        this.posX = posX;
-        this.posY = posY;
+    float fieldWidth,fieldHeight,fieldOffsetX,fieldOffsetY;
+    public HexOptionField(int width, int height,int noOfOptions,int index, OptionsHandler optionsHandler, boolean portrait) {
+
         this.width=width;
         this.noOfOptions = noOfOptions;
         this.height=height;
-        this.edgeSize = deriveEdgeSize(width, height, noOfRows, noOfColumns);
+        //this must be called after we derive the noOfRows and Columns
+        //this.edgeSize = deriveEdgeSize(width, height, noOfRows, noOfColumns);
         fieldIndex=index;
         this.optionsHandler=optionsHandler;
         this.portrait=portrait;
-
         /*
         for(int i=0;i<noOfColumns;i++)
         {
@@ -48,13 +46,7 @@ public class HexOptionField
     public int deriveEdgeSize(int width, int height,int noOfRows, int noOfColumns) {//there are two methods of deriving the edgeSize based on the aove arguments, we need whichever method gives the smallest edgeSzie as this will guarentee the hexes will be contained in the given space.
         //float averageHexWidth=width/noOfColumns;//work out the *average* width of each hex given the size of the area they occupy horizontally and the number of them there are- bear in mind they will overlap
 
-if(portrait) {
-    int tempwidth = width, tempnoOfRows = noOfRows;
-    width = height;
-    height = tempwidth;
-    noOfRows = noOfColumns;
-    noOfColumns = tempnoOfRows;
-}
+
         float edgeSize = (float) (1 / (0.5 / height + (noOfRows * 1.5) / height));//first method to work out the hex edge size
         float hexWidth;
         if (noOfRows > 1) {
@@ -102,10 +94,12 @@ public void setupOptions(int noOfOptions )
             case 7:
                 noOfRows=3;
                 noOfColumns=3;
+                ignore=new int[]{0,2};
                 break;
             case 8:
                 noOfRows=3;
                 noOfColumns=3;
+                ignore=new int[]{7};
                 break;
             case 9:
                 noOfRows=3;
@@ -114,10 +108,12 @@ public void setupOptions(int noOfOptions )
             case 10:
                 noOfRows=4;
                 noOfColumns=3;
+                ignore=new int[]{0,2};
                 break;
             case 11:
                 noOfRows=4;
                 noOfColumns=3;
+                ignore=new int[]{10};
                 break;
             case 12:
                 noOfRows=4;
@@ -126,16 +122,19 @@ public void setupOptions(int noOfOptions )
             case 13:
                 noOfRows=5;
                 noOfColumns=3;
+                ignore=new int[]{0,2};
                 break;
             case 14:
                 noOfRows=5;
                 noOfColumns=3;
+                ignore=new int[]{13};
                 break;
             case 15:
                 noOfRows=5;
                 noOfColumns=3;
                 break;
         }
+        this.edgeSize = deriveEdgeSize(width, height, noOfRows, noOfColumns);
 
 //for hexwide hexes, adjacent hexes will be 0.75 of a hex width to the right 
         float hexSpacingX = 1.5f*edgeSize;
@@ -146,7 +145,7 @@ public void setupOptions(int noOfOptions )
 
 //the width of the field will be 2*edgeSize if there is only one column
 //the height of the field will also change if there is only one column
-        float fieldWidth,fieldHeight;
+
 
         if(noOfColumns==1)
         {
@@ -155,23 +154,32 @@ public void setupOptions(int noOfOptions )
         }
         else
         {
-             fieldWidth = edgeSize*2+noOfColumns * hexSpacingX;
+             fieldWidth = edgeSize*2+(noOfColumns-1) * hexSpacingX;
              fieldHeight = edgeSize*0.866025403784439f*2*noOfRows+hexOffsetY ;
         }
 
-        float fieldOffsetX = (posX+width)/2-fieldWidth/2-edgeSize;
-        float fieldOffsetY = (posY+height)/2-fieldHeight/2-edgeSize*0.866025403784439f;
+         fieldOffsetX = edgeSize-(fieldWidth/2)+width/2;
+         fieldOffsetY = (edgeSize*0.866025403784439f)-(fieldHeight/2)+height/2;
         hexOptionArray = new HexOption[noOfColumns*noOfRows];
 //can use this to draw them normally need to figure out a way to selectively draw patterns
         noOfHexes=0;
-        for(int i=0;i<noOfColumns;i++)
+        int ignoreIndex=0,hexIndex=0;
+
+        for(int i=0;i<noOfRows;i++)
         {
-            for(int j=0;j<noOfRows;j++)
+            for(int j=0;j<noOfColumns;j++)
             {
-                hexOptionArray[noOfHexes] = new HexOption(edgeSize,fieldOffsetX+hexSpacingX*j,
-                        fieldOffsetY+hexSpacingY*i+hexOffsetY*(j%2),noOfHexes,fieldIndex
-                        ,optionsHandler);
-                noOfHexes++;
+                if(ignoreIndex<ignore.length&&ignore[ignoreIndex]==hexIndex) {
+                    ignoreIndex++;
+                }
+                else{
+                    hexOptionArray[noOfHexes] = new HexOption(edgeSize,
+                            fieldOffsetX + hexSpacingX * j,
+                            fieldOffsetY + hexSpacingY * i + hexOffsetY * (j % 2), noOfHexes, fieldIndex
+                            , optionsHandler);
+                    noOfHexes++;
+                }
+                hexIndex++;
             }
         }
     }
@@ -265,14 +273,21 @@ public void setupOptions(int noOfOptions )
                 noOfColumns=7;
                 break;
         }
+
+        this.edgeSize = deriveEdgeSize(width, height, noOfRows, noOfColumns);
+
     }
 
 }
     public void draw(ShapeRenderer sr)
     {
+        sr.rect(0,0,width/2,height/2);
+        sr.rect(fieldOffsetX-edgeSize,fieldOffsetY-edgeSize*.86f,fieldWidth,fieldHeight);
+
         for (int i = 0;i<noOfOptions;i++)
         {
             hexOptionArray[i].draw(sr);
         }
+
     }
 }//end class
