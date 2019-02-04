@@ -63,13 +63,13 @@ public class GamePauseStage extends Stage {
     HexOptionField hexOptionField;
     ShapeRenderer shapeRenderer  = new ShapeRenderer();
 
-    int x=-50,y=-50,width=720+200,height=1280+200,noOfRows = 8,noOfColumns=5;
+    int x=-50,y=-50,width=720+200,height=1280+200,noOfOptions=6,noOfRows = 8,noOfColumns=5;
     boolean portrait =true;
 
     public GamePauseStage(Viewport viewport, Texture texture, final StageInterface stageInterface) {
         super( viewport );
          optionsHandler =new OptionsHandler();
-        hexOptionField = new HexOptionField(x,y, width, height,noOfRows,noOfColumns,1,
+        hexOptionField = new HexOptionField(x,y, width, height,noOfOptions,noOfRows,noOfColumns,1,
                 optionsHandler,portrait);
 
         addHexesToStage(hexOptionField);
@@ -306,7 +306,7 @@ shapeRenderer.end();
 
     }
 
-    public void changeOrientation()
+    public void changeOrientation(boolean orientation)
     {
         int tempx = x, tempwidth = width, tempnoOfRows=noOfRows;
         x=y;
@@ -316,9 +316,9 @@ shapeRenderer.end();
         noOfRows=noOfColumns;
         noOfColumns = tempnoOfRows;
         //toggle bool for orientation
-portrait=!portrait;
+portrait=orientation;
         //removeAllActors();
-        hexOptionField = new HexOptionField(x,y,width,height,noOfRows,noOfColumns,
+        hexOptionField = new HexOptionField(x,y,width,height,noOfOptions,noOfRows,noOfColumns,
                 1,optionsHandler,portrait);
         //addHexesToStage(hexOptionField);
     }

@@ -644,7 +644,7 @@ hideAllStages();
         gameStage.getViewport().getCamera().update();
         platform.SetOrientation("portrait");
 
-        gamePauseStage.changeOrientation();
+        gamePauseStage.changeOrientation(true);
     }
     @Override
     public void setLandscape()
@@ -666,7 +666,7 @@ hideAllStages();
         gameStage.getViewport().getCamera().update();
         platform.SetOrientation("landscape");
 
-        gamePauseStage.changeOrientation();
+        gamePauseStage.changeOrientation(false);
     }
 
     @Override
