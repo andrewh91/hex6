@@ -11,7 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
  */
 
 public class HexOption extends Actor {
-    float width, height, centreX, centreY,edgeSize,altitudeSize,clickTimer=0 ;
+    float width, height, centreX, centreY,edgeSize,altitudeSize,clickTimer=5 ;
     int  hexIndex, fieldIndex;
 OptionsHandler optionsHandler;
     public HexOption(final float edgeSize, final float centreX, final float centreY,
@@ -49,17 +49,22 @@ OptionsHandler optionsHandler;
             return false;
         }
     }
-    public void draw(ShapeRenderer sr) {
+    public void draw(ShapeRenderer sr,boolean background) {
         act(Gdx.graphics.getDeltaTime());
-        if(clickTimer>0)
+
+        if(background)
+        {
+sr.setColor(0,0,0,1);
+        }
+       else if(clickTimer>0)
         {
             sr.setColor(100,100,100,1);
             clickTimer-=Gdx.graphics.getDeltaTime();
-            sr.rect(10,10,300,300);
         }
         else
         {
             sr.setColor(100,100,40,1);
+            clickTimer= 500f;
         }
         sr.line(centreX + (edgeSize / 2), centreY - altitudeSize, centreX + edgeSize, centreY);
         sr.line(centreX + edgeSize, centreY , centreX + (edgeSize / 2) , (int)(centreY + altitudeSize));

@@ -1,5 +1,8 @@
 package com.gmail.andrewahughes.hex5;
 
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 /**
@@ -11,11 +14,16 @@ public class HexOptionField
     public int noOfColumns,noOfRows ,noOfHexes,
             edgeSize,width, height,noOfOptions;
     HexOption hexOptionArray[];
+    HexOption hexBackgroundArray[];
     int[] ignore=new int[]{};
     OptionsHandler optionsHandler;
     int fieldIndex;
     boolean portrait;
     float fieldWidth,fieldHeight,fieldOffsetX,fieldOffsetY;
+    BitmapFont font = new BitmapFont();
+
+
+
     public HexOptionField(int width, int height,int noOfOptions,int index, OptionsHandler optionsHandler, boolean portrait) {
 
         this.width=width;
@@ -158,8 +166,14 @@ public void setupOptions(int noOfOptions )
              fieldHeight = edgeSize*0.866025403784439f*2*noOfRows+hexOffsetY ;
         }
 
-         fieldOffsetX = edgeSize-(fieldWidth/2)+width/2;
-         fieldOffsetY = (edgeSize*0.866025403784439f)-(fieldHeight/2)+height/2;
+//try this, i want it to produce an offset that will still overlap the background hexes, replace the current field offset values in hex option field class
+//given the edge size that we already worked out, how many hexes do we need to more than fill the background?
+        int noOfBackgroundColumns=(int)(width / (edgeSize*2));
+        int noOfBackgroundRows=(int)(height / (edgeSize*0.866025403784439f*2));
+
+        fieldOffsetX  = (int)((noOfBackgroundColumns-noOfColumns)/2+1)*(hexSpacingX) ;
+        float backgroundOffsetY = ((int)((noOfBackgroundColumns-noOfColumns)/2+1)%2)*hexOffsetY;
+        fieldOffsetY  = ((noOfBackgroundRows-noOfRows)/2+1)*(hexSpacingY);
         hexOptionArray = new HexOption[noOfColumns*noOfRows];
 //can use this to draw them normally need to figure out a way to selectively draw patterns
         noOfHexes=0;
@@ -182,6 +196,39 @@ public void setupOptions(int noOfOptions )
                 hexIndex++;
             }
         }
+
+
+        hexBackgroundArray=new HexOption[(noOfBackgroundColumns+2)*(noOfBackgroundRows+2)];
+
+
+        int noOfBackgroundHexes=0;
+        for(int i=0;i<noOfBackgroundRows+2;i++)
+        {
+            for(int j=0;j<noOfBackgroundColumns+2;j++)
+            {
+                hexBackgroundArray[noOfBackgroundHexes] = new HexOption(edgeSize,
+                        +hexSpacingX * j,
+                        +hexSpacingY * i + hexOffsetY * (j % 2)+backgroundOffsetY, noOfHexes, fieldIndex
+                        , optionsHandler);
+                noOfBackgroundHexes++;
+            }
+
+        }
+
+
+
+        /**************
+         i should make a new argument of the hexoptionfield and hex option so that we make a more lightweight version that  can't be interacted with and it's only purpose is to draw the background *****/
+
+
+
+
+
+
+
+
+
+
     }
 
 
@@ -281,13 +328,31 @@ public void setupOptions(int noOfOptions )
 }
     public void draw(ShapeRenderer sr)
     {
-        sr.rect(0,0,width/2,height/2);
-        sr.rect(fieldOffsetX-edgeSize,fieldOffsetY-edgeSize*.86f,fieldWidth,fieldHeight);
 
+        for(int j = 0;j<hexBackgroundArray.length;j++)
+        {
+            hexBackgroundArray[j].draw(sr,true);
+        }
         for (int i = 0;i<noOfOptions;i++)
         {
-            hexOptionArray[i].draw(sr);
+            hexOptionArray[i].draw(sr,false);
         }
 
+
+    }
+    public void drawText(SpriteBatch sb)
+    {
+        for (int i = 0;i<noOfOptions;i++)
+        {
+font.draw(sb,hexOptionArray[i].hexIndex+"",hexOptionArray[i].centreX,hexOptionArray[i].centreY);
+        }
     }
 }//end class
+
+
+
+
+
+
+
+

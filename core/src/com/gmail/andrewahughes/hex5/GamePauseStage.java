@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -62,7 +63,7 @@ public class GamePauseStage extends Stage {
     OptionsHandler optionsHandler;
     HexOptionField hexOptionField;
     ShapeRenderer shapeRenderer  = new ShapeRenderer();
-
+SpriteBatch spriteBatch = new SpriteBatch();
     int x=0,y=0,width=720,height=1280,noOfOptions=7;
     boolean portrait =true;
 
@@ -113,6 +114,9 @@ public class GamePauseStage extends Stage {
             shapeRenderer.setProjectionMatrix(getViewport().getCamera().combined);
 hexOptionField.draw(shapeRenderer);
 shapeRenderer.end();
+spriteBatch.begin();
+hexOptionField.drawText(spriteBatch);
+spriteBatch.end();
             super.draw();
         }
     }
