@@ -62,6 +62,7 @@ public class GamePauseStage extends Stage {
 
     OptionsHandler optionsHandler;
     HexOptionField hexOptionField;
+    HexOptionField difficultyOptionField;
     ShapeRenderer shapeRenderer  = new ShapeRenderer();
 SpriteBatch spriteBatch = new SpriteBatch();
     int x=0,y=0,width=720,height=1280,noOfOptions=7;
@@ -71,10 +72,17 @@ SpriteBatch spriteBatch = new SpriteBatch();
                           final StageInterface stageInterface) {
         super( viewport );
          optionsHandler =new OptionsHandler(stageInterface);
-        hexOptionField = new HexOptionField( width, height,noOfOptions,1,
-                optionsHandler,portrait);
-
+        hexOptionField = new HexOptionField( width, height,noOfOptions,0,
+                optionsHandler,portrait,
+                new String[]{"Return to Main Menu", "Swap Orientation","Change Difficulty","Change Game Mode"}
+);
+        difficultyOptionField = new HexOptionField( width, height,noOfOptions,1,
+                optionsHandler,portrait,
+                new String[]{"Back", "0","1","2"}
+        );
         addHexesToStage(hexOptionField);
+        addHexesToStage(difficultyOptionField);
+        difficultyOptionField.disableOptions();
         this.stageInterface =stageInterface;
 
         Table table = new Table();
@@ -112,10 +120,15 @@ SpriteBatch spriteBatch = new SpriteBatch();
             Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
             shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
             shapeRenderer.setProjectionMatrix(getViewport().getCamera().combined);
-hexOptionField.draw(shapeRenderer);
+
+            hexOptionField.draw(shapeRenderer);
+            difficultyOptionField.draw(shapeRenderer);
 shapeRenderer.end();
+            spriteBatch.setProjectionMatrix(getViewport().getCamera().combined);
+
 spriteBatch.begin();
-hexOptionField.drawText(spriteBatch);
+            hexOptionField.drawText(spriteBatch);
+            difficultyOptionField.drawText(spriteBatch);
 spriteBatch.end();
             super.draw();
         }
@@ -338,7 +351,8 @@ if(portrait)
         //toggle bool for orientation
         //removeAllActors();
         hexOptionField = new HexOptionField(width,height,noOfOptions,
-                1,optionsHandler,portrait);
+                0,optionsHandler,portrait,
+                new String[]{"Return to Main Menu", "Swap Orientation","Change Difficulty","Change Game Mode"});
         //addHexesToStage(hexOptionField);
     }
     public void removeAllActors()

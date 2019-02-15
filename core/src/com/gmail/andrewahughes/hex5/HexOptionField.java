@@ -15,6 +15,7 @@ public class HexOptionField
             edgeSize,width, height,noOfOptions;
     HexOption hexOptionArray[];
     HexOption hexBackgroundArray[];
+    String[] optionTextArray;
     int[] ignore=new int[]{};
     OptionsHandler optionsHandler;
     int fieldIndex;
@@ -24,7 +25,7 @@ public class HexOptionField
 
 
 
-    public HexOptionField(int width, int height,int noOfOptions,int index, OptionsHandler optionsHandler, boolean portrait) {
+    public HexOptionField(int width, int height,int noOfOptions,int index, OptionsHandler optionsHandler, boolean portrait,String[] optionsText) {
 
         this.width=width;
         this.noOfOptions = noOfOptions;
@@ -48,7 +49,12 @@ public class HexOptionField
         }
 */
 
-        setupOptions(noOfOptions);
+        optionTextArray=setupOptionsText(optionsText);
+        setupOptions(this.noOfOptions);
+        for(int i =0;i<this.noOfOptions;i++)
+        {
+        asignOptionText(i,optionTextArray[i]);
+        }
     }//end constructor
 
     public int deriveEdgeSize(int width, int height,int noOfRows, int noOfColumns) {//there are two methods of deriving the edgeSize based on the aove arguments, we need whichever method gives the smallest edgeSzie as this will guarentee the hexes will be contained in the given space.
@@ -326,6 +332,38 @@ public void setupOptions(int noOfOptions )
     }
 
 }
+    public void asignOptionText(int index, String text)
+    {
+        hexOptionArray[index].text = text;
+    }
+
+    public String[] setupOptionsText(String[] textArray )
+    {
+        noOfOptions=textArray.length;
+        return textArray;
+    }
+public void disableOptions()
+{
+    for(int j = 0;j<hexBackgroundArray.length;j++)
+    {
+        hexBackgroundArray[j].disable();
+    }
+    for (int i = 0;i<noOfOptions;i++)
+    {
+        hexOptionArray[i].disable();
+    }
+}
+    public void enableOptions()
+    {
+        for(int j = 0;j<hexBackgroundArray.length;j++)
+    {
+        hexBackgroundArray[j].enable();
+    }
+        for (int i = 0;i<noOfOptions;i++)
+        {
+            hexOptionArray[i].enable();
+        }
+    }
     public void draw(ShapeRenderer sr)
     {
 
@@ -344,9 +382,15 @@ public void setupOptions(int noOfOptions )
     {
         for (int i = 0;i<noOfOptions;i++)
         {
-font.draw(sb,hexOptionArray[i].hexIndex+"",hexOptionArray[i].centreX,hexOptionArray[i].centreY);
+            hexOptionArray[i].drawText(sb);
         }
     }
+
+
+
+
+
+
 }//end class
 
 

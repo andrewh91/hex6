@@ -13,7 +13,16 @@ this.stageInterface=stageInterface;
     }
     void click(int hexIndex, int fieldIndex)
     {
-        OptionsHandler.this.stageInterface.goToMainStage();
+        switch (fieldIndex)
+        {
+            case 0:
+                switch (hexIndex)
+                {
+                    case 0:
+                    OptionsHandler.this.stageInterface.goToMainStage();
+
+                }
+        }
 
     }
 }
