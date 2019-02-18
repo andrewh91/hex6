@@ -131,7 +131,7 @@ Col’s  	rows	total	orientation
     int hexPairPosX, hexPairPosY;
     //difficulty will remove some of the symbols so there are less wrong answers, and less to look at when
     //trying to compare matches, high difficulty value will make it more easy
-    int difficulty = 0;
+    int difficulty = 5;
 
     //arrayList to store which symbols are false matches – we use this to remove symbols to make the difficulty easier
     ArrayList<Integer> nonMatchingSymbols = new ArrayList<Integer>();

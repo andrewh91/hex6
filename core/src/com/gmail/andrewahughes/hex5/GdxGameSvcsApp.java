@@ -689,9 +689,10 @@ hideAllStages();
         //these options can be changed without recalculating the field
         if(newZoom+newDifficulty+newSymbolType>0)
         {
-            gameStage.updateZoom(newZoom);
-            gameStage.updateDifficulty(newDifficulty);
-            gameStage.updateSymbolType(newSymbolType);
+            if(newZoom!=0)
+            {gameStage.updateZoom(newZoom);}
+            if(newDifficulty!=0){gameStage.updateDifficulty(newDifficulty);}
+            if(newSymbolType!=0){gameStage.updateSymbolType(newSymbolType);}
         }
         //certain options require the entire field to be recalculated, if any of those options are altered, recalculate new field,
         if(  newNoOfRows+newNoOfColumns+ newPortrait1Landscape2+ newFieldPosX+ newFieldPosY+  newFieldWidth+ newFieldHeight+newGameMode>0) {
@@ -718,6 +719,34 @@ hideAllStages();
         gamePauseStage.setVisible(true);
         Gdx.input.setInputProcessor(gamePauseStage);
         Gdx.input.setCatchBackKey(true);
+    }
+
+    @Override
+    public void goToDifficultyOption()
+    {
+        disableAllOptions();
+        gamePauseStage.difficultyOptionField.enableOptions();
+        gamePauseStage.setActiveFieldIndex(2);
+
+    }
+
+    @Override
+    public void goToMainOption()
+    {
+        disableAllOptions();
+        gamePauseStage.hexOptionField.enableOptions();
+        gamePauseStage.setActiveFieldIndex(0);
+    }
+
+    public void disableAllOptions()
+    {
+        gamePauseStage.hexOptionField.disableOptions();
+       gamePauseStage.difficultyOptionField.disableOptions();
+    }
+    @Override
+    public  void setDifficulty(int difficulty)
+    {
+        gamePauseStage.setDifficulty(difficulty);
     }
     @Override
     public void goToMainStage() {

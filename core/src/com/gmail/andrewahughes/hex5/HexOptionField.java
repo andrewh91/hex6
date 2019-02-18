@@ -22,13 +22,13 @@ public class HexOptionField
     boolean portrait;
     float fieldWidth,fieldHeight,fieldOffsetX,fieldOffsetY;
     BitmapFont font = new BitmapFont();
+int selectedIndex;
 
 
-
-    public HexOptionField(int width, int height,int noOfOptions,int index, OptionsHandler optionsHandler, boolean portrait,String[] optionsText) {
-
+    public HexOptionField(int width, int height,int noOfOptions,int index, OptionsHandler optionsHandler, boolean portrait,String[] optionsText,int defaultOption) {
+selectedIndex=defaultOption;
         this.width=width;
-        this.noOfOptions = noOfOptions;
+        this.noOfOptions = optionsText.length;
         this.height=height;
         //this must be called after we derive the noOfRows and Columns
         //this.edgeSize = deriveEdgeSize(width, height, noOfRows, noOfColumns);
@@ -204,17 +204,17 @@ public void setupOptions(int noOfOptions )
         }
 
 
-        hexBackgroundArray=new HexOption[(noOfBackgroundColumns+2)*(noOfBackgroundRows+2)];
+        hexBackgroundArray=new HexOption[(noOfBackgroundColumns+2)*(noOfBackgroundRows+3)];
 
 
         int noOfBackgroundHexes=0;
-        for(int i=0;i<noOfBackgroundRows+2;i++)
+        for(int i=0;i<noOfBackgroundRows+3;i++)
         {
             for(int j=0;j<noOfBackgroundColumns+2;j++)
             {
                 hexBackgroundArray[noOfBackgroundHexes] = new HexOption(edgeSize,
                         +hexSpacingX * j,
-                        +hexSpacingY * i + hexOffsetY * (j % 2)+backgroundOffsetY, noOfHexes, fieldIndex
+                        -2*hexSpacingY+hexSpacingY * i + hexOffsetY * (j % 2)+backgroundOffsetY, noOfHexes, fieldIndex
                         , optionsHandler);
                 noOfBackgroundHexes++;
             }
@@ -364,16 +364,27 @@ public void disableOptions()
             hexOptionArray[i].enable();
         }
     }
+
+    public void setSelectedIndex(int a)
+    {
+        selectedIndex=a;
+    }
     public void draw(ShapeRenderer sr)
     {
 
         for(int j = 0;j<hexBackgroundArray.length;j++)
         {
-            hexBackgroundArray[j].draw(sr,true);
+            hexBackgroundArray[j].draw(sr,true,false);
         }
         for (int i = 0;i<noOfOptions;i++)
         {
-            hexOptionArray[i].draw(sr,false);
+            if(i==selectedIndex)
+            {
+                hexOptionArray[i].draw(sr,false,true);
+
+            }
+            else
+            hexOptionArray[i].draw(sr,false,false);
         }
 
 

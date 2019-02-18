@@ -67,18 +67,19 @@ public class GamePauseStage extends Stage {
 SpriteBatch spriteBatch = new SpriteBatch();
     int x=0,y=0,width=720,height=1280,noOfOptions=7;
     boolean portrait =true;
-
+int fieldIndex=0;
     public GamePauseStage(Viewport viewport, Texture texture,
                           final StageInterface stageInterface) {
         super( viewport );
          optionsHandler =new OptionsHandler(stageInterface);
-        hexOptionField = new HexOptionField( width, height,noOfOptions,0,
+        createOptionsMenu();
+        //swap orientation code goes here
+
+
+        difficultyOptionField = new HexOptionField( width, height,13,2,
                 optionsHandler,portrait,
-                new String[]{"Return to Main Menu", "Swap Orientation","Change Difficulty","Change Game Mode"}
-);
-        difficultyOptionField = new HexOptionField( width, height,noOfOptions,1,
-                optionsHandler,portrait,
-                new String[]{"Back", "0","1","2"}
+                new String[]{"Back", "0","1","2","3","4","5","6","7","8","9","10","11"}
+                ,1
         );
         addHexesToStage(hexOptionField);
         addHexesToStage(difficultyOptionField);
@@ -116,9 +117,9 @@ SpriteBatch spriteBatch = new SpriteBatch();
 
         if (visible) {
 
-            Gdx.gl.glClearColor(0.9f*black, 0.0f*black, 0.4f*black, 1);
+            Gdx.gl.glClearColor(0.93f, 0.84f, 0.08f, 1);
             Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-            shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+            shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
             shapeRenderer.setProjectionMatrix(getViewport().getCamera().combined);
 
             hexOptionField.draw(shapeRenderer);
@@ -130,6 +131,7 @@ spriteBatch.begin();
             hexOptionField.drawText(spriteBatch);
             difficultyOptionField.drawText(spriteBatch);
 spriteBatch.end();
+
             super.draw();
         }
     }
@@ -325,7 +327,10 @@ spriteBatch.end();
 
 
     }
-
+public void setDifficulty(int difficulty)
+{
+    difficultyOptionField.setSelectedIndex(difficulty);
+}
     public void changeOrientation(boolean orientation)
     {
         portrait=orientation;
@@ -350,9 +355,7 @@ if(portrait)
         }
         //toggle bool for orientation
         //removeAllActors();
-        hexOptionField = new HexOptionField(width,height,noOfOptions,
-                0,optionsHandler,portrait,
-                new String[]{"Return to Main Menu", "Swap Orientation","Change Difficulty","Change Game Mode"});
+      createOptionsMenu();
         //addHexesToStage(hexOptionField);
     }
     public void removeAllActors()
@@ -363,13 +366,24 @@ if(portrait)
         }
     }
 
-
+void createOptionsMenu()
+{
+    hexOptionField = new HexOptionField(width,height,6,
+            0,optionsHandler,portrait,
+            new String[]{"Cancel Changes","Return to Main Menu","Change Difficulty" ,"Swap Orientation","Change Game Mode","Save Changes"}
+            ,7);
+}
 
     @Override
     public void dispose() {
         skin.dispose();
         atlas.dispose();
     }
+
+    void setActiveFieldIndex(int activeFieldIndex)
+        {
+            fieldIndex=activeFieldIndex;
+        }
 
     @Override
     public boolean keyDown(int keycode) {
@@ -379,8 +393,8 @@ if(portrait)
             //pauseImg1.setVisible(false);
             setVisible(false);
             //black = 1.f;
-            GamePauseStage.this.stageInterface.goToGameStage();
-
+            //GamePauseStage.this.stageInterface.goToGameStage();
+optionsHandler.click(0,fieldIndex);
 
 
 

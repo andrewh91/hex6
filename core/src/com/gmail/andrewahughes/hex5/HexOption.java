@@ -15,17 +15,19 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
  */
 
 public class HexOption extends Actor {
-    float width, height, centreX, centreY,edgeSize,altitudeSize,clickTimer=5 ;
+    float width, height, centreX, centreY,edgeSize,altitudeSize,clickTimer=1f ;
     int  hexIndex, fieldIndex;
     BitmapFont font = new BitmapFont();
     GlyphLayout glyphLayout = new GlyphLayout();
     String text = new String();
+     float edgeSizeStatic;
 
     OptionsHandler optionsHandler;
     public HexOption(final float edgeSize, final float centreX, final float centreY,
                      final int hexIndex, final int fieldIndex, final OptionsHandler optionsHandler) {
       this.optionsHandler=optionsHandler;
         this.edgeSize=edgeSize;
+        edgeSizeStatic=edgeSize;
         this.centreX=centreX;
         this.centreY=centreY;
         altitudeSize = edgeSize * 0.866025403784439f;
@@ -38,7 +40,7 @@ public class HexOption extends Actor {
                 //if(pointInCircle(edgeSize, altitudeSize, altitudeSize, x, y))
                 {
                     optionsHandler.click(hexIndex, fieldIndex);
-                    clickTimer=5000;
+                    clickTimer=0f;
                 }
             }
         });
@@ -66,24 +68,70 @@ public class HexOption extends Actor {
         this.setTouchable(Touchable.enabled);
         this.setVisible(true);
     }
-    public void draw(ShapeRenderer sr,boolean background) {
+    public void draw(ShapeRenderer sr,boolean background,boolean selected) {
         act(Gdx.graphics.getDeltaTime());
 if(this.isVisible()) {
-    if (background) {
-        sr.setColor(0, 0, 0, 1);
-    } else if (clickTimer > 0) {
-        sr.setColor(100, 100, 100, 1);
-        clickTimer -= Gdx.graphics.getDeltaTime();
-    } else {
-        sr.setColor(100, 100, 40, 1);
-        clickTimer = 500f;
+    sr.setColor(0.95f,0.74f,0.25f, 1);
+    if(selected)
+    {
+        sr.setColor(0.95f,0.9f,0.04f, 1);
+
     }
+    else if (background) {
+        sr.setColor(0.77f,0.7f,0.035f, 1);
+        edgeSize=edgeSizeStatic*0.95f;
+        altitudeSize=edgeSize * 0.866025403784439f;
+    } else if (clickTimer < 1f) {
+        clickTimer += Gdx.graphics.getDeltaTime();
+
+        /*
+        edgeSize=edgeSizeStatic*0.9f+edgeSizeStatic*0.1f*clickTimer;
+        altitudeSize=edgeSize * 0.866025403784439f;
+        */
+    } else {
+        clickTimer = 1f;
+        edgeSize=edgeSizeStatic*0.95f;
+        altitudeSize=edgeSize * 0.866025403784439f;
+    }
+
+
+    sr.triangle(
+            centreX+edgeSize,
+            centreY,
+            centreX+edgeSize/2,
+            centreY+altitudeSize,
+            centreX-edgeSize/2,
+            centreY+altitudeSize);
+    sr.triangle(
+            centreX+edgeSize,
+            centreY,
+            centreX-edgeSize/2,
+            centreY+altitudeSize,
+            centreX-edgeSize,
+            centreY);
+    sr.triangle(
+            centreX+edgeSize,
+            centreY,
+            centreX-edgeSize,
+            centreY,
+            centreX-edgeSize/2,
+            centreY-altitudeSize);
+    sr.triangle(
+            centreX+edgeSize,
+            centreY,
+            centreX-edgeSize/2,
+            centreY-altitudeSize,
+            centreX+edgeSize/2,
+            centreY-altitudeSize);
+
+    /*
     sr.line(centreX + (edgeSize / 2), centreY - altitudeSize, centreX + edgeSize, centreY);
     sr.line(centreX + edgeSize, centreY, centreX + (edgeSize / 2), (int) (centreY + altitudeSize));
     sr.line(centreX + (edgeSize / 2), (int) (centreY + altitudeSize), centreX - (edgeSize / 2), (int) (centreY + altitudeSize));
     sr.line(centreX - (edgeSize / 2), (int) (centreY + altitudeSize), centreX - edgeSize, centreY);
     sr.line(centreX - edgeSize, centreY, centreX - (edgeSize / 2), (int) (centreY - altitudeSize));
     sr.line(centreX - (edgeSize / 2), (int) (centreY - altitudeSize), centreX + (edgeSize / 2), (int) (centreY - altitudeSize));
+    */
 }
 
     }
