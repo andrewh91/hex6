@@ -9,14 +9,14 @@ import javax.crypto.spec.OAEPParameterSpec;
 public class OptionsHandler
 {
     public StageInterface stageInterface;
-    public int difficulty = 1, newDifficulty = 0;
-    int orientation = 1, newOrientation = 0;
-    int symbol = 1, newSymbol = 0;
-    int gameMode = 1, newGameMode = 0;
-    int noOfHexes = 1, newNoOfHexes = 0;
+     int difficulty = 1, newDifficulty = 1;
+    int orientation = 1, newOrientation = 1;
+    int symbol = 1, newSymbol = 1;
+    int gameMode = 1, newGameMode = 1;
+    int noOfHexes = 1, newNoOfHexes = 1;
     int noOfRows = 0, newNoOfRows = 0;
     int noOfColumns = 0, newNoOfColumns = 0;
-    int zoomMode = 2, newZoomMode = 0;
+    int zoomMode = 2, newZoomMode = 2;
 
     public OptionsHandler(StageInterface stageInterface)
     {
@@ -46,6 +46,7 @@ public class OptionsHandler
 
                         OptionsHandler.this.stageInterface.setDifficulty(difficulty);
                         OptionsHandler.this.stageInterface.setOrientation(orientation);
+                        OptionsHandler.this.stageInterface.setSymbol(symbol);
                         OptionsHandler.this.stageInterface.setGameMode(gameMode);
                         OptionsHandler.this.stageInterface.setNoOfHexes(noOfHexes);
                         OptionsHandler.this.stageInterface.setZoomMode(zoomMode);
@@ -120,9 +121,9 @@ public class OptionsHandler
                         OptionsHandler.this.stageInterface.setDifficulty(newDifficulty);
                         break;
                 }//end hex index 2 switch
-
+break;
             case 3://swap orientation
-            {
+
                 switch (hexIndex)
                 {
 
@@ -135,8 +136,9 @@ public class OptionsHandler
                         OptionsHandler.this.stageInterface.setOrientation(newOrientation);
                         break;
                 }
-            }
-            break;
+                break;
+
+
             case 4://symbols menu
                 switch (hexIndex)
                 {
@@ -154,7 +156,7 @@ public class OptionsHandler
 
 
             case 6://gameMode
-            {
+
                 switch (hexIndex)
                 {
 
@@ -167,10 +169,10 @@ public class OptionsHandler
                         OptionsHandler.this.stageInterface.setGameMode(newGameMode);
                         break;
                 }
-            }
+
             break;
             case 7://noOfHexesOptionField
-            {
+
                 switch (hexIndex)
                 {
 
@@ -224,11 +226,9 @@ public class OptionsHandler
 
                         break;
                 }
-            }
-            break;
-
+                break;
             case 8://zoomMode
-            {
+
                 switch (hexIndex)
                 {
 
@@ -241,7 +241,7 @@ public class OptionsHandler
                         OptionsHandler.this.stageInterface.setZoomMode(newZoomMode);
                         break;
                 }
-            }
+
             break;
 
 

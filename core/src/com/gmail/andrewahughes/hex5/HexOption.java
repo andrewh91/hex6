@@ -32,6 +32,7 @@ public class HexOption extends Actor {
         this.centreY=centreY;
         altitudeSize = edgeSize * 0.866025403784439f;
         this.hexIndex=hexIndex;
+        this.fieldIndex=fieldIndex;
         setBounds(centreX - edgeSize, centreY - altitudeSize, edgeSize * 2,
                 altitudeSize * 2);
         this.addListener(new ClickListener() {
@@ -137,7 +138,7 @@ if(this.isVisible()) {
     }
     public void drawText (SpriteBatch sb) {
         if (this.isVisible()) {
-            font.draw(sb, "" + hexIndex + " " + text, centreX + glyphLayout.width / 2, centreY + glyphLayout.height / 2);
+            font.draw(sb, "hi f" + hexIndex + " fi " +fieldIndex+ text, centreX + glyphLayout.width / 2, centreY + glyphLayout.height / 2);
         }
 
     }

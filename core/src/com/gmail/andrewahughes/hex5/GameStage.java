@@ -119,7 +119,7 @@ Col’s  	rows	total	orientation
     //prefer not to use Boolean for the orientation, when changing the options in game we can use 0 to show no change, 1 portrait 2 landscape
     //game mode is 0 by default, this is the field mode, many hexes on screen, hexes disappear when matched, game mode 1 would be singles mode, 2 hexes on screen, symbols are replaced when matching
     int portrait1Landscape2 = 1, fieldPosX = 50, fieldPosY = 50, fieldWidth = 620, fieldHeight = 1180
-            , gameMode = 0,symbolType=1;
+            , gameMode = 2,symbolType=1;
 
 
     //haven’t properly implemented the zoom mode yet, the alternative is called quickMode – or just zoomSelectionMode false
@@ -131,7 +131,7 @@ Col’s  	rows	total	orientation
     int hexPairPosX, hexPairPosY;
     //difficulty will remove some of the symbols so there are less wrong answers, and less to look at when
     //trying to compare matches, high difficulty value will make it more easy
-    int difficulty = 5;
+    int difficulty = 0;
 
     //arrayList to store which symbols are false matches – we use this to remove symbols to make the difficulty easier
     ArrayList<Integer> nonMatchingSymbols = new ArrayList<Integer>();
@@ -464,17 +464,20 @@ Col’s  	rows	total	orientation
             // if the field game mode had less hexes than the default target score for the singles game mode
             // then this would do index out of bounds, use this if statement to prevent that,
             // might be neccessary to repeat reset selection method  after creating new database for singles mode
-            if(selectedHex!=-1&&
-                    selectedHex<hexWideField.hexWideArray.length&&
-            selectedHex2!=-1&&
-                    selectedHex2<hexWideField.hexWideArray.length)
 
-            {
+                if (hexWideField!=null&&selectedHex != -1 &&
+                        selectedHex < hexWideField.hexWideArray.length &&
+                        selectedHex2 != -1 &&
+                        selectedHex2 < hexWideField.hexWideArray.length)
 
-                hexWideField.hexWideArray[selectedHex].select(0);
-            hexWideField.hexWideArray[selectedHex2].select(0);
-            noOfSelected=2;
-            }
+                {
+
+                    hexWideField.hexWideArray[selectedHex].select(0);
+                    hexWideField.hexWideArray[selectedHex2].select(0);
+                    noOfSelected = 2;
+                }
+
+
         }
         else//game mode field
         {
@@ -796,7 +799,7 @@ Col’s  	rows	total	orientation
                 selectedHex=0;
                 selectedHex2=0;
             }
-            if(selectedHex!=-1&&
+            if(hexTallField!=null&&selectedHex!=-1&&
                     selectedHex<hexTallField.hexTallArray.length&&
                     selectedHex2!=-1&&
                     selectedHex2<hexTallField.hexTallArray.length)
@@ -1275,6 +1278,63 @@ resetSelection();
             zoomSelectionMode=true;
         }
     }
+
+
+    public boolean isNewNoOfRows(int v)
+    {
+        if(v==noOfRows)
+        {
+            return false;
+        }
+        else
+        {
+            return true;
+        }
+    }
+    public boolean isNewNoOfColumns(int v)
+    {
+        if(v==noOfColumns)
+        {
+            return false;
+        }
+        else
+        {
+            return true;
+        }
+    }
+    public boolean isNewPortrait1Landscape2(int v)
+    {
+        if(v==portrait1Landscape2 )
+        {
+            return false;
+        }
+        else
+        {
+            return true;
+        }
+    }
+    public boolean isNewGameMode(int v)
+    {
+        if(v==gameMode)
+        {
+            return false;
+        }
+        else
+        {
+            return true;
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
     //called when a match is found
     void increaseScore()
     {

@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -73,14 +74,14 @@ public class GamePauseStage extends Stage {
 SpriteBatch spriteBatch = new SpriteBatch();
     int x=0,y=0,width=720,height=1280,noOfOptions=7;
     boolean portrait =true;
-int fieldIndex=0;
+private int fieldIndex=0;
+    BitmapFont font = new BitmapFont();
+
     public GamePauseStage(Viewport viewport, Texture texture,
                           final StageInterface stageInterface) {
         super( viewport );
          optionsHandler =new OptionsHandler(stageInterface);
         createOptionsMenu();
-        //swap orientation code goes here
-
 
         difficultyOptionField = new HexOptionField( width, height,13,2,
                 optionsHandler,portrait,
@@ -90,7 +91,7 @@ int fieldIndex=0;
         symbolOptionField= new HexOptionField(width,height,4,4,
                 optionsHandler,portrait,new String[]{"Back","Numbers","Shapes","Pictures - not implemented"}
                 ,1);
-        swapOrientationOptionField = new HexOptionField( width, height,3,1,
+        swapOrientationOptionField = new HexOptionField( width, height,3,3,
                 optionsHandler,portrait,
                 new String[]{"Back", "Portrait","Landscape"}
                 ,1
@@ -111,22 +112,22 @@ int fieldIndex=0;
         );
 
 
+        addHexesToStage(difficultyOptionField);
         addHexesToStage(swapOrientationOptionField );
+        addHexesToStage(symbolOptionField);
         addHexesToStage(gameModeOptionField );
         addHexesToStage(noOfHexesOptionField);
         addHexesToStage(zoomModeOptionField );
+        addHexesToStage(hexOptionField);
 
+        difficultyOptionField.disableOptions();
         swapOrientationOptionField.disableOptions();
+        symbolOptionField.disableOptions();
         gameModeOptionField.disableOptions();
         noOfHexesOptionField.disableOptions();
         zoomModeOptionField.disableOptions();
 
 
-        addHexesToStage(hexOptionField);
-        addHexesToStage(difficultyOptionField);
-        addHexesToStage(symbolOptionField);
-        difficultyOptionField.disableOptions();
-        symbolOptionField.disableOptions();
         this.stageInterface =stageInterface;
 
         Table table = new Table();
@@ -182,13 +183,11 @@ spriteBatch.begin();
             hexOptionField.drawText(spriteBatch);
             difficultyOptionField.drawText(spriteBatch);
             symbolOptionField.drawText(spriteBatch);
-
-
             swapOrientationOptionField.drawText(spriteBatch);
             gameModeOptionField.drawText(spriteBatch);
             noOfHexesOptionField.drawText(spriteBatch);
             zoomModeOptionField.drawText(spriteBatch);
-
+font.draw(spriteBatch,fieldIndex+"",50,100);
             spriteBatch.end();
 
             super.draw();
@@ -433,7 +432,8 @@ void createOptionsMenu()
 {
     hexOptionField = new HexOptionField(width,height,9,
             0,optionsHandler,portrait,
-            new String[]{"Cancel Changes","Return to Main Menu","Change Difficulty" ,"Swap Orientation","Change Symbol Type",
+            new String[]{"Cancel Changes","Return to Main Menu","Change Difficulty" ,
+                    "Swap Orientation","Change Symbol Type",
                     "Save Changes","Change Game Mode","Change Number of Hexes","Change Zoom Mode"
             }
             ,0);

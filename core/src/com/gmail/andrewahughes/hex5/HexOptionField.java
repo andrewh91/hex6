@@ -25,7 +25,8 @@ public class HexOptionField
 int selectedIndex;
 
 
-    public HexOptionField(int width, int height,int noOfOptions,int index, OptionsHandler optionsHandler, boolean portrait,String[] optionsText,int defaultOption) {
+    public HexOptionField(int width, int height,int noOfOptions,int index, OptionsHandler optionsHandler,
+                          boolean portrait,String[] optionsText,int defaultOption) {
 selectedIndex=defaultOption;
         this.width=width;
         this.noOfOptions = optionsText.length;
@@ -50,8 +51,8 @@ selectedIndex=defaultOption;
 */
 
         optionTextArray=setupOptionsText(optionsText);
-        setupOptions(this.noOfOptions);
-        for(int i =0;i<this.noOfOptions;i++)
+        setupOptions(optionTextArray.length);
+        for(int i =0;i<optionTextArray.length;i++)
         {
         asignOptionText(i,optionTextArray[i]);
         }

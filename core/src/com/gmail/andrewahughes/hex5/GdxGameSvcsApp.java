@@ -681,10 +681,10 @@ hideAllStages();
                                            int newFieldPosY, int newFieldWidth,
                                            int newFieldHeight,int newZoom,int newDifficulty,
                                            int newGameMode, int newSymbolType) {
-       hideAllStages();
+        hideAllStages();
         gameStage.returnCameraZoom();
         gameStage.returnCameraPos();
-       gameStage.setVisible(true);
+        gameStage.setVisible(true);
 
         //these options can be changed without recalculating the field
         if(newZoom+newDifficulty+newSymbolType>0)
@@ -694,8 +694,10 @@ hideAllStages();
             if(newDifficulty!=0){gameStage.updateDifficulty(newDifficulty);}
             if(newSymbolType!=0){gameStage.updateSymbolType(newSymbolType);}
         }
+
         //certain options require the entire field to be recalculated, if any of those options are altered, recalculate new field,
-        if(  newNoOfRows+newNoOfColumns+ newPortrait1Landscape2+ newFieldPosX+ newFieldPosY+  newFieldWidth+ newFieldHeight+newGameMode>0) {
+        if(gameStage.isNewGameMode(newGameMode)||gameStage.isNewPortrait1Landscape2(newPortrait1Landscape2)||gameStage.isNewNoOfColumns(newNoOfColumns)||gameStage.isNewNoOfRows(newNoOfRows))
+        {
             if(newPortrait1Landscape2==1)
             {
                 setPortrait();
@@ -713,6 +715,11 @@ hideAllStages();
         Gdx.input.setInputProcessor(gameStage);
         Gdx.input.setCatchBackKey(true);
     }
+
+
+
+
+
     @Override
     public void goToGamePauseStage() {
        hideAllStages();
@@ -744,12 +751,45 @@ hideAllStages();
         gamePauseStage.hexOptionField.enableOptions();
         gamePauseStage.setActiveFieldIndex(0);
     }
+    @Override
+    public void goToZoomModeOption()
+    {
+        disableAllOptions();
+        gamePauseStage.zoomModeOptionField.enableOptions();
+        gamePauseStage.setActiveFieldIndex(8);
+    }
+    @Override
+    public void goToNoOfHexesOption()
+    {
+        disableAllOptions();
+        gamePauseStage.noOfHexesOptionField.enableOptions();
+        gamePauseStage.setActiveFieldIndex(7);
+    }
+    @Override
+    public void goToGameModeOption()
+    {
+        disableAllOptions();
+        gamePauseStage.gameModeOptionField.enableOptions();
+        gamePauseStage.setActiveFieldIndex(6);
+    }
+
+    @Override
+    public void goToSwapOrientationOption()
+    {
+        disableAllOptions();
+        gamePauseStage.swapOrientationOptionField.enableOptions();
+        gamePauseStage.setActiveFieldIndex(3);
+    }
 
     public void disableAllOptions()
     {
         gamePauseStage.hexOptionField.disableOptions();
        gamePauseStage.difficultyOptionField.disableOptions();
+       gamePauseStage.swapOrientationOptionField.disableOptions();
        gamePauseStage.symbolOptionField.disableOptions();
+       gamePauseStage.gameModeOptionField.disableOptions();
+       gamePauseStage.noOfHexesOptionField.disableOptions();
+       gamePauseStage.zoomModeOptionField.disableOptions();
     }
     @Override
     public  void setDifficulty(int difficulty)
@@ -790,35 +830,6 @@ hideAllStages();
         gamePauseStage.setZoomMode(zoomMode);
     }
 
-    @Override
-    public void goToZoomModeOption()
-    {
-        disableAllOptions();
-        gamePauseStage.zoomModeOptionField.enableOptions();
-        gamePauseStage.setActiveFieldIndex(8);
-    }
-    @Override
-    public void goToNoOfHexesOption()
-    {
-        disableAllOptions();
-        gamePauseStage.noOfHexesOptionField.enableOptions();
-        gamePauseStage.setActiveFieldIndex(7);
-    }
-    @Override
-    public void goToGameModeOption()
-    {
-        disableAllOptions();
-        gamePauseStage.gameModeOptionField.enableOptions();
-        gamePauseStage.setActiveFieldIndex(6);
-    }
-
-    @Override
-    public void goToSwapOrientationOption()
-    {
-        disableAllOptions();
-        gamePauseStage.swapOrientationOptionField.enableOptions();
-        gamePauseStage.setActiveFieldIndex(1);
-    }
 
 
     @Override
