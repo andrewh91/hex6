@@ -18,6 +18,20 @@ public interface StageInterface {
                                     int newFieldPosX, int newFieldPosY, int newFieldWidth,
                                     int newFieldHeight,int zoom,int difficulty, int gameMode, int symbolType);
     void goToDifficultyOption();
+    void goToSymbolOption();
     void goToMainOption();
+    void goToSwapOrientationOption();
+    void goToGameModeOption();
+    void goToNoOfHexesOption();
+    void goToZoomModeOption();
+
     void setDifficulty(int difficulty);
+    void setSymbol(int symbol);
+
+
+    void setOrientation(int orientation);
+    void setGameMode(int gameMode);
+    void setNoOfHexes(int noOfHexes);
+    void setZoomMode(int zoomMode);
+
 }

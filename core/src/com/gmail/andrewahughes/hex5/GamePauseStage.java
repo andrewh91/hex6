@@ -63,6 +63,12 @@ public class GamePauseStage extends Stage {
     OptionsHandler optionsHandler;
     HexOptionField hexOptionField;
     HexOptionField difficultyOptionField;
+    HexOptionField symbolOptionField;
+    HexOptionField swapOrientationOptionField ;
+    HexOptionField gameModeOptionField ;
+    HexOptionField noOfHexesOptionField;
+    HexOptionField zoomModeOptionField ;
+
     ShapeRenderer shapeRenderer  = new ShapeRenderer();
 SpriteBatch spriteBatch = new SpriteBatch();
     int x=0,y=0,width=720,height=1280,noOfOptions=7;
@@ -81,9 +87,46 @@ int fieldIndex=0;
                 new String[]{"Back", "0","1","2","3","4","5","6","7","8","9","10","11"}
                 ,1
         );
+        symbolOptionField= new HexOptionField(width,height,4,4,
+                optionsHandler,portrait,new String[]{"Back","Numbers","Shapes","Pictures - not implemented"}
+                ,1);
+        swapOrientationOptionField = new HexOptionField( width, height,3,1,
+                optionsHandler,portrait,
+                new String[]{"Back", "Portrait","Landscape"}
+                ,1
+        );
+
+        gameModeOptionField = new HexOptionField( width, height,3,6,
+                optionsHandler,portrait,
+                new String[]{"Back", "Singles","Field"}
+                ,1
+        );
+//this one needs to be updated on orientation change
+        createNoOfHexesOptionsField();
+
+        zoomModeOptionField = new HexOptionField( width, height,3,8,
+                optionsHandler,portrait,
+                new String[]{"Back", "Quick","Zoom"}
+                ,2
+        );
+
+
+        addHexesToStage(swapOrientationOptionField );
+        addHexesToStage(gameModeOptionField );
+        addHexesToStage(noOfHexesOptionField);
+        addHexesToStage(zoomModeOptionField );
+
+        swapOrientationOptionField.disableOptions();
+        gameModeOptionField.disableOptions();
+        noOfHexesOptionField.disableOptions();
+        zoomModeOptionField.disableOptions();
+
+
         addHexesToStage(hexOptionField);
         addHexesToStage(difficultyOptionField);
+        addHexesToStage(symbolOptionField);
         difficultyOptionField.disableOptions();
+        symbolOptionField.disableOptions();
         this.stageInterface =stageInterface;
 
         Table table = new Table();
@@ -124,13 +167,29 @@ int fieldIndex=0;
 
             hexOptionField.draw(shapeRenderer);
             difficultyOptionField.draw(shapeRenderer);
-shapeRenderer.end();
+            symbolOptionField.draw(shapeRenderer);
+            swapOrientationOptionField.draw(shapeRenderer);
+            gameModeOptionField.draw(shapeRenderer);
+            noOfHexesOptionField.draw(shapeRenderer);
+            zoomModeOptionField.draw(shapeRenderer);
+
+
+
+            shapeRenderer.end();
             spriteBatch.setProjectionMatrix(getViewport().getCamera().combined);
 
 spriteBatch.begin();
             hexOptionField.drawText(spriteBatch);
             difficultyOptionField.drawText(spriteBatch);
-spriteBatch.end();
+            symbolOptionField.drawText(spriteBatch);
+
+
+            swapOrientationOptionField.drawText(spriteBatch);
+            gameModeOptionField.drawText(spriteBatch);
+            noOfHexesOptionField.drawText(spriteBatch);
+            zoomModeOptionField.drawText(spriteBatch);
+
+            spriteBatch.end();
 
             super.draw();
         }
@@ -331,6 +390,10 @@ public void setDifficulty(int difficulty)
 {
     difficultyOptionField.setSelectedIndex(difficulty);
 }
+    public void setSymbol(int symbol)
+    {
+        symbolOptionField.setSelectedIndex(symbol);
+    }
     public void changeOrientation(boolean orientation)
     {
         portrait=orientation;
@@ -368,11 +431,49 @@ if(portrait)
 
 void createOptionsMenu()
 {
-    hexOptionField = new HexOptionField(width,height,6,
+    hexOptionField = new HexOptionField(width,height,9,
             0,optionsHandler,portrait,
-            new String[]{"Cancel Changes","Return to Main Menu","Change Difficulty" ,"Swap Orientation","Change Game Mode","Save Changes"}
-            ,7);
+            new String[]{"Cancel Changes","Return to Main Menu","Change Difficulty" ,"Swap Orientation","Change Symbol Type",
+                    "Save Changes","Change Game Mode","Change Number of Hexes","Change Zoom Mode"
+            }
+            ,0);
 }
+    void createNoOfHexesOptionsField()
+    {
+        if(portrait)
+        {
+            noOfHexesOptionField = new HexOptionField( width, height,5,7,
+                    optionsHandler,portrait,
+                    new String[]{"Back", "6","15","24","40"}
+                    ,1
+            );
+        }
+        else
+        {
+            noOfHexesOptionField = new HexOptionField( width, height,5,7,
+                    optionsHandler,portrait,
+                    new String[]{"Back", "3","10","21","36"}
+                    ,1
+            );
+        }
+    }
+
+    public void setOrientation(int o)
+    {
+        swapOrientationOptionField.setSelectedIndex(o);
+    }
+    public void setGameMode(int g)
+    {
+        gameModeOptionField.setSelectedIndex(g);
+    }
+    public void setNoOfHexes(int n)
+    {
+        noOfHexesOptionField.setSelectedIndex(n);
+    }
+    public void setZoomMode(int z)
+    {
+        zoomModeOptionField.setSelectedIndex(z);
+    }
 
     @Override
     public void dispose() {

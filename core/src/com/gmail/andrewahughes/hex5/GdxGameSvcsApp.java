@@ -729,7 +729,14 @@ hideAllStages();
         gamePauseStage.setActiveFieldIndex(2);
 
     }
+    @Override
+    public void goToSymbolOption()
+    {
+        disableAllOptions();
+        gamePauseStage.symbolOptionField.enableOptions();
+        gamePauseStage.setActiveFieldIndex(4);
 
+    }
     @Override
     public void goToMainOption()
     {
@@ -742,11 +749,18 @@ hideAllStages();
     {
         gamePauseStage.hexOptionField.disableOptions();
        gamePauseStage.difficultyOptionField.disableOptions();
+       gamePauseStage.symbolOptionField.disableOptions();
     }
     @Override
     public  void setDifficulty(int difficulty)
     {
         gamePauseStage.setDifficulty(difficulty);
+    }
+
+    @Override
+    public  void setSymbol(int symbol)
+    {
+        gamePauseStage.setSymbol(symbol);
     }
     @Override
     public void goToMainStage() {
@@ -755,6 +769,58 @@ hideAllStages();
         Gdx.input.setInputProcessor(mainStage);
         Gdx.input.setCatchBackKey(true);
     }
+    @Override
+    public  void setOrientation(int orientation)
+    {
+        gamePauseStage.setOrientation(orientation);
+    }
+    @Override
+    public  void setGameMode(int gameMode)
+    {
+        gamePauseStage.setGameMode(gameMode);
+    }
+    @Override
+    public  void setNoOfHexes(int noOfHexes)
+    {
+        gamePauseStage.setNoOfHexes(noOfHexes);
+    }
+    @Override
+    public  void setZoomMode(int zoomMode)
+    {
+        gamePauseStage.setZoomMode(zoomMode);
+    }
+
+    @Override
+    public void goToZoomModeOption()
+    {
+        disableAllOptions();
+        gamePauseStage.zoomModeOptionField.enableOptions();
+        gamePauseStage.setActiveFieldIndex(8);
+    }
+    @Override
+    public void goToNoOfHexesOption()
+    {
+        disableAllOptions();
+        gamePauseStage.noOfHexesOptionField.enableOptions();
+        gamePauseStage.setActiveFieldIndex(7);
+    }
+    @Override
+    public void goToGameModeOption()
+    {
+        disableAllOptions();
+        gamePauseStage.gameModeOptionField.enableOptions();
+        gamePauseStage.setActiveFieldIndex(6);
+    }
+
+    @Override
+    public void goToSwapOrientationOption()
+    {
+        disableAllOptions();
+        gamePauseStage.swapOrientationOptionField.enableOptions();
+        gamePauseStage.setActiveFieldIndex(1);
+    }
+
+
     @Override
     public void setScore(int timeValueArg, int difficultyValueArg,int gameModeArg)
     {
