@@ -138,7 +138,7 @@ if(this.isVisible()) {
     }
     public void drawText (SpriteBatch sb) {
         if (this.isVisible()) {
-            font.draw(sb, "hi f" + hexIndex + " fi " +fieldIndex+ text, centreX + glyphLayout.width / 2, centreY + glyphLayout.height / 2);
+            font.draw(sb, "" + hexIndex + " " + text, centreX + glyphLayout.width / 2, centreY + glyphLayout.height / 2);
         }
 
     }

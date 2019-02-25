@@ -12,7 +12,7 @@ public class OptionsHandler
      int difficulty = 1, newDifficulty = 1;
     int orientation = 1, newOrientation = 1;
     int symbol = 1, newSymbol = 1;
-    int gameMode = 1, newGameMode = 1;
+    int gameMode = 2, newGameMode = 2;
     int noOfHexes = 1, newNoOfHexes = 1;
     int noOfRows = 0, newNoOfRows = 0;
     int noOfColumns = 0, newNoOfColumns = 0;
@@ -121,9 +121,9 @@ public class OptionsHandler
                         OptionsHandler.this.stageInterface.setDifficulty(newDifficulty);
                         break;
                 }//end hex index 2 switch
-break;
-            case 3://swap orientation
 
+            case 3://swap orientation
+            {
                 switch (hexIndex)
                 {
 
@@ -136,9 +136,8 @@ break;
                         OptionsHandler.this.stageInterface.setOrientation(newOrientation);
                         break;
                 }
-                break;
-
-
+            }
+            break;
             case 4://symbols menu
                 switch (hexIndex)
                 {
@@ -156,7 +155,7 @@ break;
 
 
             case 6://gameMode
-
+            {
                 switch (hexIndex)
                 {
 
@@ -169,10 +168,10 @@ break;
                         OptionsHandler.this.stageInterface.setGameMode(newGameMode);
                         break;
                 }
-
+            }
             break;
             case 7://noOfHexesOptionField
-
+            {
                 switch (hexIndex)
                 {
 
@@ -226,9 +225,11 @@ break;
 
                         break;
                 }
-                break;
-            case 8://zoomMode
+            }
+            break;
 
+            case 8://zoomMode
+            {
                 switch (hexIndex)
                 {
 
@@ -241,7 +242,7 @@ break;
                         OptionsHandler.this.stageInterface.setZoomMode(newZoomMode);
                         break;
                 }
-
+            }
             break;
 
 

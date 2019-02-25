@@ -347,7 +347,7 @@ public void disableOptions()
 {
     for(int j = 0;j<hexBackgroundArray.length;j++)
     {
-        hexBackgroundArray[j].disable();
+        hexBackgroundArray[j].setVisible(false);
     }
     for (int i = 0;i<noOfOptions;i++)
     {
@@ -358,7 +358,7 @@ public void disableOptions()
     {
         for(int j = 0;j<hexBackgroundArray.length;j++)
     {
-        hexBackgroundArray[j].enable();
+        hexBackgroundArray[j].setVisible(true);
     }
         for (int i = 0;i<noOfOptions;i++)
         {

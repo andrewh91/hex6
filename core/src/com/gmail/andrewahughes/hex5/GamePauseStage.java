@@ -74,7 +74,7 @@ public class GamePauseStage extends Stage {
 SpriteBatch spriteBatch = new SpriteBatch();
     int x=0,y=0,width=720,height=1280,noOfOptions=7;
     boolean portrait =true;
-private int fieldIndex=0;
+ int fieldIndex=0;
     BitmapFont font = new BitmapFont();
 
     public GamePauseStage(Viewport viewport, Texture texture,
@@ -100,8 +100,9 @@ private int fieldIndex=0;
         gameModeOptionField = new HexOptionField( width, height,3,6,
                 optionsHandler,portrait,
                 new String[]{"Back", "Singles","Field"}
-                ,1
+                ,2
         );
+
 //this one needs to be updated on orientation change
         createNoOfHexesOptionsField();
 
@@ -187,7 +188,7 @@ spriteBatch.begin();
             gameModeOptionField.drawText(spriteBatch);
             noOfHexesOptionField.drawText(spriteBatch);
             zoomModeOptionField.drawText(spriteBatch);
-font.draw(spriteBatch,fieldIndex+"",50,100);
+font.draw(spriteBatch,fieldIndex+""+hexOptionField.hexOptionArray[0].isTouchable(),50,100);
             spriteBatch.end();
 
             super.draw();
@@ -417,7 +418,15 @@ if(portrait)
         }
         //toggle bool for orientation
         //removeAllActors();
-      createOptionsMenu();
+        removeOptionFieldActors(hexOptionField );
+        createOptionsMenu();
+        addHexesToStage(hexOptionField);
+
+
+        removeOptionFieldActors(noOfHexesOptionField );
+        createNoOfHexesOptionsField();
+        addHexesToStage(noOfHexesOptionField);
+        noOfHexesOptionField.disableOptions();
         //addHexesToStage(hexOptionField);
     }
     public void removeAllActors()
@@ -425,6 +434,13 @@ if(portrait)
         for(Actor actor : getActors()) {
             //actor.remove();
             actor.addAction(Actions.removeActor());
+        }
+    }
+    public void removeOptionFieldActors( HexOptionField hof)
+    {
+        for(int i=0;i<hof.noOfHexes;i++)
+        {
+            hof.hexOptionArray[i].addAction(Actions.removeActor());
         }
     }
 
@@ -490,9 +506,9 @@ void createOptionsMenu()
     public boolean keyDown(int keycode) {
         if(keycode == Input.Keys.BACK){
 
-            setPause(false);
+           // setPause(false);
             //pauseImg1.setVisible(false);
-            setVisible(false);
+           // setVisible(false);
             //black = 1.f;
             //GamePauseStage.this.stageInterface.goToGameStage();
 optionsHandler.click(0,fieldIndex);
