@@ -35,24 +35,7 @@ public class OptionsHandler
 
 //reset the default selected options for next time we see this menu 
 
-                        newDifficulty = difficulty;
-                        newOrientation = orientation;
-                        newSymbol=symbol;
-                        newGameMode = gameMode;
-                        newNoOfHexes = noOfHexes;
-                        newNoOfRows = noOfRows;
-                        newNoOfColumns = noOfColumns;
-                        newZoomMode = zoomMode;
 
-                        OptionsHandler.this.stageInterface.setDifficulty(difficulty);
-                        OptionsHandler.this.stageInterface.setOrientation(orientation);
-                        OptionsHandler.this.stageInterface.setSymbol(symbol);
-                        OptionsHandler.this.stageInterface.setGameMode(gameMode);
-                        OptionsHandler.this.stageInterface.setNoOfHexes(noOfHexes);
-                        OptionsHandler.this.stageInterface.setZoomMode(zoomMode);
-                        OptionsHandler.this.stageInterface.updateOptionsGoToGameStage(0, 0,
-                                0, 0, 0, 0, 0, 0,
-                                0, 0, 0);
                         break;
                     case 1://return to main menu
                         OptionsHandler.this.stageInterface.goToMainStage();

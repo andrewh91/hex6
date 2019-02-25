@@ -36,7 +36,16 @@ public class GamePauseStage extends Stage {
     Skin skin;
     private TextureAtlas atlas;
 
+    int difficulty = 1, newDifficulty = 1;
+    int orientation = 1, newOrientation = 1;
+    int symbol = 1, newSymbol = 1;
+    int gameMode = 2, newGameMode = 2;
+    int noOfHexes = 1, newNoOfHexes = 1;
+    int noOfRows = 0, newNoOfRows = 0;
+    int noOfColumns = 0, newNoOfColumns = 0;
+    int zoomMode = 2, newZoomMode = 2;
 
+    /*
     private TextField zoomModeValue;
     private Label zoomMode;
     private TextField posXValue;
@@ -60,6 +69,7 @@ public class GamePauseStage extends Stage {
 
     private TextField symbolTypeValue;
     private Label symbolType;
+    */
 
     OptionsHandler optionsHandler;
     HexOptionField hexOptionField;
@@ -69,6 +79,9 @@ public class GamePauseStage extends Stage {
     HexOptionField gameModeOptionField ;
     HexOptionField noOfHexesOptionField;
     HexOptionField zoomModeOptionField ;
+    HexOptionField[] hexOptionFieldArray;
+
+    HexOption tempHexOption;
 
     ShapeRenderer shapeRenderer  = new ShapeRenderer();
 SpriteBatch spriteBatch = new SpriteBatch();
@@ -81,6 +94,12 @@ SpriteBatch spriteBatch = new SpriteBatch();
                           final StageInterface stageInterface) {
         super( viewport );
          optionsHandler =new OptionsHandler(stageInterface);
+         //construct this so it can  be added to the array
+        hexOptionField = new HexOptionField( width, height,9,0,
+                optionsHandler,portrait,
+                new String[]{""}
+                ,0
+        );
         createOptionsMenu();
 
         difficultyOptionField = new HexOptionField( width, height,13,2,
@@ -104,6 +123,12 @@ SpriteBatch spriteBatch = new SpriteBatch();
         );
 
 //this one needs to be updated on orientation change
+        //construct this so it can  be added to the array
+        noOfHexesOptionField = new HexOptionField( width, height,5,7,
+                optionsHandler,portrait,
+                new String[]{""}
+                ,0
+        );
         createNoOfHexesOptionsField();
 
         zoomModeOptionField = new HexOptionField( width, height,3,8,
@@ -111,8 +136,24 @@ SpriteBatch spriteBatch = new SpriteBatch();
                 new String[]{"Back", "Quick","Zoom"}
                 ,2
         );
+        hexOptionFieldArray = new HexOptionField[]{
+                hexOptionField,
+                difficultyOptionField,
+                swapOrientationOptionField,
+                symbolOptionField,
+                gameModeOptionField,
+                noOfHexesOptionField,
+                zoomModeOptionField
+        };
 
+for(int i =0;i<hexOptionFieldArray.length;i++)
+{
+    addHexesToStage(hexOptionFieldArray[i]);
+}
+hexOptionField.enableOptions();
 
+updateUI();
+/*
         addHexesToStage(difficultyOptionField);
         addHexesToStage(swapOrientationOptionField );
         addHexesToStage(symbolOptionField);
@@ -127,7 +168,7 @@ SpriteBatch spriteBatch = new SpriteBatch();
         gameModeOptionField.disableOptions();
         noOfHexesOptionField.disableOptions();
         zoomModeOptionField.disableOptions();
-
+*/
 
         this.stageInterface =stageInterface;
 
@@ -144,6 +185,7 @@ SpriteBatch spriteBatch = new SpriteBatch();
         final Image pauseImg = new Image(texture);
         this.pauseImg1 =pauseImg;
         this.pauseImg1.setVisible(false);//start off invisible
+
 
 
 /*
@@ -166,7 +208,11 @@ SpriteBatch spriteBatch = new SpriteBatch();
             Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
             shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
             shapeRenderer.setProjectionMatrix(getViewport().getCamera().combined);
-
+for(int i =0;i<hexOptionFieldArray.length;i++)
+{
+    hexOptionFieldArray[i].draw(shapeRenderer);
+}
+/*
             hexOptionField.draw(shapeRenderer);
             difficultyOptionField.draw(shapeRenderer);
             symbolOptionField.draw(shapeRenderer);
@@ -174,13 +220,19 @@ SpriteBatch spriteBatch = new SpriteBatch();
             gameModeOptionField.draw(shapeRenderer);
             noOfHexesOptionField.draw(shapeRenderer);
             zoomModeOptionField.draw(shapeRenderer);
-
+*/
 
 
             shapeRenderer.end();
             spriteBatch.setProjectionMatrix(getViewport().getCamera().combined);
 
 spriteBatch.begin();
+            for(int i =0;i<hexOptionFieldArray.length;i++)
+            {
+                hexOptionFieldArray[i].drawText(spriteBatch);
+
+            }
+            /*
             hexOptionField.drawText(spriteBatch);
             difficultyOptionField.drawText(spriteBatch);
             symbolOptionField.drawText(spriteBatch);
@@ -188,7 +240,9 @@ spriteBatch.begin();
             gameModeOptionField.drawText(spriteBatch);
             noOfHexesOptionField.drawText(spriteBatch);
             zoomModeOptionField.drawText(spriteBatch);
-font.draw(spriteBatch,fieldIndex+""+hexOptionField.hexOptionArray[0].isTouchable(),50,100);
+            */
+//font.draw(spriteBatch,""+hexOptionField.hexOptionArray[0].centreX+
+ //       hexOptionField.hexOptionArray[0].centreY ,50,100);
             spriteBatch.end();
 
             super.draw();
@@ -208,8 +262,306 @@ font.draw(spriteBatch,fieldIndex+""+hexOptionField.hexOptionArray[0].isTouchable
         this.pause = pause;
     }
 
+    //gamePauseStage
+    public void updateUI()
+    {
+//main menu
+//cancel changes
+        hexOptionField.hexOptionArray[0].addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                newDifficulty = difficulty;
+                newOrientation = orientation;
+                newSymbol=symbol;
+                newGameMode = gameMode;
+                newNoOfHexes = noOfHexes;
+                newNoOfRows = noOfRows;
+                newNoOfColumns = noOfColumns;
+                newZoomMode = zoomMode;
 
-    public void prepareUI()
+                stageInterface.setDifficulty(difficulty);
+                stageInterface.setOrientation(orientation);
+                stageInterface.setSymbol(symbol);
+                stageInterface.setGameMode(gameMode);
+                stageInterface.setNoOfHexes(noOfHexes);
+                stageInterface.setZoomMode(zoomMode);
+                stageInterface.updateOptionsGoToGameStage(0, 0,
+                        0, 0, 0, 0, 0, 0,
+                        0, 0, 0);
+            }});//end cancel changes
+
+//return to main menu
+        hexOptionField.hexOptionArray[1].addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                stageInterface.goToMainStage();
+
+            }});//end return to main menu
+
+//go to difficulty menu
+        hexOptionField.hexOptionArray[2].addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                stageInterface.goToDifficultyOption();
+
+            }});//end go to difficulty menu
+
+//go to swap orientation
+        hexOptionField.hexOptionArray[3].addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                stageInterface.goToSwapOrientationOption();
+
+            }});//end go to swap orientation
+
+//go to symbol
+        hexOptionField.hexOptionArray[4].addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                stageInterface.goToSymbolOption();
+
+            }});//end go to symbol
+
+//save changes
+        hexOptionField.hexOptionArray[5].addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                difficulty = newDifficulty;
+                orientation = newOrientation;
+                symbol=newSymbol;
+                gameMode = newGameMode;
+                noOfHexes = newNoOfHexes;
+                noOfRows = newNoOfRows;
+                noOfColumns = newNoOfColumns;
+                zoomMode = newZoomMode;
+
+
+                stageInterface.updateOptionsGoToGameStage(
+                        noOfRows, noOfColumns,
+                        orientation, 0, 0, 0, 0, zoomMode,
+                        difficulty, gameMode, symbol);
+
+            }});//end save changes
+
+//go to game mode
+        hexOptionField.hexOptionArray[6].addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                stageInterface.goToGameModeOption();
+
+            }});//end go to game mode
+
+//go to no of hexes
+        hexOptionField.hexOptionArray[7].addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                stageInterface.goToNoOfHexesOption();
+
+            }});//end go to no of hexes
+
+//go to zoom mode
+        hexOptionField.hexOptionArray[8].addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                stageInterface.goToZoomModeOption();
+
+            }});//end go to zoom mode
+//end main menu
+
+//difficulty menu
+//go back
+        difficultyOptionField.hexOptionArray[0].addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                stageInterface.goToMainOption();
+            }});//end go back
+//select difficulty
+        for( int i = 1;i<13;i++)
+        {
+            difficultyOptionField.hexOptionArray[i].addListener(new ClickListener()
+            {
+
+                @Override
+                public void clicked(InputEvent event, float x, float y)
+                {
+                    //get the touched hexoption
+                    tempHexOption=(HexOption)event.getTarget();
+newDifficulty=tempHexOption.hexIndex;
+                    stageInterface.setDifficulty(newDifficulty);
+                }
+            });
+        }
+    //end select difficulty
+
+//end difficulty menu
+
+//swap orientation
+//go back
+    swapOrientationOptionField.hexOptionArray[0].addListener(new ClickListener() {
+        @Override
+        public void clicked(InputEvent event, float x, float y) {
+            stageInterface.goToMainOption();
+
+        }});//end go back
+
+//select orientation
+
+for(int i = 1;i<3;i++)
+    {
+        swapOrientationOptionField.hexOptionArray[i].addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                tempHexOption=(HexOption)event.getTarget();
+                newOrientation=tempHexOption.hexIndex;
+                stageInterface.setOrientation(newOrientation);
+            }
+        });
+    }//end select orientation
+
+//end swap orientation
+
+// symbols menu
+//go back
+    symbolOptionField.hexOptionArray[0].addListener(new ClickListener() {
+        @Override
+        public void clicked(InputEvent event, float x, float y) {
+            stageInterface.goToMainOption();
+
+        }});//end go back
+
+//select symbol
+
+for(int i = 1;i<3;i++)
+    {
+        symbolOptionField.hexOptionArray[i].addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                tempHexOption=(HexOption)event.getTarget();
+                newSymbol=tempHexOption.hexIndex;
+                stageInterface.setSymbol(newSymbol);
+            }
+        });
+    }//end select symbol
+
+//end symbols menu
+
+// gamemenu
+//go back
+    gameModeOptionField.hexOptionArray[0].addListener(new ClickListener() {
+        @Override
+        public void clicked(InputEvent event, float x, float y) {
+            stageInterface.goToMainOption();
+
+        }});//end go back
+
+//select game mode
+
+for(int i = 1;i<3;i++)
+    {
+        gameModeOptionField.hexOptionArray[i].addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                tempHexOption=(HexOption)event.getTarget();
+                newGameMode=tempHexOption.hexIndex;
+                stageInterface.setGameMode(newGameMode);
+            }
+        });
+    }//end select game mode
+
+//end game modemenu
+
+// noofhexes menu
+//go back
+    noOfHexesOptionField.hexOptionArray[0].addListener(new ClickListener() {
+        @Override
+        public void clicked(InputEvent event, float x, float y) {
+            stageInterface.goToMainOption();
+
+        }});//end go back
+//select no of hexes
+
+for(int i = 1;i<5;i++)
+    {
+        noOfHexesOptionField.hexOptionArray[i].addListener(new ClickListener() {
+            @Override
+        public void clicked(InputEvent event, float x, float y) {
+                tempHexOption=(HexOption)event.getTarget();
+                newNoOfHexes=tempHexOption.hexIndex;
+                stageInterface.setNoOfHexes(newNoOfHexes);
+//need to derive noOfRows and columns from noOfHexes
+        switch (newNoOfHexes)
+        {
+
+            case 3:
+                newNoOfRows = 1;
+                newNoOfColumns = 3;
+                break;
+            case 6:
+                newNoOfRows = 3;
+                newNoOfColumns = 2;
+                break;
+            case 10:
+                newNoOfRows = 2;
+                newNoOfColumns = 5;
+                break;
+            case 15:
+                newNoOfRows = 5;
+                newNoOfColumns = 3;
+                break;
+            case 21:
+                newNoOfRows = 3;
+                newNoOfColumns = 7;
+                break;
+            case 24:
+                newNoOfRows = 6;
+                newNoOfColumns = 4;
+                break;
+            case 36:
+                newNoOfRows = 4;
+                newNoOfColumns = 9;
+                break;
+            case 40:
+                newNoOfRows = 8;
+                newNoOfColumns = 5;
+                break;
+
+        }//end of noofhexes switch statement
+    }
+    });//end select no of hexes
+}//end for
+
+//end noofhexes menu
+
+// zoom menu
+//go back
+zoomModeOptionField.hexOptionArray[0].addListener(new ClickListener() {
+@Override
+public void clicked(InputEvent event, float x, float y) {
+        stageInterface.goToMainOption();
+
+        }});//end go back
+//select zoom
+
+        for(int i = 1;i<3;i++)
+        {
+        zoomModeOptionField.hexOptionArray[i].addListener(new ClickListener() {
+@Override
+public void clicked(InputEvent event, float x, float y) {
+    tempHexOption=(HexOption)event.getTarget();
+    newZoomMode=tempHexOption.hexIndex;
+    stageInterface.setZoomMode(newZoomMode);
+        }
+        });
+        }//end select zoom mode
+//end zoom menu
+
+
+        }//end updateUI
+
+
+
+/*
+public void prepareUI()
     {
 
         zoomModeValue= new TextField("", skin);
@@ -336,7 +688,7 @@ font.draw(spriteBatch,fieldIndex+""+hexOptionField.hexOptionArray[0].isTouchable
 
             }
         });
-
+*/
 /*
         Table table = new Table();
         table.setFillParent(true);
@@ -384,8 +736,9 @@ font.draw(spriteBatch,fieldIndex+""+hexOptionField.hexOptionArray[0].isTouchable
         addActor(table);
         */
 
-
-    }
+/*
+    }// end prepareui
+    */
 public void setDifficulty(int difficulty)
 {
     difficultyOptionField.setSelectedIndex(difficulty);
@@ -394,9 +747,9 @@ public void setDifficulty(int difficulty)
     {
         symbolOptionField.setSelectedIndex(symbol);
     }
-    public void changeOrientation(boolean orientation)
+    public void changeOrientation(boolean orient)
     {
-        portrait=orientation;
+        portrait=orient;
 int longside,shortside;
 
 if(width<height) {
@@ -418,15 +771,18 @@ if(portrait)
         }
         //toggle bool for orientation
         //removeAllActors();
+
         removeOptionFieldActors(hexOptionField );
         createOptionsMenu();
         addHexesToStage(hexOptionField);
+        hexOptionField.enableOptions();
 
 
         removeOptionFieldActors(noOfHexesOptionField );
         createNoOfHexesOptionsField();
         addHexesToStage(noOfHexesOptionField);
         noOfHexesOptionField.disableOptions();
+       updateUI();
         //addHexesToStage(hexOptionField);
     }
     public void removeAllActors()
@@ -438,7 +794,7 @@ if(portrait)
     }
     public void removeOptionFieldActors( HexOptionField hof)
     {
-        for(int i=0;i<hof.noOfHexes;i++)
+        for(int i=0;i<hof.hexOptionArray.length;i++)
         {
             hof.hexOptionArray[i].addAction(Actions.removeActor());
         }

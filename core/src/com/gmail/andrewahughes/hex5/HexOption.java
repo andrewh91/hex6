@@ -16,7 +16,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 public class HexOption extends Actor {
     float width, height, centreX, centreY,edgeSize,altitudeSize,clickTimer=1f ;
-    int  hexIndex, fieldIndex;
+    public int  hexIndex, fieldIndex;
     BitmapFont font = new BitmapFont();
     GlyphLayout glyphLayout = new GlyphLayout();
     String text = new String();
@@ -35,7 +35,9 @@ public class HexOption extends Actor {
         this.fieldIndex=fieldIndex;
         setBounds(centreX - edgeSize, centreY - altitudeSize, edgeSize * 2,
                 altitudeSize * 2);
-        this.addListener(new ClickListener() {
+        disable();
+
+        /*this.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 //if(pointInCircle(edgeSize, altitudeSize, altitudeSize, x, y))
@@ -45,6 +47,7 @@ public class HexOption extends Actor {
                 }
             }
         });
+        */
 
     }
     public boolean pointInCircle(float circleOriginX, float circleOriginY,
