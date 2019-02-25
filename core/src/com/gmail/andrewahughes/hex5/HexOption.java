@@ -22,10 +22,8 @@ public class HexOption extends Actor {
     String text = new String();
      float edgeSizeStatic;
 
-    OptionsHandler optionsHandler;
     public HexOption(final float edgeSize, final float centreX, final float centreY,
-                     final int hexIndex, final int fieldIndex, final OptionsHandler optionsHandler) {
-      this.optionsHandler=optionsHandler;
+                     final int hexIndex, final int fieldIndex ) {
         this.edgeSize=edgeSize;
         edgeSizeStatic=edgeSize;
         this.centreX=centreX;

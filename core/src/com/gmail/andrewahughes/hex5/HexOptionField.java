@@ -17,7 +17,6 @@ public class HexOptionField
     HexOption hexBackgroundArray[];
     String[] optionTextArray;
     int[] ignore=new int[]{};
-    OptionsHandler optionsHandler;
     int fieldIndex;
     boolean portrait;
     float fieldWidth,fieldHeight,fieldOffsetX,fieldOffsetY;
@@ -25,7 +24,7 @@ public class HexOptionField
 int selectedIndex;
 
 
-    public HexOptionField(int width, int height,int noOfOptions,int index, OptionsHandler optionsHandler,
+    public HexOptionField(int width, int height,int noOfOptions,int index,
                           boolean portrait,String[] optionsText,int defaultOption) {
 selectedIndex=defaultOption;
         this.width=width;
@@ -34,7 +33,6 @@ selectedIndex=defaultOption;
         //this must be called after we derive the noOfRows and Columns
         //this.edgeSize = deriveEdgeSize(width, height, noOfRows, noOfColumns);
         fieldIndex=index;
-        this.optionsHandler=optionsHandler;
         this.portrait=portrait;
         /*
         for(int i=0;i<noOfColumns;i++)
@@ -197,7 +195,7 @@ public void setupOptions(int noOfOptions )
                     hexOptionArray[noOfHexes] = new HexOption(edgeSize,
                             fieldOffsetX + hexSpacingX * j,
                             fieldOffsetY + hexSpacingY * i + hexOffsetY * (j % 2), noOfHexes, fieldIndex
-                            , optionsHandler);
+                            );
                     noOfHexes++;
                 }
                 hexIndex++;
@@ -216,7 +214,7 @@ public void setupOptions(int noOfOptions )
                 hexBackgroundArray[noOfBackgroundHexes] = new HexOption(edgeSize,
                         +hexSpacingX * j,
                         -2*hexSpacingY+hexSpacingY * i + hexOffsetY * (j % 2)+backgroundOffsetY, noOfHexes, fieldIndex
-                        , optionsHandler);
+                        );
                 noOfBackgroundHexes++;
             }
 

@@ -22,6 +22,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
+import java.util.ArrayList;
+
 /**
  * Created by Andrew Hughes on 24/09/2018.
  */
@@ -71,7 +73,6 @@ public class GamePauseStage extends Stage {
     private Label symbolType;
     */
 
-    OptionsHandler optionsHandler;
     HexOptionField hexOptionField;
     HexOptionField difficultyOptionField;
     HexOptionField symbolOptionField;
@@ -79,7 +80,7 @@ public class GamePauseStage extends Stage {
     HexOptionField gameModeOptionField ;
     HexOptionField noOfHexesOptionField;
     HexOptionField zoomModeOptionField ;
-    HexOptionField[] hexOptionFieldArray;
+    ArrayList<HexOptionField> hexOptionFieldArray = new ArrayList<HexOptionField>();
 
     HexOption tempHexOption;
 
@@ -93,31 +94,29 @@ SpriteBatch spriteBatch = new SpriteBatch();
     public GamePauseStage(Viewport viewport, Texture texture,
                           final StageInterface stageInterface) {
         super( viewport );
-         optionsHandler =new OptionsHandler(stageInterface);
          //construct this so it can  be added to the array
-        hexOptionField = new HexOptionField( width, height,9,0,
-                optionsHandler,portrait,
+        hexOptionField = new HexOptionField( width, height,9,0,portrait,
                 new String[]{""}
                 ,0
         );
         createOptionsMenu();
 
         difficultyOptionField = new HexOptionField( width, height,13,2,
-                optionsHandler,portrait,
+                portrait,
                 new String[]{"Back", "0","1","2","3","4","5","6","7","8","9","10","11"}
                 ,1
         );
         symbolOptionField= new HexOptionField(width,height,4,4,
-                optionsHandler,portrait,new String[]{"Back","Numbers","Shapes","Pictures - not implemented"}
+                portrait,new String[]{"Back","Numbers","Shapes","Pictures - not implemented"}
                 ,1);
         swapOrientationOptionField = new HexOptionField( width, height,3,3,
-                optionsHandler,portrait,
+                portrait,
                 new String[]{"Back", "Portrait","Landscape"}
                 ,1
         );
 
         gameModeOptionField = new HexOptionField( width, height,3,6,
-                optionsHandler,portrait,
+                portrait,
                 new String[]{"Back", "Singles","Field"}
                 ,2
         );
@@ -125,30 +124,29 @@ SpriteBatch spriteBatch = new SpriteBatch();
 //this one needs to be updated on orientation change
         //construct this so it can  be added to the array
         noOfHexesOptionField = new HexOptionField( width, height,5,7,
-                optionsHandler,portrait,
+                portrait,
                 new String[]{""}
                 ,0
         );
         createNoOfHexesOptionsField();
 
         zoomModeOptionField = new HexOptionField( width, height,3,8,
-                optionsHandler,portrait,
+                portrait,
                 new String[]{"Back", "Quick","Zoom"}
                 ,2
         );
-        hexOptionFieldArray = new HexOptionField[]{
-                hexOptionField,
-                difficultyOptionField,
-                swapOrientationOptionField,
-                symbolOptionField,
-                gameModeOptionField,
-                noOfHexesOptionField,
-                zoomModeOptionField
-        };
+        hexOptionFieldArray.add(hexOptionField);
+                hexOptionFieldArray.add(difficultyOptionField);
+                hexOptionFieldArray.add(swapOrientationOptionField);
+                hexOptionFieldArray.add(symbolOptionField);
+                hexOptionFieldArray.add(gameModeOptionField);
+                hexOptionFieldArray.add(noOfHexesOptionField);
+                hexOptionFieldArray.add(zoomModeOptionField);
 
-for(int i =0;i<hexOptionFieldArray.length;i++)
+
+for(int i =0;i<hexOptionFieldArray.size();i++)
 {
-    addHexesToStage(hexOptionFieldArray[i]);
+    addHexesToStage(hexOptionFieldArray.get(i));
 }
 hexOptionField.enableOptions();
 
@@ -208,9 +206,9 @@ updateUI();
             Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
             shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
             shapeRenderer.setProjectionMatrix(getViewport().getCamera().combined);
-for(int i =0;i<hexOptionFieldArray.length;i++)
+for(int i =0;i<hexOptionFieldArray.size();i++)
 {
-    hexOptionFieldArray[i].draw(shapeRenderer);
+    hexOptionFieldArray.get(i).draw(shapeRenderer);
 }
 /*
             hexOptionField.draw(shapeRenderer);
@@ -227,9 +225,9 @@ for(int i =0;i<hexOptionFieldArray.length;i++)
             spriteBatch.setProjectionMatrix(getViewport().getCamera().combined);
 
 spriteBatch.begin();
-            for(int i =0;i<hexOptionFieldArray.length;i++)
+            for(int i =0;i<hexOptionFieldArray.size();i++)
             {
-                hexOptionFieldArray[i].drawText(spriteBatch);
+                hexOptionFieldArray.get(i).drawText(spriteBatch);
 
             }
             /*
@@ -489,43 +487,62 @@ for(int i = 1;i<5;i++)
                 newNoOfHexes=tempHexOption.hexIndex;
                 stageInterface.setNoOfHexes(newNoOfHexes);
 //need to derive noOfRows and columns from noOfHexes
-        switch (newNoOfHexes)
-        {
+                if(portrait)
+                {
+                    switch (newNoOfHexes)
+                    {
 
-            case 3:
-                newNoOfRows = 1;
-                newNoOfColumns = 3;
-                break;
-            case 6:
-                newNoOfRows = 3;
-                newNoOfColumns = 2;
-                break;
-            case 10:
-                newNoOfRows = 2;
-                newNoOfColumns = 5;
-                break;
-            case 15:
-                newNoOfRows = 5;
-                newNoOfColumns = 3;
-                break;
-            case 21:
-                newNoOfRows = 3;
-                newNoOfColumns = 7;
-                break;
-            case 24:
-                newNoOfRows = 6;
-                newNoOfColumns = 4;
-                break;
-            case 36:
-                newNoOfRows = 4;
-                newNoOfColumns = 9;
-                break;
-            case 40:
-                newNoOfRows = 8;
-                newNoOfColumns = 5;
-                break;
 
-        }//end of noofhexes switch statement
+                        case 1:
+                            newNoOfRows = 3;
+                            newNoOfColumns = 2;
+                            break;
+
+                        case 2:
+                            newNoOfRows = 5;
+                            newNoOfColumns = 3;
+                            break;
+
+                        case 3:
+                            newNoOfRows = 6;
+                            newNoOfColumns = 4;
+                            break;
+
+                        case 4:
+                            newNoOfRows = 8;
+                            newNoOfColumns = 5;
+                            break;
+                    }
+                }
+        else
+                    {
+                        switch (newNoOfHexes)
+                        {
+
+                            case 1:
+                                newNoOfRows = 1;
+                                newNoOfColumns = 3;
+                                break;
+
+                            case 2:
+                                newNoOfRows = 2;
+                                newNoOfColumns = 5;
+                                break;
+
+                            case 3:
+                                newNoOfRows = 3;
+                                newNoOfColumns = 7;
+                                break;
+
+                            case 4:
+                                newNoOfRows = 4;
+                                newNoOfColumns = 9;
+                                break;
+
+                        }
+                    }
+                    stageInterface.setNoOfHexes(newNoOfHexes);
+        //end of noofhexes switch statement
     }
     });//end select no of hexes
 }//end for
@@ -558,7 +575,27 @@ public void clicked(InputEvent event, float x, float y) {
 
         }//end updateUI
 
+public void cancelOptions()
+{
+    newDifficulty = difficulty;
+    newOrientation = orientation;
+    newSymbol=symbol;
+    newGameMode = gameMode;
+    newNoOfHexes = noOfHexes;
+    newNoOfRows = noOfRows;
+    newNoOfColumns = noOfColumns;
+    newZoomMode = zoomMode;
 
+    stageInterface.setDifficulty(difficulty);
+    stageInterface.setOrientation(orientation);
+    stageInterface.setSymbol(symbol);
+    stageInterface.setGameMode(gameMode);
+    stageInterface.setNoOfHexes(noOfHexes);
+    stageInterface.setZoomMode(zoomMode);
+    stageInterface.updateOptionsGoToGameStage(0, 0,
+            0, 0, 0, 0, 0, 0,
+            0, 0, 0);
+}
 
 /*
 public void prepareUI()
@@ -771,15 +808,20 @@ if(portrait)
         }
         //toggle bool for orientation
         //removeAllActors();
-
         removeOptionFieldActors(hexOptionField );
+hexOptionFieldArray.remove(hexOptionField);
+
         createOptionsMenu();
+        hexOptionFieldArray.add(hexOptionField);
         addHexesToStage(hexOptionField);
         hexOptionField.enableOptions();
 
 
         removeOptionFieldActors(noOfHexesOptionField );
+        hexOptionFieldArray.remove(noOfHexesOptionField);
+
         createNoOfHexesOptionsField();
+        hexOptionFieldArray.add(noOfHexesOptionField);
         addHexesToStage(noOfHexesOptionField);
         noOfHexesOptionField.disableOptions();
        updateUI();
@@ -803,7 +845,7 @@ if(portrait)
 void createOptionsMenu()
 {
     hexOptionField = new HexOptionField(width,height,9,
-            0,optionsHandler,portrait,
+            0,portrait,
             new String[]{"Cancel Changes","Return to Main Menu","Change Difficulty" ,
                     "Swap Orientation","Change Symbol Type",
                     "Save Changes","Change Game Mode","Change Number of Hexes","Change Zoom Mode"
@@ -815,7 +857,7 @@ void createOptionsMenu()
         if(portrait)
         {
             noOfHexesOptionField = new HexOptionField( width, height,5,7,
-                    optionsHandler,portrait,
+                    portrait,
                     new String[]{"Back", "6","15","24","40"}
                     ,1
             );
@@ -823,7 +865,7 @@ void createOptionsMenu()
         else
         {
             noOfHexesOptionField = new HexOptionField( width, height,5,7,
-                    optionsHandler,portrait,
+                    portrait,
                     new String[]{"Back", "3","10","21","36"}
                     ,1
             );
@@ -867,10 +909,16 @@ void createOptionsMenu()
            // setVisible(false);
             //black = 1.f;
             //GamePauseStage.this.stageInterface.goToGameStage();
-optionsHandler.click(0,fieldIndex);
+   //optionsHandler.click(0,fieldIndex);
 
 
-
+if(fieldIndex==0)
+{
+cancelOptions();}
+else
+{
+    stageInterface.goToMainOption();
+}
         }
         return false;
     }
