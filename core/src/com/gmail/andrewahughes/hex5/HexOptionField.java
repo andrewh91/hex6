@@ -14,7 +14,7 @@ public class HexOptionField
     public int noOfColumns,noOfRows ,noOfHexes,
             edgeSize,width, height,noOfOptions;
     HexOption hexOptionArray[];
-    HexOption hexBackgroundArray[];
+    HexOptionBKGD hexBackgroundArray[];
     String[] optionTextArray;
     int[] ignore=new int[]{};
     int fieldIndex;
@@ -203,7 +203,7 @@ public void setupOptions(int noOfOptions )
         }
 
 
-        hexBackgroundArray=new HexOption[(noOfBackgroundColumns+2)*(noOfBackgroundRows+3)];
+        hexBackgroundArray=new HexOptionBKGD[(noOfBackgroundColumns+2)*(noOfBackgroundRows+3)];
 
 
         int noOfBackgroundHexes=0;
@@ -211,10 +211,9 @@ public void setupOptions(int noOfOptions )
         {
             for(int j=0;j<noOfBackgroundColumns+2;j++)
             {
-                hexBackgroundArray[noOfBackgroundHexes] = new HexOption(edgeSize,
+                hexBackgroundArray[noOfBackgroundHexes] = new HexOptionBKGD(edgeSize,
                         +hexSpacingX * j,
-                        -2*hexSpacingY+hexSpacingY * i + hexOffsetY * (j % 2)+backgroundOffsetY, noOfHexes, fieldIndex
-                        );
+                        -2*hexSpacingY+hexSpacingY * i + hexOffsetY * (j % 2)+backgroundOffsetY);
                 noOfBackgroundHexes++;
             }
 
@@ -345,7 +344,7 @@ public void disableOptions()
 {
     for(int j = 0;j<hexBackgroundArray.length;j++)
     {
-        hexBackgroundArray[j].setVisible(false);
+        hexBackgroundArray[j].visible=(false);
     }
     for (int i = 0;i<noOfOptions;i++)
     {
@@ -356,7 +355,7 @@ public void disableOptions()
     {
         for(int j = 0;j<hexBackgroundArray.length;j++)
     {
-        hexBackgroundArray[j].setVisible(true);
+        hexBackgroundArray[j].visible=(true);
     }
         for (int i = 0;i<noOfOptions;i++)
         {
@@ -373,7 +372,7 @@ public void disableOptions()
 
         for(int j = 0;j<hexBackgroundArray.length;j++)
         {
-            hexBackgroundArray[j].draw(sr,true,false);
+            hexBackgroundArray[j].draw(sr);
         }
         for (int i = 0;i<noOfOptions;i++)
         {
