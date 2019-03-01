@@ -378,11 +378,11 @@ public void disableOptions()
         {
             if(i==selectedIndex)
             {
-                hexOptionArray[i].draw(sr,false,true);
+                hexOptionArray[i].draw(sr,true);
 
             }
             else
-            hexOptionArray[i].draw(sr,false,false);
+            hexOptionArray[i].draw(sr,false);
         }
 
 

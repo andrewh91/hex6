@@ -1424,9 +1424,9 @@ int diffInt = difficulty;
         updateField(noOfRows, noOfColumns, portrait1Landscape2, fieldPosX,
                 fieldPosY, fieldWidth, fieldHeight, gameMode,symbolType);
 
-        GameStage.this.stageInterface.setScore(timerInt, diffInt,gameMode);
+        GameStage.this.stageInterface.setScore(timerInt);
 
-        GameStage.this.stageInterface.goToGameOverStage();
+        GameStage.this.stageInterface.goToGamePauseStage(true);
     }
     void resetGame()
     {
@@ -1536,7 +1536,7 @@ int diffInt = difficulty;
         if(keycode == Input.Keys.BACK){
 
 
-            GameStage.this.stageInterface.goToGamePauseStage();
+            GameStage.this.stageInterface.goToGamePauseStage(false);
 
 
 

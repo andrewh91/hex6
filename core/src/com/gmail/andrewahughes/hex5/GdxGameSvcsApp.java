@@ -721,12 +721,26 @@ hideAllStages();
 
 
     @Override
-    public void goToGamePauseStage() {
-       hideAllStages();
+    public void goToGamePauseStage(boolean gameOver) {
+        hideAllStages();
+        gamePauseStage.setGameOver(gameOver);
+        if(gameOver)
+        {
+            goToScoreboardOption();
+        }
         gamePauseStage.setVisible(true);
         Gdx.input.setInputProcessor(gamePauseStage);
         Gdx.input.setCatchBackKey(true);
     }
+
+    @Override
+    public void goToScoreboardOption()
+    {
+        disableAllOptions();
+        gamePauseStage.scoreboardOptionField.enableOptions();
+        gamePauseStage.setActiveFieldIndex(9);
+    }
+
 
     @Override
     public void goToDifficultyOption()
@@ -780,17 +794,39 @@ hideAllStages();
         gamePauseStage.swapOrientationOptionField.enableOptions();
         gamePauseStage.setActiveFieldIndex(3);
     }
-
     public void disableAllOptions()
     {
         gamePauseStage.hexOptionField.disableOptions();
-       gamePauseStage.difficultyOptionField.disableOptions();
-       gamePauseStage.swapOrientationOptionField.disableOptions();
-       gamePauseStage.symbolOptionField.disableOptions();
-       gamePauseStage.gameModeOptionField.disableOptions();
-       gamePauseStage.noOfHexesOptionField.disableOptions();
-       gamePauseStage.zoomModeOptionField.disableOptions();
+        gamePauseStage.difficultyOptionField.disableOptions();
+        gamePauseStage.swapOrientationOptionField.disableOptions();
+        gamePauseStage.symbolOptionField.disableOptions();
+        gamePauseStage.gameModeOptionField.disableOptions();
+        gamePauseStage.noOfHexesOptionField.disableOptions();
+        gamePauseStage.zoomModeOptionField.disableOptions();
+        gamePauseStage.scoreboardOptionField.disableOptions();
     }
+
+    @Override
+    public  void setScoreboardMode(int scoreboardMode)
+    {
+        gamePauseStage.setScoreboardMode(scoreboardMode);
+    }
+
+    @Override
+    public  void showScoreboard()
+    {
+        try {
+            gsClient.showLeaderboards(null);
+        } catch (GameServiceException e) {
+            e.printStackTrace();
+        }
+    }
+    @Override
+    public  void submitScore(int score)
+    {
+        gsClient.submitToLeaderboard(LEADERBOARD1, score, gsClient.getGameServiceId());
+    }
+
     @Override
     public  void setDifficulty(int difficulty)
     {
@@ -833,9 +869,10 @@ hideAllStages();
 
 
     @Override
-    public void setScore(int timeValueArg, int difficultyValueArg,int gameModeArg)
+    public void setScore(int score )
     {
-        gameOverStage.setScore(timeValueArg,difficultyValueArg,gameModeArg);
+       // gameOverStage.setScore(timeValueArg,difficultyValueArg,gameModeArg);
+        gamePauseStage.setScore(score);
     }
     @Override
     public void goToGameOverStage() {

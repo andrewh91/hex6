@@ -46,7 +46,8 @@ public class GamePauseStage extends Stage {
     int noOfRows = 0, newNoOfRows = 0;
     int noOfColumns = 0, newNoOfColumns = 0;
     int zoomMode = 2, newZoomMode = 2;
-
+    int scoreboardMode = 0, newScoreboardMode = 0;
+    boolean gameOver =false;
     /*
     private TextField zoomModeValue;
     private Label zoomMode;
@@ -80,6 +81,7 @@ public class GamePauseStage extends Stage {
     HexOptionField gameModeOptionField ;
     HexOptionField noOfHexesOptionField;
     HexOptionField zoomModeOptionField ;
+    HexOptionField scoreboardOptionField ;
     ArrayList<HexOptionField> hexOptionFieldArray = new ArrayList<HexOptionField>();
 
     HexOption tempHexOption;
@@ -90,58 +92,11 @@ SpriteBatch spriteBatch = new SpriteBatch();
     boolean portrait =true;
  int fieldIndex=0;
     BitmapFont font = new BitmapFont();
-
+int score;
     public GamePauseStage(Viewport viewport, Texture texture,
                           final StageInterface stageInterface) {
         super( viewport );
-         //construct this so it can  be added to the array
-        hexOptionField = new HexOptionField( width, height,9,0,portrait,
-                new String[]{""}
-                ,0
-        );
-        createOptionsMenu();
-
-        difficultyOptionField = new HexOptionField( width, height,13,2,
-                portrait,
-                new String[]{"Back", "0","1","2","3","4","5","6","7","8","9","10","11"}
-                ,1
-        );
-        symbolOptionField= new HexOptionField(width,height,4,4,
-                portrait,new String[]{"Back","Numbers","Shapes","Pictures - not implemented"}
-                ,1);
-        swapOrientationOptionField = new HexOptionField( width, height,3,3,
-                portrait,
-                new String[]{"Back", "Portrait","Landscape"}
-                ,1
-        );
-
-        gameModeOptionField = new HexOptionField( width, height,3,6,
-                portrait,
-                new String[]{"Back", "Singles","Field"}
-                ,2
-        );
-
-//this one needs to be updated on orientation change
-        //construct this so it can  be added to the array
-        noOfHexesOptionField = new HexOptionField( width, height,5,7,
-                portrait,
-                new String[]{""}
-                ,0
-        );
-        createNoOfHexesOptionsField();
-
-        zoomModeOptionField = new HexOptionField( width, height,3,8,
-                portrait,
-                new String[]{"Back", "Quick","Zoom"}
-                ,2
-        );
-        hexOptionFieldArray.add(hexOptionField);
-                hexOptionFieldArray.add(difficultyOptionField);
-                hexOptionFieldArray.add(swapOrientationOptionField);
-                hexOptionFieldArray.add(symbolOptionField);
-                hexOptionFieldArray.add(gameModeOptionField);
-                hexOptionFieldArray.add(noOfHexesOptionField);
-                hexOptionFieldArray.add(zoomModeOptionField);
+        setupFields();
 
 
 for(int i =0;i<hexOptionFieldArray.size();i++)
@@ -206,10 +161,18 @@ updateUI();
             Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
             shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
             shapeRenderer.setProjectionMatrix(getViewport().getCamera().combined);
-for(int i =0;i<hexOptionFieldArray.size();i++)
-{
-    hexOptionFieldArray.get(i).draw(shapeRenderer);
-}
+            for(int i =0;i<hexOptionFieldArray.size();i++)
+            {
+                hexOptionFieldArray.get(i).draw(shapeRenderer);
+            }
+
+            if(!gameOver&&hexOptionFieldArray.get(7).hexOptionArray[2].isVisible())
+            {//if scoreboard option menu visible and not gameover grey out the submit score button in the scoreboard option menu
+                shapeRenderer.setColor(0.04f,0.04f,0.04f, 1);
+                hexOptionFieldArray.get(7).hexOptionArray[2].drawHex(shapeRenderer);
+
+            }
+
 /*
             hexOptionField.draw(shapeRenderer);
             difficultyOptionField.draw(shapeRenderer);
@@ -259,7 +222,10 @@ spriteBatch.begin();
     public void setPause(boolean pause) {
         this.pause = pause;
     }
-
+    void setGameOver(boolean gameOver)
+    {
+        this.gameOver=gameOver;
+    }
     //gamePauseStage
     public void updateUI()
     {
@@ -276,6 +242,8 @@ spriteBatch.begin();
                 newNoOfRows = noOfRows;
                 newNoOfColumns = noOfColumns;
                 newZoomMode = zoomMode;
+                newScoreboardMode=scoreboardMode;
+
 
                 stageInterface.setDifficulty(difficulty);
                 stageInterface.setOrientation(orientation);
@@ -283,6 +251,7 @@ spriteBatch.begin();
                 stageInterface.setGameMode(gameMode);
                 stageInterface.setNoOfHexes(noOfHexes);
                 stageInterface.setZoomMode(zoomMode);
+
                 stageInterface.updateOptionsGoToGameStage(0, 0,
                         0, 0, 0, 0, 0, 0,
                         0, 0, 0);
@@ -332,6 +301,7 @@ spriteBatch.begin();
                 noOfRows = newNoOfRows;
                 noOfColumns = newNoOfColumns;
                 zoomMode = newZoomMode;
+                scoreboardMode=newScoreboardMode;
 
 
                 stageInterface.updateOptionsGoToGameStage(
@@ -364,6 +334,12 @@ spriteBatch.begin();
                 stageInterface.goToZoomModeOption();
 
             }});//end go to zoom mode
+        hexOptionField.hexOptionArray[9].addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                stageInterface.goToScoreboardOption();
+
+            }});//end go to scoreboard
 //end main menu
 
 //difficulty menu
@@ -573,7 +549,54 @@ public void clicked(InputEvent event, float x, float y) {
 //end zoom menu
 
 
-        }//end updateUI
+// scoreboard
+//go back
+        scoreboardOptionField.hexOptionArray[0].addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                if(gameOver)//if game over is true then we navigated here when the game ended, the back button should take us back to the main menu
+                {
+                    stageInterface.goToMainStage();
+
+                }
+                else
+                {
+                    stageInterface.goToMainOption();
+                }
+            }});//end go back
+//select show scoreboard
+
+
+        scoreboardOptionField.hexOptionArray[1].addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                tempHexOption=(HexOption)event.getTarget();
+                newScoreboardMode=tempHexOption.hexIndex;
+                stageInterface.setScoreboardMode(newScoreboardMode);
+                stageInterface.showScoreboard();
+            }
+        });
+        //end show scoreboard mode
+//select submit score
+
+
+        scoreboardOptionField.hexOptionArray[2].addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                tempHexOption=(HexOption)event.getTarget();
+                newScoreboardMode=tempHexOption.hexIndex;
+                stageInterface.setScoreboardMode(newScoreboardMode);
+                if(gameOver)//if game over is true then we navigated here when the game ended, should be allowed to submit a score 
+                {
+                    stageInterface.submitScore(score);
+                }
+            }
+        });
+        //end submit score
+//end scoreboard menu
+
+
+    }//end updateUI
 
 public void cancelOptions()
 {
@@ -808,24 +831,82 @@ if(portrait)
         }
         //toggle bool for orientation
         //removeAllActors();
-        removeOptionFieldActors(hexOptionField );
-hexOptionFieldArray.remove(hexOptionField);
+        for(int i = hexOptionFieldArray.size(); i >0;i--)
+        {
+            removeOptionFieldActors(hexOptionFieldArray.get(0));
+            hexOptionFieldArray.remove(0);
+        }
+        setupFields();
 
-        createOptionsMenu();
-        hexOptionFieldArray.add(hexOptionField);
-        addHexesToStage(hexOptionField);
+        for(int i = 0; i<hexOptionFieldArray.size(); i++)
+        {
+            addHexesToStage(hexOptionFieldArray.get(i));
+        }
+
         hexOptionField.enableOptions();
 
 
-        removeOptionFieldActors(noOfHexesOptionField );
-        hexOptionFieldArray.remove(noOfHexesOptionField);
 
-        createNoOfHexesOptionsField();
-        hexOptionFieldArray.add(noOfHexesOptionField);
-        addHexesToStage(noOfHexesOptionField);
-        noOfHexesOptionField.disableOptions();
-       updateUI();
+        updateUI();
         //addHexesToStage(hexOptionField);
+    }
+
+    public void setupFields()
+    {
+        hexOptionField = new HexOptionField( width, height,9,0,portrait,
+                new String[]{""}
+                ,0
+        );
+        createOptionsMenu();
+
+        difficultyOptionField = new HexOptionField( width, height,13,2,
+                portrait,
+                new String[]{"Back", "0","1","2","3","4","5","6","7","8","9","10","11"}
+                ,1
+        );
+        symbolOptionField= new HexOptionField(width,height,4,4,
+                portrait,new String[]{"Back","Numbers","Shapes","Pictures - not implemented"}
+                ,1);
+        swapOrientationOptionField = new HexOptionField( width, height,3,3,
+                portrait,
+                new String[]{"Back", "Portrait","Landscape"}
+                ,1
+        );
+
+        gameModeOptionField = new HexOptionField( width, height,3,6,
+                portrait,
+                new String[]{"Back", "Singles","Field"}
+                ,2
+        );
+
+//this one needs to be updated on orientation change
+        //construct this so it can  be added to the array
+        noOfHexesOptionField = new HexOptionField( width, height,5,7,
+                portrait,
+                new String[]{""}
+                ,0
+        );
+        createNoOfHexesOptionsField();
+
+        zoomModeOptionField = new HexOptionField( width, height,3,8,
+                portrait,
+                new String[]{"Back", "Quick","Zoom"}
+                ,2
+        );
+
+        scoreboardOptionField = new HexOptionField( width, height,3,9,
+                portrait,
+                new String[]{"Back", "Show Scoreboard","Submit"}
+                ,0
+        );
+        hexOptionFieldArray.add(hexOptionField);
+        hexOptionFieldArray.add(difficultyOptionField);
+        hexOptionFieldArray.add(swapOrientationOptionField);
+        hexOptionFieldArray.add(symbolOptionField);
+        hexOptionFieldArray.add(gameModeOptionField);
+        hexOptionFieldArray.add(noOfHexesOptionField);
+        hexOptionFieldArray.add(zoomModeOptionField);
+        hexOptionFieldArray.add(scoreboardOptionField);
     }
     public void removeAllActors()
     {
@@ -836,7 +917,7 @@ hexOptionFieldArray.remove(hexOptionField);
     }
     public void removeOptionFieldActors( HexOptionField hof)
     {
-        for(int i=0;i<hof.hexOptionArray.length;i++)
+        for(int i=0;i<hof.noOfHexes;i++)
         {
             hof.hexOptionArray[i].addAction(Actions.removeActor());
         }
@@ -844,11 +925,11 @@ hexOptionFieldArray.remove(hexOptionField);
 
 void createOptionsMenu()
 {
-    hexOptionField = new HexOptionField(width,height,9,
+    hexOptionField = new HexOptionField(width,height,10,
             0,portrait,
             new String[]{"Cancel Changes","Return to Main Menu","Change Difficulty" ,
                     "Swap Orientation","Change Symbol Type",
-                    "Save Changes","Change Game Mode","Change Number of Hexes","Change Zoom Mode"
+                    "Save Changes","Change Game Mode","Change Number of Hexes","Change Zoom Mode","Scoreboard"
             }
             ,0);
 }
@@ -888,6 +969,14 @@ void createOptionsMenu()
     {
         zoomModeOptionField.setSelectedIndex(z);
     }
+    public void setScoreboardMode(int s)
+    {
+        scoreboardOptionField.setSelectedIndex(s);
+    }
+public void setScore(int score)
+{
+    this.score = score;
+}
 
     @Override
     public void dispose() {
@@ -915,6 +1004,11 @@ void createOptionsMenu()
 if(fieldIndex==0)
 {
 cancelOptions();}
+else if(gameOver)
+{
+    stageInterface.goToMainStage();
+
+}
 else
 {
     stageInterface.goToMainOption();

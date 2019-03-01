@@ -7,13 +7,19 @@ package com.gmail.andrewahughes.hex5;
 public interface StageInterface {
     void goToGameStage();
     void goToMainStage();
-    void goToGamePauseStage();
+    void goToGamePauseStage(boolean gameOver);
+    void goToScoreboardOption();
+
+    void setScoreboardMode(int scoreboardMode);
+
+    void showScoreboard();
+    void submitScore(int score);
     void goToGameOverStage();
     void updateFieldSwapOrientation();
     void setLandscape();
     void setPortrait();
     void goToGameStageRefresh();
-    void setScore(int timeValueArg, int difficultyValueArg,int gameModeArg);
+    void setScore(int score);
     void updateOptionsGoToGameStage(int newNoOfRows, int newNoOfColumns, int newPortrait1Landscape2,
                                     int newFieldPosX, int newFieldPosY, int newFieldWidth,
                                     int newFieldHeight,int zoom,int difficulty, int gameMode, int symbolType);

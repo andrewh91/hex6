@@ -70,7 +70,7 @@ public class HexOption extends Actor {
         this.setTouchable(Touchable.enabled);
         this.setVisible(true);
     }
-    public void draw(ShapeRenderer sr,boolean background,boolean selected) {
+    public void draw(ShapeRenderer sr,boolean selected) {
         act(Gdx.graphics.getDeltaTime());
 if(this.isVisible()) {
     sr.setColor(0.95f,0.74f,0.25f, 1);
@@ -79,61 +79,10 @@ if(this.isVisible()) {
         sr.setColor(0.95f,0.9f,0.04f, 1);
 
     }
-    else if (background) {
-        sr.setColor(0.77f,0.7f,0.035f, 1);
-        edgeSize=edgeSizeStatic*0.95f;
-        altitudeSize=edgeSize * 0.866025403784439f;
-    } else if (clickTimer < 1f) {
-        clickTimer += Gdx.graphics.getDeltaTime();
+edgeSize=edgeSizeStatic*0.95f;
+    altitudeSize=edgeSize*0.866025403784439f;
+drawHex(sr);
 
-        /*
-        edgeSize=edgeSizeStatic*0.9f+edgeSizeStatic*0.1f*clickTimer;
-        altitudeSize=edgeSize * 0.866025403784439f;
-        */
-    } else {
-        clickTimer = 1f;
-        edgeSize=edgeSizeStatic*0.95f;
-        altitudeSize=edgeSize * 0.866025403784439f;
-    }
-
-
-    sr.triangle(
-            centreX+edgeSize,
-            centreY,
-            centreX+edgeSize/2,
-            centreY+altitudeSize,
-            centreX-edgeSize/2,
-            centreY+altitudeSize);
-    sr.triangle(
-            centreX+edgeSize,
-            centreY,
-            centreX-edgeSize/2,
-            centreY+altitudeSize,
-            centreX-edgeSize,
-            centreY);
-    sr.triangle(
-            centreX+edgeSize,
-            centreY,
-            centreX-edgeSize,
-            centreY,
-            centreX-edgeSize/2,
-            centreY-altitudeSize);
-    sr.triangle(
-            centreX+edgeSize,
-            centreY,
-            centreX-edgeSize/2,
-            centreY-altitudeSize,
-            centreX+edgeSize/2,
-            centreY-altitudeSize);
-
-    /*
-    sr.line(centreX + (edgeSize / 2), centreY - altitudeSize, centreX + edgeSize, centreY);
-    sr.line(centreX + edgeSize, centreY, centreX + (edgeSize / 2), (int) (centreY + altitudeSize));
-    sr.line(centreX + (edgeSize / 2), (int) (centreY + altitudeSize), centreX - (edgeSize / 2), (int) (centreY + altitudeSize));
-    sr.line(centreX - (edgeSize / 2), (int) (centreY + altitudeSize), centreX - edgeSize, centreY);
-    sr.line(centreX - edgeSize, centreY, centreX - (edgeSize / 2), (int) (centreY - altitudeSize));
-    sr.line(centreX - (edgeSize / 2), (int) (centreY - altitudeSize), centreX + (edgeSize / 2), (int) (centreY - altitudeSize));
-    */
 }
 
     }
@@ -144,5 +93,37 @@ if(this.isVisible()) {
 
     }
 
+    void drawHex(ShapeRenderer sr)
+    {
+
+        sr.triangle(
+                centreX+edgeSize,
+                centreY,
+                centreX+edgeSize/2,
+                centreY+altitudeSize,
+                centreX-edgeSize/2,
+                centreY+altitudeSize);
+        sr.triangle(
+                centreX+edgeSize,
+                centreY,
+                centreX-edgeSize/2,
+                centreY+altitudeSize,
+                centreX-edgeSize,
+                centreY);
+        sr.triangle(
+                centreX+edgeSize,
+                centreY,
+                centreX-edgeSize,
+                centreY,
+                centreX-edgeSize/2,
+                centreY-altitudeSize);
+        sr.triangle(
+                centreX+edgeSize,
+                centreY,
+                centreX-edgeSize/2,
+                centreY-altitudeSize,
+                centreX+edgeSize/2,
+                centreY-altitudeSize);
+    }
 
 }
