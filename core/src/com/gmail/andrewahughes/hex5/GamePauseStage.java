@@ -2,6 +2,7 @@ package com.gmail.andrewahughes.hex5;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -73,6 +74,11 @@ public class GamePauseStage extends Stage {
     private TextField symbolTypeValue;
     private Label symbolType;
     */
+    Label[][] ost=new Label[12][6];//2d array to hold offline scoreboard text
+    Label scoreboardTypeLbl, dateLbl, timeLbl, noOfHexesLbl, scoreLbl, uploadedLbl;
+Table os;
+
+
 
     HexOptionField hexOptionField;
     HexOptionField difficultyOptionField;
@@ -93,6 +99,8 @@ SpriteBatch spriteBatch = new SpriteBatch();
  int fieldIndex=0;
     BitmapFont font = new BitmapFont();
 int score;
+
+
     public GamePauseStage(Viewport viewport, Texture texture,
                           final StageInterface stageInterface) {
         super( viewport );
@@ -106,6 +114,8 @@ for(int i =0;i<hexOptionFieldArray.size();i++)
 hexOptionField.enableOptions();
 
 updateUI();
+
+
 /*
         addHexesToStage(difficultyOptionField);
         addHexesToStage(swapOrientationOptionField );
@@ -138,6 +148,7 @@ updateUI();
         final Image pauseImg = new Image(texture);
         this.pauseImg1 =pauseImg;
         this.pauseImg1.setVisible(false);//start off invisible
+        prepareUI();
 
 
 
@@ -588,11 +599,24 @@ public void clicked(InputEvent event, float x, float y) {
                 stageInterface.setScoreboardMode(newScoreboardMode);
                 if(gameOver)//if game over is true then we navigated here when the game ended, should be allowed to submit a score 
                 {
-                    stageInterface.submitScore(score);
+                    stageInterface.submitScore(score,difficulty,newNoOfHexes);
                 }
             }
         });
         //end submit score
+
+        //show offline scoreboard
+        scoreboardOptionField.hexOptionArray[3].addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                scoreboardOptionField.disableOptions();
+os.setVisible(true);
+updateUIText();
+
+            }
+        });
+        //end  show offline
+
 //end scoreboard menu
 
 
@@ -894,11 +918,13 @@ if(portrait)
                 ,2
         );
 
-        scoreboardOptionField = new HexOptionField( width, height,3,9,
+        scoreboardOptionField = new HexOptionField( width, height,4,9,
                 portrait,
-                new String[]{"Back", "Show Scoreboard","Submit"}
+                new String[]{"Back", "Show Scoreboard","Submit","Show Offline Scoreboard"}
                 ,0
         );
+
+
         hexOptionFieldArray.add(hexOptionField);
         hexOptionFieldArray.add(difficultyOptionField);
         hexOptionFieldArray.add(swapOrientationOptionField);
@@ -988,6 +1014,83 @@ public void setScore(int score)
         {
             fieldIndex=activeFieldIndex;
         }
+
+
+    public void prepareUI()
+    {
+        scoreboardTypeLbl= new Label("Scoreboard Type", skin);
+        /*dateLbl= new Label("Date", skin);
+        timeLbl= new Label("Time", skin);
+        noOfHexesLbl= new Label("Number of Hexes", skin);
+        scoreLbl= new Label("Score", skin);
+        uploadedLbl= new Label("Uploaded?", skin);*/
+
+         os= new Table();//offline scoreboard
+        os.debug();
+os.setVisible(false);
+os.defaults().pad(20);
+        os.setFillParent(true);
+        os.center();
+        addActor(os);
+
+        os.add(scoreboardTypeLbl);
+       /*
+        os.add(dateLbl);
+        os.add(timeLbl);
+        os.add(noOfHexesLbl);
+        os.add(scoreLbl);
+        os.add(uploadedLbl);
+*/
+        os.row();
+
+        for(int i = 0 ; i < 12; i++)
+        {
+            for(int j = 0 ; j < 6; j++)
+            {
+                ost[i][j] = new Label("",skin);
+                //os.add(ost[i][j]);
+            }
+            os.row();
+        }
+
+    }//end prepareUI
+
+    public void updateUIText()
+    {
+//this will read in the values from the saved text file into our table to display it
+        if(Gdx.files.local("offlineScoreboard.txt").exists()) {
+            String s = Gdx.files.local("offlineScoreboard.txt").readString();
+            String[] sa = s.split(",");
+            for(int i = -6 ; i< sa.length-6;i++)//sa.length should be 72, bur we have the headings as well, need go ignore them
+            {
+if(i>=0)
+{
+    ost[(int) (i / 6)][i % 6].setText(sa[i+6]);
+
+}
+scoreboardTypeLbl.setText("Scoreboard Type,Date,Time,Number of Hexes,Score,Uploaded?\n,1,\t,2");
+            }
+        }
+        else//if file doesn't exist, create it
+        {
+            FileHandle file = Gdx.files.local("offlineScoreboard.txt");
+            file.writeString("Scoreboard Type,Date,Time,Number of Hexes,Score,Uploaded?\n,"
+                   +" , , , , , , "
+                            +" , , , , , , "
+                            +" , , , , , , "
+                            +" , , , , , , "
+                            +" , , , , , , "
+                            +" , , , , , , "
+                            +" , , , , , , "
+                            +" , , , , , , "
+                            +" , , , , , , "
+                            +" , , , , , , "
+                    +" , , , , , , "
+                   +" , , , , ,"
+                    , false);
+
+        }
+    }//end updateUIText
 
     @Override
     public boolean keyDown(int keycode) {

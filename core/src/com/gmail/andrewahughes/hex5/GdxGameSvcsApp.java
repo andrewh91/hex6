@@ -822,8 +822,11 @@ hideAllStages();
         }
     }
     @Override
-    public  void submitScore(int score)
+    public  void submitScore(int score, int difficulty, int noOfHexes)
     {
+        //i intend to have multiple scoreboards which will cover the different difficulties and noofhexes
+        //        gsClient.submitToLeaderboard(difficulty+LEADERBOARD1+noOfHexes, score, gsClient.getGameServiceId());
+
         gsClient.submitToLeaderboard(LEADERBOARD1, score, gsClient.getGameServiceId());
     }
 

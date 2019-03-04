@@ -13,7 +13,7 @@ public interface StageInterface {
     void setScoreboardMode(int scoreboardMode);
 
     void showScoreboard();
-    void submitScore(int score);
+    void submitScore(int score, int difficulty, int noOfHes);
     void goToGameOverStage();
     void updateFieldSwapOrientation();
     void setLandscape();
