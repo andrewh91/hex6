@@ -13,8 +13,8 @@ public interface StageInterface {
     void setScoreboardMode(int scoreboardMode);
 
     void showScoreboard();
-    void submitScore(int score, int difficulty, int noOfHes);
-    void goToGameOverStage();
+    boolean submitScore(int score, int difficulty, int noOfHes);
+    void goToGameOverStage(int noOfHexes, int score, int difficulty,int gameMode) ;
     void updateFieldSwapOrientation();
     void setLandscape();
     void setPortrait();
@@ -34,6 +34,8 @@ public interface StageInterface {
     void setDifficulty(int difficulty);
     void setSymbol(int symbol);
 
+    int getScreenHeight();
+    int getScreenWidth();
 
     void setOrientation(int orientation);
     void setGameMode(int gameMode);

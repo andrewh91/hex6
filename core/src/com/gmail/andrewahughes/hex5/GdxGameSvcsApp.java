@@ -822,12 +822,12 @@ hideAllStages();
         }
     }
     @Override
-    public  void submitScore(int score, int difficulty, int noOfHexes)
+    public  boolean submitScore(int score, int difficulty, int noOfHexes)
     {
         //i intend to have multiple scoreboards which will cover the different difficulties and noofhexes
         //        gsClient.submitToLeaderboard(difficulty+LEADERBOARD1+noOfHexes, score, gsClient.getGameServiceId());
 
-        gsClient.submitToLeaderboard(LEADERBOARD1, score, gsClient.getGameServiceId());
+        return gsClient.submitToLeaderboard(LEADERBOARD1, score, gsClient.getGameServiceId());
     }
 
     @Override
@@ -868,7 +868,16 @@ hideAllStages();
     {
         gamePauseStage.setZoomMode(zoomMode);
     }
-
+    @Override
+    public int getScreenHeight()
+    {
+        return vpHeight;
+    }
+    @Override
+    public int getScreenWidth()
+    {
+        return vpWidth;
+    }
 
 
     @Override
@@ -878,13 +887,15 @@ hideAllStages();
         gamePauseStage.setScore(score);
     }
     @Override
-    public void goToGameOverStage() {
+    public void goToGameOverStage(int noOfHexes, int score, int difficulty,int gameMode) {
 
-hideAllStages();
+        hideAllStages();
+        gameOverStage.setScore(noOfHexes,score,difficulty, gameMode);
         gameOverStage.setVisible(true);
         Gdx.input.setInputProcessor(gameOverStage);
         Gdx.input.setCatchBackKey(true);
     }
+
     void hideAllStages()
     {
         gameStage.setVisible(false);

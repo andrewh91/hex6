@@ -1426,7 +1426,8 @@ int diffInt = difficulty;
 
         GameStage.this.stageInterface.setScore(timerInt);
 
-        GameStage.this.stageInterface.goToGamePauseStage(true);
+        GameStage.this.stageInterface.goToGameOverStage(noOfRows*noOfRows,timerInt,
+                difficulty,gameMode);
     }
     void resetGame()
     {

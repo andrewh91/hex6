@@ -76,7 +76,6 @@ public class GamePauseStage extends Stage {
     */
     Label[][] ost=new Label[12][6];//2d array to hold offline scoreboard text
     Label scoreboardTypeLbl, dateLbl, timeLbl, noOfHexesLbl, scoreLbl, uploadedLbl;
-Table os;
 
 
 
@@ -99,6 +98,13 @@ SpriteBatch spriteBatch = new SpriteBatch();
  int fieldIndex=0;
     BitmapFont font = new BitmapFont();
 int score;
+    int dateTimeWidth=0, noOfHexesWidth=0,ScoreWidth=0;
+    int scoreboardHeight=800;
+    int screenWidth=800;
+    ScoreboardRow[] scoreboardRowArray = new ScoreboardRow[14];
+    boolean offlineScoreboardVisible = false;
+
+    Actor continueButton = new Actor();
 
 
     public GamePauseStage(Viewport viewport, Texture texture,
@@ -106,8 +112,23 @@ int score;
         super( viewport );
         setupFields();
 
+        continueButton = new Actor();
+        continueButton.debug();
+        continueButton.setBounds(0,0,stageInterface.getScreenWidth(),stageInterface.getScreenHeight());
+        continueButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                {//any changes madehere should be  reflected in the back button
+                    continueButton.setVisible(false);
+                    offlineScoreboardVisible=false;
+                    GamePauseStage.this.stageInterface.goToScoreboardOption();
+                }
+            }
+        });
+        continueButton.setVisible(false);
+        this.addActor(continueButton);
 
-for(int i =0;i<hexOptionFieldArray.size();i++)
+        for(int i =0;i<hexOptionFieldArray.size();i++)
 {
     addHexesToStage(hexOptionFieldArray.get(i));
 }
@@ -198,12 +219,20 @@ updateUI();
             shapeRenderer.end();
             spriteBatch.setProjectionMatrix(getViewport().getCamera().combined);
 
-spriteBatch.begin();
+            spriteBatch.begin();
             for(int i =0;i<hexOptionFieldArray.size();i++)
             {
                 hexOptionFieldArray.get(i).drawText(spriteBatch);
 
             }
+            if(offlineScoreboardVisible)
+            {
+                for(int i = 0 ; i< scoreboardRowArray.length;i++)
+                {
+                    scoreboardRowArray[i].draw(spriteBatch);
+                }
+            }
+
             /*
             hexOptionField.drawText(spriteBatch);
             difficultyOptionField.drawText(spriteBatch);
@@ -599,7 +628,11 @@ public void clicked(InputEvent event, float x, float y) {
                 stageInterface.setScoreboardMode(newScoreboardMode);
                 if(gameOver)//if game over is true then we navigated here when the game ended, should be allowed to submit a score 
                 {
-                    stageInterface.submitScore(score,difficulty,newNoOfHexes);
+                    if(stageInterface.submitScore(score,difficulty,newNoOfHexes))
+                    {
+                        //if upload successful, black out submit button
+                        gameOver=false;
+                    }
                 }
             }
         });
@@ -610,11 +643,14 @@ public void clicked(InputEvent event, float x, float y) {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 scoreboardOptionField.disableOptions();
-os.setVisible(true);
-updateUIText();
+                offlineScoreboardVisible=true;
+                continueButton.setBounds(0,0,stageInterface.getScreenWidth(),stageInterface.getScreenHeight());
+                continueButton.setVisible(true);
+                updateUIText();
 
             }
         });
+
         //end  show offline
 
 //end scoreboard menu
@@ -1018,75 +1054,73 @@ public void setScore(int score)
 
     public void prepareUI()
     {
-        scoreboardTypeLbl= new Label("Scoreboard Type", skin);
-        /*dateLbl= new Label("Date", skin);
-        timeLbl= new Label("Time", skin);
-        noOfHexesLbl= new Label("Number of Hexes", skin);
-        scoreLbl= new Label("Score", skin);
-        uploadedLbl= new Label("Uploaded?", skin);*/
+         dateTimeWidth=0;
+          noOfHexesWidth=0;
+          ScoreWidth=0;
+         scoreboardHeight=800;
+         screenWidth=800;
+         for(int i =0;i<scoreboardRowArray.length;i++)
+         {
+             scoreboardRowArray[i]= new ScoreboardRow(font);
+         }
+         offlineScoreboardVisible = false;
+         continueButton.setVisible(false);
 
-         os= new Table();//offline scoreboard
-        os.debug();
-os.setVisible(false);
-os.defaults().pad(20);
-        os.setFillParent(true);
-        os.center();
-        addActor(os);
 
-        os.add(scoreboardTypeLbl);
-       /*
-        os.add(dateLbl);
-        os.add(timeLbl);
-        os.add(noOfHexesLbl);
-        os.add(scoreLbl);
-        os.add(uploadedLbl);
-*/
-        os.row();
-
-        for(int i = 0 ; i < 12; i++)
-        {
-            for(int j = 0 ; j < 6; j++)
-            {
-                ost[i][j] = new Label("",skin);
-                //os.add(ost[i][j]);
-            }
-            os.row();
-        }
 
     }//end prepareUI
 
     public void updateUIText()
     {
 //this will read in the values from the saved text file into our table to display it
-        if(Gdx.files.local("offlineScoreboard.txt").exists()) {
-            String s = Gdx.files.local("offlineScoreboard.txt").readString();
+        if(Gdx.files.local("offlineScoreboard2.txt").exists()) {
+            String s = Gdx.files.local("offlineScoreboard2.txt").readString();
             String[] sa = s.split(",");
-            for(int i = -6 ; i< sa.length-6;i++)//sa.length should be 72, bur we have the headings as well, need go ignore them
-            {
-if(i>=0)
-{
-    ost[(int) (i / 6)][i % 6].setText(sa[i+6]);
 
-}
-scoreboardTypeLbl.setText("Scoreboard Type,Date,Time,Number of Hexes,Score,Uploaded?\n,1,\t,2");
+            for(int i = 0 ; i< scoreboardRowArray.length;i++)
+//scoreboardRowArray.length should be 14, including the headings
+            {
+
+                scoreboardRowArray[i].setText(sa[i*3],sa[i*3+1],sa[i*3+2]);
+
+                if(dateTimeWidth<scoreboardRowArray[i].getTextWidth(sa[i*3]))
+                {
+                    dateTimeWidth=scoreboardRowArray[i].getTextWidth(sa[i*3]);
+                }
+                if(noOfHexesWidth<scoreboardRowArray[i].getTextWidth(sa[i*3+1]))
+                {
+                    noOfHexesWidth=scoreboardRowArray[i].getTextWidth(sa[i*3+1]);
+                }
+                if(ScoreWidth<scoreboardRowArray[i].getTextWidth(sa[i*3+2]))
+                {
+                    ScoreWidth=scoreboardRowArray[i].getTextWidth(sa[i*3+2]);
+                }
+
+            }//end for
+            for(int i = 0 ; i< scoreboardRowArray.length;i++)
+            {//need to start a new for loop, because now we know the text width of each column
+                scoreboardRowArray[i].setValues( (screenWidth-(dateTimeWidth+noOfHexesWidth+ScoreWidth))/2,
+                        dateTimeWidth, noOfHexesWidth, ScoreWidth, 100+scoreboardHeight/14*i);
+
             }
         }
         else//if file doesn't exist, create it
         {
-            FileHandle file = Gdx.files.local("offlineScoreboard.txt");
-            file.writeString("Scoreboard Type,Date,Time,Number of Hexes,Score,Uploaded?\n,"
-                   +" , , , , , , "
-                            +" , , , , , , "
-                            +" , , , , , , "
-                            +" , , , , , , "
-                            +" , , , , , , "
-                            +" , , , , , , "
-                            +" , , , , , , "
-                            +" , , , , , , "
-                            +" , , , , , , "
-                            +" , , , , , , "
-                    +" , , , , , , "
-                   +" , , , , ,"
+            FileHandle file = Gdx.files.local("offlineScoreboard2.txt");
+            file.writeString("DateTime,Number of Hexes,Score,"
+                            +" , , ,"
+                            +" , , ,"
+                            +" , , ,"
+                            +" , , ,"
+                            +" , , ,"
+                            +" , , ,"
+                    +"DateTime,Number of Hexes,Score,"
+                            +" , , ,"
+                            +" , , ,"
+                            +" , , ,"
+                            +" , , ,"
+                            +" , , ,"
+                            +" , , "
                     , false);
 
         }
@@ -1103,8 +1137,14 @@ scoreboardTypeLbl.setText("Scoreboard Type,Date,Time,Number of Hexes,Score,Uploa
             //GamePauseStage.this.stageInterface.goToGameStage();
    //optionsHandler.click(0,fieldIndex);
 
+if(continueButton.isVisible())
+{
+    continueButton.setVisible(false);
+    offlineScoreboardVisible=false;
+    GamePauseStage.this.stageInterface.goToScoreboardOption();
 
-if(fieldIndex==0)
+}
+else if(fieldIndex==0)
 {
 cancelOptions();}
 else if(gameOver)
