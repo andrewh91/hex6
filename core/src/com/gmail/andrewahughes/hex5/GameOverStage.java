@@ -38,6 +38,7 @@ public class GameOverStage extends Stage {
     CentredText[] centredTextArray = new CentredText[12];
     int screenWidth, screenHeight;
     Actor continueButton = new Actor();
+    int continueButtonTimer;
 
     int scoreValue, difficultyValue,noOfHexesValue, gameModeValue;
 
@@ -47,15 +48,19 @@ public class GameOverStage extends Stage {
         this.stageInterface =stageInterface;
         screenWidth=stageInterface.getScreenWidth();
         screenHeight=stageInterface.getScreenHeight();
-
+continueButtonTimer=100;
          continueButton = new Actor();
         continueButton.setBounds(0,0,screenWidth,screenHeight);
         continueButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 {
+                    if(continueButtonTimer<=0)
+                    {
                     setVisible(false);
                     GameOverStage.this.stageInterface.goToGamePauseStage(true);
+                    continueButtonTimer=100;
+                }
                 }
             }
         });
@@ -67,6 +72,10 @@ this.addActor(continueButton);
     public void draw() {
         act(Gdx.graphics.getDeltaTime());
         if (visible) {
+            if(continueButtonTimer>0)
+            {
+                continueButtonTimer -= Gdx.graphics.getDeltaTime();
+            }
             sb.setProjectionMatrix(getViewport().getCamera().combined);
 sb.begin();
             Gdx.gl.glClearColor(0.9f, 0.0f, 0.4f, 1);

@@ -12,6 +12,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -141,14 +142,28 @@ Col’s  	rows	total	orientation
     ArrayList<Integer> nonMatchingSymbolsHex1 = new ArrayList<Integer>();
     ArrayList<Integer> nonMatchingSymbolsHex2 = new ArrayList<Integer>();
 
-
+    Actor readyButton ;
+int readyButtonWidth;
+int readyButtonHeight;
     public GameStage(Viewport viewport, Texture texture, final StageInterface stageInterface, int portrait) {
         super(viewport);
         this.viewport = viewport;
         hudViewport = new StretchViewport(1280,720);
         hudViewport.setScreenBounds(0,0,1280,720);
-
-        this.portrait1Landscape2 = portrait;
+        readyButton = new Actor();
+        readyButtonWidth=stageInterface.getScreenWidth();
+        readyButtonHeight=stageInterface.getScreenHeight();
+        readyButton.setBounds(0,0,readyButtonWidth,readyButtonHeight);
+        readyButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                {
+readyButton.setVisible(false);
+setPause(false);
+                }
+            }
+        });
+this.portrait1Landscape2 = portrait;
         //the font isn’t really final, the symbols will be replaced with pictures eventually
         font.setColor(Color.WHITE);
         font.getData().setScale(1f);
@@ -934,6 +949,21 @@ Col’s  	rows	total	orientation
             super.draw();
         }
 //if not game over
+        else if(pause)
+        {
+
+            spriteBatch.setProjectionMatrix(viewport.getCamera().combined);
+            spriteBatch.begin();
+            this.act();
+
+            Gdx.gl.glClearColor(0.74f , 0.3f , .2f, 1);
+            Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+            font.draw(spriteBatch,"Tap and hold screen to get ready",stageInterface.getScreenWidth()/2,stageInterface.getScreenHeight()/7*3);
+            font.draw(spriteBatch,"Release to start",stageInterface.getScreenWidth()/2,stageInterface.getScreenHeight()/7*4);
+spriteBatch.end();
+
+super.draw();
+        }
         else {
 //if visible, should be visible so long as we are in the game stage
             if (visible) {
@@ -1027,7 +1057,10 @@ hexWideField.drawFilled(renderer,symbolType);
     }
 
     public void setVisible(boolean visible) {
+
         this.visible = visible;
+        setPause(visible);
+        readyButton.setVisible(visible);
     }
     public void setPause(boolean pause) {
         this.pause = pause;
@@ -1055,6 +1088,10 @@ hexWideField.drawFilled(renderer,symbolType);
         {
             addActor(hwf.hexWideArray[i]);
         }
+        
+        readyButton.setBounds(0,0,readyButtonWidth,readyButtonHeight);
+
+        addActor(readyButton);
     }
     //same but for tall hexes
     public void addHexesToStage( HexTallField hwf)
@@ -1063,6 +1100,9 @@ hexWideField.drawFilled(renderer,symbolType);
         {
             addActor(hwf.hexTallArray[i]);
         }
+        readyButton.setBounds(0,0,readyButtonWidth,readyButtonHeight);
+
+        addActor(readyButton);
     }
     //remove all actors, needed when switching game mode, or otherwise getting rid of one field and making a new one
     public void removeAllActors()
@@ -1071,6 +1111,7 @@ hexWideField.drawFilled(renderer,symbolType);
             //actor.remove();
             actor.addAction(Actions.removeActor());
         }
+
     }
     void updateFieldRefresh() {
         resetGame();
