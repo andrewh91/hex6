@@ -99,13 +99,18 @@ SpriteBatch spriteBatch = new SpriteBatch();
     BitmapFont font = new BitmapFont();
 int score;
     int dateTimeWidth=0, noOfHexesWidth=0,ScoreWidth=0;
-    int scoreboardHeight=800;
-    int screenWidth=800;
+    int scoreboardHeight=0;
+    int screenWidth=0;
     ScoreboardRow[] scoreboardRowArray = new ScoreboardRow[14];
     boolean offlineScoreboardVisible = false;
-
+String offlineScoreboardPathString=new String("offlineScoreboard14.txt");
     Actor continueButton = new Actor();
-
+    boolean newOfflineScore =false;
+    boolean newOnlineScore =false;
+    int     scoreboardScore;
+    int  scoreboardNoOfHexes;
+    int scoreboardDate;
+    int category=0;
 
     public GamePauseStage(Viewport viewport, Texture texture,
                           final StageInterface stageInterface) {
@@ -198,7 +203,7 @@ updateUI();
                 hexOptionFieldArray.get(i).draw(shapeRenderer);
             }
 
-            if(!gameOver&&hexOptionFieldArray.get(7).hexOptionArray[2].isVisible())
+            if(!newOnlineScore&&hexOptionFieldArray.get(7).hexOptionArray[2].isVisible())
             {//if scoreboard option menu visible and not gameover grey out the submit score button in the scoreboard option menu
                 shapeRenderer.setColor(0.04f,0.04f,0.04f, 1);
                 hexOptionFieldArray.get(7).hexOptionArray[2].drawHex(shapeRenderer);
@@ -265,8 +270,112 @@ updateUI();
     void setGameOver(boolean gameOver)
     {
         this.gameOver=gameOver;
+        if (gameOver)//if we have arrived at the game pause stage after completing a game, we will have a new score to consider
+        {
+            updateUIText();
+            newOfflineScore=true;
+            newOnlineScore=true;
+            category=0;
+//figure out which category the new score is in 
+            switch(scoreboardNoOfHexes)
+            {
+                //TODO delete this, its for testing only
+                case 6:
+                {
+                    category=1;
+                    break;
+                }
+                //
+                case 20:
+                {
+                    category=1;
+                    break;
+                }//end case
+                case 21:
+                {
+                    category=2;
+                    break;
+                }//end case
+                case 24:
+                {
+                    category=3;
+                    break;
+                }//end case
+                case 36:
+                {
+                    category=4;
+                    break;
+                }//end case
+                case 40:
+                {
+                    category=5;
+                    break;
+                }//end case
+                case 100:
+                {
+                    category=6;
+                    break;
+                }//end case
+
+            }//end switch
+//compare the recorded date with the new date, if they don't match remove the recorded score
+            if(!scoreboardRowArray[category].dateTime.equals(" ")&&scoreboardDate !=Integer.parseInt(scoreboardRowArray[category].dateTime))
+            {
+                scoreboardRowArray[category].score=" ";
+            }
+//test if the new score is better than the recorded score or if the recorded score is blank
+            if(scoreboardRowArray[category].score.equals( " ")||scoreboardScore<Integer.parseInt(scoreboardRowArray[category].score))
+            {
+//set the recorded score as the new score
+                scoreboardRowArray[category].score=""+scoreboardScore;
+                scoreboardRowArray[category].dateTime=""+scoreboardDate ;
+                scoreboardRowArray[category].noOfHexes=""+scoreboardNoOfHexes ;
+                scoreboardRowArray[category].uploaded=false ;
+
+
+//if the new score was better than the daily score we should check if it was better than the all time score too 
+                if(scoreboardRowArray[category+7].score.equals(" ")||scoreboardScore<Integer.parseInt(scoreboardRowArray[category+7].score))
+                {
+//set the recorded score as the new score 
+                    scoreboardRowArray[category+7].score=""+scoreboardScore;
+                    scoreboardRowArray[category+7].dateTime=""+scoreboardDate ;
+                    scoreboardRowArray[category+7].noOfHexes=""+scoreboardNoOfHexes ;
+                    scoreboardRowArray[category+7].uploaded=false ;
+
+                }//end if better than all time score
+//record any new values in the text file
+                writeToTextFile();
+            }//end if better than daily score
+
+            newOfflineScore =false;
+        }//end if recent game over and new score to consider
+    }//end method
+    void writeToTextFile()
+    {
+        FileHandle file = Gdx.files.local(offlineScoreboardPathString);
+//might need to do String.valueOf(scoreboardRowArray[1].uploaded);
+        file.writeString
+                ("Daily Scoreboard: Date    ,Number of Hexes    ,Score    , ,"+
+                                scoreboardRowArray[1].dateTime+","+	scoreboardRowArray[1].noOfHexes+","+	scoreboardRowArray[1].score+","+	scoreboardRowArray[1].uploaded+","+
+                                scoreboardRowArray[2].dateTime+","+	scoreboardRowArray[2].noOfHexes+","+	scoreboardRowArray[2].score+","+	scoreboardRowArray[2].uploaded+","+
+                                scoreboardRowArray[3].dateTime+","+	scoreboardRowArray[3].noOfHexes+","+	scoreboardRowArray[3].score+","+	scoreboardRowArray[3].uploaded+","+
+                                scoreboardRowArray[4].dateTime+","+	scoreboardRowArray[4].noOfHexes+","+	scoreboardRowArray[4].score+","+	scoreboardRowArray[4].uploaded+","+
+                                scoreboardRowArray[5].dateTime+","+	scoreboardRowArray[5].noOfHexes+","+	scoreboardRowArray[5].score+","+	scoreboardRowArray[5].uploaded+","+
+                                scoreboardRowArray[6].dateTime+","+	scoreboardRowArray[6].noOfHexes+","+	scoreboardRowArray[6].score+","+	scoreboardRowArray[6].uploaded+","+
+                                "All Time Scoreboard: Date    ,Number of Hexes    ,Score    , ,"+
+                                scoreboardRowArray[8].dateTime+","+	scoreboardRowArray[8].noOfHexes+","+	scoreboardRowArray[8].score+","+	scoreboardRowArray[8].uploaded+","+
+                                scoreboardRowArray[9].dateTime+","+	scoreboardRowArray[9].noOfHexes+","+	scoreboardRowArray[9].score+","+	scoreboardRowArray[9].uploaded+","+
+                                scoreboardRowArray[10].dateTime+","+	scoreboardRowArray[10].noOfHexes+","+	scoreboardRowArray[10].score+","+	scoreboardRowArray[10].uploaded+","+
+                                scoreboardRowArray[11].dateTime+","+	scoreboardRowArray[11].noOfHexes+","+	scoreboardRowArray[11].score+","+	scoreboardRowArray[11].uploaded+","+
+                                scoreboardRowArray[12].dateTime+","+	scoreboardRowArray[12].noOfHexes+","+	scoreboardRowArray[12].score+","+	scoreboardRowArray[12].uploaded+","+
+                                scoreboardRowArray[13].dateTime+","+	scoreboardRowArray[13].noOfHexes+","+	scoreboardRowArray[13].score+","+	scoreboardRowArray[13].uploaded
+                        , false);
+
+
+
     }
-    //gamePauseStage
+
+    // gamePauseStage
     public void updateUI()
     {
 //main menu
@@ -626,23 +735,51 @@ public void clicked(InputEvent event, float x, float y) {
                 tempHexOption=(HexOption)event.getTarget();
                 newScoreboardMode=tempHexOption.hexIndex;
                 stageInterface.setScoreboardMode(newScoreboardMode);
-                if(gameOver)//if game over is true then we navigated here when the game ended, should be allowed to submit a score 
+
+                if(newOnlineScore)//if newOnlineScore  is true then there is a score that is not uploaded yet,  should be allowed to submit a score 
                 {
-                    if(stageInterface.submitScore(score,difficulty,newNoOfHexes))
+//read the text file into the scoreboardRowArray
+                    updateUIText();
+                    boolean allUploaded = true;
+//loop through the first 6 values after the first value, this is the daily scoreboard only, not all time scoreboard
+                    for(int i =1 ; i<7;i++)
+                    {
+//if the score has not been submitted, and the score is not blank try submitting it
+                        if(scoreboardRowArray[i].uploaded==false&&!scoreboardRowArray[i].score.equals(" "))
+                        {
+//this returns true if upload successful, if unsuccessful set a flag
+                            if(stageInterface.submitScore(Integer.valueOf(scoreboardRowArray[i].score),
+                                    Integer.valueOf(scoreboardRowArray[i].noOfHexes))==false)
+                            {
+                                allUploaded=false;
+                            }
+                            else//if it was successful we need to update the uploaded value to true
+                            {
+                                scoreboardRowArray[i].uploaded=true;
+                            }
+                        }//end if uploaded == false
+                    }//end for loop
+//if all successfully uploaded 
+                    if(allUploaded)
                     {
                         //if upload successful, black out submit button
-                        gameOver=false;
+                        newOnlineScore=false;
                     }
+//write to the text file - because the uploaded values might have changed 
+                    writeToTextFile();
                 }
             }
         });
         //end submit score
+
 
         //show offline scoreboard
         scoreboardOptionField.hexOptionArray[3].addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 scoreboardOptionField.disableOptions();
+                screenWidth=stageInterface.getScreenWidth();
+                scoreboardHeight=stageInterface.getScreenHeight();
                 offlineScoreboardVisible=true;
                 continueButton.setBounds(0,0,stageInterface.getScreenWidth(),stageInterface.getScreenHeight());
                 continueButton.setVisible(true);
@@ -1035,11 +1172,12 @@ void createOptionsMenu()
     {
         scoreboardOptionField.setSelectedIndex(s);
     }
-public void setScore(int score)
-{
-    this.score = score;
-}
-
+    public void setScore(int score, int noOfHexes, int date)
+    {
+        scoreboardScore= score;
+        scoreboardNoOfHexes = noOfHexes;
+        scoreboardDate = date;
+    }
     @Override
     public void dispose() {
         skin.dispose();
@@ -1056,9 +1194,12 @@ public void setScore(int score)
     {
          dateTimeWidth=0;
           noOfHexesWidth=0;
+
           ScoreWidth=0;
-         scoreboardHeight=800;
-         screenWidth=800;
+
+
+         scoreboardHeight=stageInterface.getScreenHeight();
+         screenWidth=stageInterface.getScreenWidth();
          for(int i =0;i<scoreboardRowArray.length;i++)
          {
              scoreboardRowArray[i]= new ScoreboardRow(font);
@@ -1073,57 +1214,58 @@ public void setScore(int score)
     public void updateUIText()
     {
 //this will read in the values from the saved text file into our table to display it
-        if(Gdx.files.local("offlineScoreboard2.txt").exists()) {
-            String s = Gdx.files.local("offlineScoreboard2.txt").readString();
+        //if the file doesnt exist then create it
+        if(!Gdx.files.local(offlineScoreboardPathString).exists())
+        {
+
+
+            FileHandle file = Gdx.files.local(offlineScoreboardPathString);
+            file.writeString("Daily Scoreboard: Date    ,Number of Hexes    ,Score, ,"
+                            + " , , , ,"
+                            + " , , , ,"
+                            + " , , , ,"
+                            + " , , , ,"
+                            + " , , , ,"
+                            + " , , , ,"
+                            + "All Time Scoreboard: Date    ,Number of Hexes    ,Score, ,"
+                            + " , , , ,"
+                            + " , , , ,"
+                            + " , , , ,"
+                            + " , , , ,"
+                            + " , , , ,"
+                            + " , , , "
+                    , false);
+        }
+            String s = Gdx.files.local(offlineScoreboardPathString).readString();
             String[] sa = s.split(",");
 
             for(int i = 0 ; i< scoreboardRowArray.length;i++)
 //scoreboardRowArray.length should be 14, including the headings
             {
 
-                scoreboardRowArray[i].setText(sa[i*3],sa[i*3+1],sa[i*3+2]);
+                scoreboardRowArray[i].setText(sa[i*4],sa[i*4+1],sa[i*4+2],sa[i*4+3]);
 
-                if(dateTimeWidth<scoreboardRowArray[i].getTextWidth(sa[i*3]))
+                if(dateTimeWidth<scoreboardRowArray[i].getTextWidth(sa[i*4]))
                 {
-                    dateTimeWidth=scoreboardRowArray[i].getTextWidth(sa[i*3]);
+                    dateTimeWidth=scoreboardRowArray[i].getTextWidth(sa[i*4]);
                 }
-                if(noOfHexesWidth<scoreboardRowArray[i].getTextWidth(sa[i*3+1]))
+                if(noOfHexesWidth<scoreboardRowArray[i].getTextWidth(sa[i*4+1]))
                 {
-                    noOfHexesWidth=scoreboardRowArray[i].getTextWidth(sa[i*3+1]);
+                    noOfHexesWidth=scoreboardRowArray[i].getTextWidth(sa[i*4+1]);
                 }
-                if(ScoreWidth<scoreboardRowArray[i].getTextWidth(sa[i*3+2]))
+                if(ScoreWidth<scoreboardRowArray[i].getTextWidth(sa[i*4+2]))
                 {
-                    ScoreWidth=scoreboardRowArray[i].getTextWidth(sa[i*3+2]);
+                    ScoreWidth=scoreboardRowArray[i].getTextWidth(sa[i*4+2]);
                 }
 
             }//end for
             for(int i = 0 ; i< scoreboardRowArray.length;i++)
             {//need to start a new for loop, because now we know the text width of each column
                 scoreboardRowArray[i].setValues( (screenWidth-(dateTimeWidth+noOfHexesWidth+ScoreWidth))/2,
-                        dateTimeWidth, noOfHexesWidth, ScoreWidth, 100+scoreboardHeight/14*i);
+                        dateTimeWidth, noOfHexesWidth, ScoreWidth, +scoreboardHeight-100-scoreboardHeight/14*i);
 
             }
-        }
-        else//if file doesn't exist, create it
-        {
-            FileHandle file = Gdx.files.local("offlineScoreboard2.txt");
-            file.writeString("DateTime,Number of Hexes,Score,"
-                            +" , , ,"
-                            +" , , ,"
-                            +" , , ,"
-                            +" , , ,"
-                            +" , , ,"
-                            +" , , ,"
-                    +"DateTime,Number of Hexes,Score,"
-                            +" , , ,"
-                            +" , , ,"
-                            +" , , ,"
-                            +" , , ,"
-                            +" , , ,"
-                            +" , , "
-                    , false);
 
-        }
     }//end updateUIText
 
     @Override

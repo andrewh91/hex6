@@ -21,6 +21,9 @@ import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 
 
 /**
@@ -1423,10 +1426,19 @@ int diffInt = difficulty;
         resetGame();
         updateField(noOfRows, noOfColumns, portrait1Landscape2, fieldPosX,
                 fieldPosY, fieldWidth, fieldHeight, gameMode,symbolType);
+        Date date = new Date();
+        Calendar calendarG = new GregorianCalendar();
+        calendarG.setTime(date);
 
-        GameStage.this.stageInterface.setScore(timerInt);
+//int minutes = calendarG.get(Calendar.MINUTE);
+//int hours = calendarG.get(Calendar.HOUR_OF_DAY);
 
-        GameStage.this.stageInterface.goToGameOverStage(noOfRows*noOfRows,timerInt,
+        int year = calendarG.get(Calendar.YEAR);
+        int month = calendarG.get(Calendar.MONTH)+1;
+        int day = calendarG.get(Calendar.DAY_OF_MONTH);
+        int intDate = year*10000+month*100+day;
+        GameStage.this.stageInterface.setScore(timerInt,noOfRows*noOfColumns,intDate);
+        GameStage.this.stageInterface.goToGameOverStage(noOfRows*noOfColumns,timerInt,
                 difficulty,gameMode);
     }
     void resetGame()

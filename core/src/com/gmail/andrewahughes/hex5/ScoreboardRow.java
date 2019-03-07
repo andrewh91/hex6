@@ -7,7 +7,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 /**
  * Created by Andrew Hughes on 06/03/2019.
  */
-
 public class ScoreboardRow
 {
     GlyphLayout glyphLayout = new GlyphLayout();
@@ -18,6 +17,7 @@ public class ScoreboardRow
     BitmapFont font;
     int x1,x2,x3;
     int margin,  width1,  width2,  width3,  height;
+    boolean uploaded=true;
 
     public ScoreboardRow(BitmapFont font)
     {
@@ -28,11 +28,12 @@ public class ScoreboardRow
         margin=0;
     }
 
-    public void setText(String text1, String text2, String text3)
+    public void setText(String text1, String text2, String text3, String bool)
     {
         dateTime=text1;
         noOfHexes=text2;
         score=text3;
+        uploaded = Boolean.parseBoolean(bool);
     }
     public int getTextWidth(String text)
     {
@@ -55,9 +56,9 @@ public class ScoreboardRow
         this.width2=width2;
         this.width3=width3;
         this.height =height;
-        x1=margin+(width1/2);
-        x2=margin+width1+(width2/2);
-        x3=margin+width1+width2+(width3/2);
+        x1=margin;
+        x2=margin+width1;
+        x3=margin+width1+width2;
     }
 
     public void draw(SpriteBatch sb)

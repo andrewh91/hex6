@@ -13,13 +13,11 @@ public interface StageInterface {
     void setScoreboardMode(int scoreboardMode);
 
     void showScoreboard();
-    boolean submitScore(int score, int difficulty, int noOfHes);
     void goToGameOverStage(int noOfHexes, int score, int difficulty,int gameMode) ;
     void updateFieldSwapOrientation();
     void setLandscape();
     void setPortrait();
     void goToGameStageRefresh();
-    void setScore(int score);
     void updateOptionsGoToGameStage(int newNoOfRows, int newNoOfColumns, int newPortrait1Landscape2,
                                     int newFieldPosX, int newFieldPosY, int newFieldWidth,
                                     int newFieldHeight,int zoom,int difficulty, int gameMode, int symbolType);
@@ -41,5 +39,10 @@ public interface StageInterface {
     void setGameMode(int gameMode);
     void setNoOfHexes(int noOfHexes);
     void setZoomMode(int zoomMode);
+    void setScore(int score,int hexes, int date );
+
+
+    boolean submitScore(int score, int noOfHexes);
+
 
 }

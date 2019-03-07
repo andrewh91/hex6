@@ -822,13 +822,16 @@ hideAllStages();
         }
     }
     @Override
-    public  boolean submitScore(int score, int difficulty, int noOfHexes)
+    public  boolean submitScore(int score, int noOfHexes)
     {
-        //i intend to have multiple scoreboards which will cover the different difficulties and noofhexes
-        //        gsClient.submitToLeaderboard(difficulty+LEADERBOARD1+noOfHexes, score, gsClient.getGameServiceId());
+        //i intend to have multiple scoreboards which will cover the different  noofhexes
+        //        gsClient.submitToLeaderboard(LEADERBOARD1+noOfHexes, score, gsClient.getGameServiceId());
 
         return gsClient.submitToLeaderboard(LEADERBOARD1, score, gsClient.getGameServiceId());
     }
+
+
+
 
     @Override
     public  void setDifficulty(int difficulty)
@@ -881,10 +884,10 @@ hideAllStages();
 
 
     @Override
-    public void setScore(int score )
+    public void setScore(int score,int hexes, int date )
     {
-       // gameOverStage.setScore(timeValueArg,difficultyValueArg,gameModeArg);
-        gamePauseStage.setScore(score);
+
+        gamePauseStage.setScore(score,hexes,date);
     }
     @Override
     public void goToGameOverStage(int noOfHexes, int score, int difficulty,int gameMode) {
