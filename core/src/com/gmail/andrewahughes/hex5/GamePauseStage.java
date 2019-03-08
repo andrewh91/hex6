@@ -383,27 +383,7 @@ updateUI();
         hexOptionField.hexOptionArray[0].addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                newDifficulty = difficulty;
-                newOrientation = orientation;
-                newSymbol=symbol;
-                newGameMode = gameMode;
-                newNoOfHexes = noOfHexes;
-                newNoOfRows = noOfRows;
-                newNoOfColumns = noOfColumns;
-                newZoomMode = zoomMode;
-                newScoreboardMode=scoreboardMode;
-
-
-                stageInterface.setDifficulty(difficulty);
-                stageInterface.setOrientation(orientation);
-                stageInterface.setSymbol(symbol);
-                stageInterface.setGameMode(gameMode);
-                stageInterface.setNoOfHexes(noOfHexes);
-                stageInterface.setZoomMode(zoomMode);
-
-                stageInterface.updateOptionsGoToGameStage(0, 0,
-                        0, 0, 0, 0, 0, 0,
-                        0, 0, 0);
+                cancelOptions();
             }});//end cancel changes
 
 //return to main menu
@@ -420,6 +400,8 @@ updateUI();
             public void clicked(InputEvent event, float x, float y) {
                 stageInterface.goToDifficultyOption();
 
+                //highlight saved selected option value
+                stageInterface.setDifficulty(difficulty);
             }});//end go to difficulty menu
 
 //go to swap orientation
@@ -428,6 +410,7 @@ updateUI();
             public void clicked(InputEvent event, float x, float y) {
                 stageInterface.goToSwapOrientationOption();
 
+                stageInterface.setOrientation(orientation);
             }});//end go to swap orientation
 
 //go to symbol
@@ -436,6 +419,7 @@ updateUI();
             public void clicked(InputEvent event, float x, float y) {
                 stageInterface.goToSymbolOption();
 
+                stageInterface.setSymbol(symbol);
             }});//end go to symbol
 
 //save changes
@@ -466,6 +450,7 @@ updateUI();
             public void clicked(InputEvent event, float x, float y) {
                 stageInterface.goToGameModeOption();
 
+                stageInterface.setGameMode(gameMode);
             }});//end go to game mode
 
 //go to no of hexes
@@ -474,6 +459,7 @@ updateUI();
             public void clicked(InputEvent event, float x, float y) {
                 stageInterface.goToNoOfHexesOption();
 
+                stageInterface.setNoOfHexes(noOfHexes);
             }});//end go to no of hexes
 
 //go to zoom mode
@@ -482,6 +468,7 @@ updateUI();
             public void clicked(InputEvent event, float x, float y) {
                 stageInterface.goToZoomModeOption();
 
+                stageInterface.setZoomMode(zoomMode);
             }});//end go to zoom mode
         hexOptionField.hexOptionArray[9].addListener(new ClickListener() {
             @Override
@@ -705,6 +692,8 @@ public void clicked(InputEvent event, float x, float y) {
             public void clicked(InputEvent event, float x, float y) {
                 if(gameOver)//if game over is true then we navigated here when the game ended, the back button should take us back to the main menu
                 {
+                    stageInterface.goToMainOption();
+
                     stageInterface.goToMainStage();
 
                 }
@@ -764,6 +753,7 @@ public void clicked(InputEvent event, float x, float y) {
                     {
                         //if upload successful, black out submit button
                         newOnlineScore=false;
+
                     }
 //write to the text file - because the uploaded values might have changed 
                     writeToTextFile();
@@ -805,6 +795,7 @@ public void cancelOptions()
     newNoOfRows = noOfRows;
     newNoOfColumns = noOfColumns;
     newZoomMode = zoomMode;
+    newScoreboardMode=scoreboardMode;
 
     stageInterface.setDifficulty(difficulty);
     stageInterface.setOrientation(orientation);
@@ -812,9 +803,20 @@ public void cancelOptions()
     stageInterface.setGameMode(gameMode);
     stageInterface.setNoOfHexes(noOfHexes);
     stageInterface.setZoomMode(zoomMode);
-    stageInterface.updateOptionsGoToGameStage(0, 0,
+    /*stageInterface.updateOptionsGoToGameStage(0, 0,
             0, 0, 0, 0, 0, 0,
             0, 0, 0);
+            */
+    int tempPortrait;
+    if(portrait)
+    {
+        tempPortrait=1;
+    }
+    else{
+        tempPortrait=2;
+    }
+    stageInterface.updateOptionsGoToGameStage(newNoOfRows,newNoOfColumns,
+            tempPortrait,0,0,0,0,0,0,gameMode,0);
 }
 
 /*
