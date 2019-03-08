@@ -642,6 +642,7 @@ hideAllStages();
         gameStage.setNewCameraZoomTarget(1);
         gameStage.setDefaultCameraZoom(1);
         gameStage.getViewport().getCamera().update();
+        gameStage.hudViewport.setWorldSize(vpWidth,vpHeight);
         platform.SetOrientation("portrait");
 
         gamePauseStage.changeOrientation(true);
@@ -665,6 +666,7 @@ hideAllStages();
         gameStage.setDefaultCameraZoom(1);
         gameStage.getViewport().getCamera().update();
         platform.SetOrientation("landscape");
+        gameStage.hudViewport.setWorldSize(vpWidth,vpHeight);
 
         gamePauseStage.changeOrientation(false);
     }

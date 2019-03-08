@@ -141,28 +141,17 @@ Col’s  	rows	total	orientation
     ArrayList<Integer> nonMatchingSymbols = new ArrayList<Integer>();
     ArrayList<Integer> nonMatchingSymbolsHex1 = new ArrayList<Integer>();
     ArrayList<Integer> nonMatchingSymbolsHex2 = new ArrayList<Integer>();
+boolean ready = false;
+Actor readyButton;
 
-    Actor readyButton ;
-int readyButtonWidth;
-int readyButtonHeight;
+
+
     public GameStage(Viewport viewport, Texture texture, final StageInterface stageInterface, int portrait) {
         super(viewport);
         this.viewport = viewport;
-        hudViewport = new StretchViewport(1280,720);
-        hudViewport.setScreenBounds(0,0,1280,720);
-        readyButton = new Actor();
-        readyButtonWidth=stageInterface.getScreenWidth();
-        readyButtonHeight=stageInterface.getScreenHeight();
-        readyButton.setBounds(0,0,readyButtonWidth,readyButtonHeight);
-        readyButton.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                {
-readyButton.setVisible(false);
-setPause(false);
-                }
-            }
-        });
+        hudViewport = new StretchViewport(stageInterface.getScreenWidth(),stageInterface.getScreenHeight());
+        hudViewport.setScreenBounds(0,0,stageInterface.getScreenWidth(),stageInterface.getScreenHeight());
+
 this.portrait1Landscape2 = portrait;
         //the font isn’t really final, the symbols will be replaced with pictures eventually
         font.setColor(Color.WHITE);
@@ -173,6 +162,7 @@ this.portrait1Landscape2 = portrait;
         //the stage interface is used to go from one stage to another and pass variables over
         this.stageInterface = stageInterface;
 
+        createReadyButton();
     }
 
 
@@ -934,39 +924,25 @@ this.portrait1Landscape2 = portrait;
     @Override
     public void draw() {
         act(Gdx.graphics.getDeltaTime());
-//if we reach gameover for example by reaching target score
-        if(gameOver)
+        if(visible)
         {
-            //green backgroudn
-            Gdx.gl.glClearColor(0 , 0.8f, 0, 1);
-            Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
-            viewport.getCamera().update();
-            spriteBatch.begin();
-            //display the results
-            font.draw(spriteBatch, "finish!   timer: " + (float)(((int)(timer*100)))/100f  + " score: " + score+" difficulty: " +difficulty, 5, 640);
-            spriteBatch.end();
-            super.draw();
-        }
-//if not game over
-        else if(pause)
+ if(!ready)
         {
-
-            spriteBatch.setProjectionMatrix(viewport.getCamera().combined);
-            spriteBatch.begin();
+hudViewport.apply();
+            hudBatch.begin();
             this.act();
 
             Gdx.gl.glClearColor(0.74f , 0.3f , .2f, 1);
             Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-            font.draw(spriteBatch,"Tap and hold screen to get ready",stageInterface.getScreenWidth()/2,stageInterface.getScreenHeight()/7*3);
-            font.draw(spriteBatch,"Release to start",stageInterface.getScreenWidth()/2,stageInterface.getScreenHeight()/7*4);
-spriteBatch.end();
+            font.draw(hudBatch,"Tap and hold screen to get ready",stageInterface.getScreenWidth()/2,stageInterface.getScreenHeight()/17*9);
+            font.draw(hudBatch,"Release to start",stageInterface.getScreenWidth()/2,stageInterface.getScreenHeight()/17*8);
+hudBatch.end();
 
 super.draw();
         }
         else {
 //if visible, should be visible so long as we are in the game stage
-            if (visible) {
+
 //increase the timer
                 timer = timer + Gdx.graphics.getDeltaTime();
                 //test camera translate
@@ -1059,8 +1035,6 @@ hexWideField.drawFilled(renderer,symbolType);
     public void setVisible(boolean visible) {
 
         this.visible = visible;
-        setPause(visible);
-        readyButton.setVisible(visible);
     }
     public void setPause(boolean pause) {
         this.pause = pause;
@@ -1088,10 +1062,10 @@ hexWideField.drawFilled(renderer,symbolType);
         {
             addActor(hwf.hexWideArray[i]);
         }
-        
-        readyButton.setBounds(0,0,readyButtonWidth,readyButtonHeight);
 
-        addActor(readyButton);
+
+        ready=false;
+        createReadyButton();
     }
     //same but for tall hexes
     public void addHexesToStage( HexTallField hwf)
@@ -1100,9 +1074,7 @@ hexWideField.drawFilled(renderer,symbolType);
         {
             addActor(hwf.hexTallArray[i]);
         }
-        readyButton.setBounds(0,0,readyButtonWidth,readyButtonHeight);
 
-        addActor(readyButton);
     }
     //remove all actors, needed when switching game mode, or otherwise getting rid of one field and making a new one
     public void removeAllActors()
@@ -1585,14 +1557,29 @@ int diffInt = difficulty;
     {
         ((OrthographicCamera)viewport.getCamera()).zoom=newCamZoom;
     }
+
+    void createReadyButton()
+    {
+        readyButton = new Actor();
+        readyButton.setBounds(0,0,1280,1280);
+        readyButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                {
+                    readyButton.setVisible(false);
+ready =true;
+                }
+            }
+        });
+        addActor(readyButton);
+    }
+
     @Override
     public boolean keyDown(int keycode) {
         if(keycode == Input.Keys.BACK){
 
 
             GameStage.this.stageInterface.goToGamePauseStage(false);
-
-
 
 
 
