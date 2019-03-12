@@ -41,8 +41,7 @@ public interface StageInterface {
     void setZoomMode(int zoomMode);
     void setScore(int score,int hexes, int date );
 
-
-    boolean submitScore(int score, int noOfHexes);
+    boolean submitScore(int score, int noOfHexes, int scoreboard );
 
 
 }

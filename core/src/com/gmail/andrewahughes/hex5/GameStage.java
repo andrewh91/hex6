@@ -1298,7 +1298,7 @@ resetSelection();
 
     public boolean isNewNoOfRows(int v)
     {
-        if(v==noOfRows)
+        if(v==noOfRows||v==0)
         {
             return false;
         }
@@ -1309,7 +1309,7 @@ resetSelection();
     }
     public boolean isNewNoOfColumns(int v)
     {
-        if(v==noOfColumns)
+        if(v==noOfColumns||v==0)
         {
             return false;
         }

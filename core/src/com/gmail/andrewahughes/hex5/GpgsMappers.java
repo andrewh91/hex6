@@ -9,8 +9,20 @@ public class GpgsMappers {
         String gpgsId = null;
 
         if (leaderboardId != null) {
-            if (leaderboardId.equals(GdxGameSvcsApp.LEADERBOARD1))
-                gpgsId = "CgkIhbawkZcMEAIQAQ";
+            if (leaderboardId.equals(GdxGameSvcsApp.LEADERBOARD1+0))
+            gpgsId = "CgkIhbawkZcMEAIQAQ";
+            if (leaderboardId.equals(GdxGameSvcsApp.LEADERBOARD1+1))
+                gpgsId = "CgkIhbawkZcMEAIQAg";
+            else  if (leaderboardId.equals(GdxGameSvcsApp.LEADERBOARD1+2))
+                gpgsId = "CgkIhbawkZcMEAIQAw";
+            else  if (leaderboardId.equals(GdxGameSvcsApp.LEADERBOARD1+3))
+                gpgsId = "CgkIhbawkZcMEAIQBA";
+            else  if (leaderboardId.equals(GdxGameSvcsApp.LEADERBOARD1+4))
+                gpgsId = "CgkIhbawkZcMEAIQBQ";
+            else  if (leaderboardId.equals(GdxGameSvcsApp.LEADERBOARD1+5))
+                gpgsId = "CgkIhbawkZcMEAIQBg";
+            else  if (leaderboardId.equals(GdxGameSvcsApp.LEADERBOARD1+6))
+                gpgsId = "CgkIhbawkZcMEAIQBw";
         }
 
         return gpgsId;

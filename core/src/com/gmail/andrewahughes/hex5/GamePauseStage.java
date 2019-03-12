@@ -282,7 +282,7 @@ updateUI();
                 //TODO delete this, its for testing only
                 case 6:
                 {
-                    category=1;
+                    category=0;
                     break;
                 }
                 //
@@ -737,8 +737,8 @@ public void clicked(InputEvent event, float x, float y) {
                         if(scoreboardRowArray[i].uploaded==false&&!scoreboardRowArray[i].score.equals(" "))
                         {
 //this returns true if upload successful, if unsuccessful set a flag
-                            if(stageInterface.submitScore(Integer.valueOf(scoreboardRowArray[i].score),
-                                    Integer.valueOf(scoreboardRowArray[i].noOfHexes))==false)
+if(stageInterface.submitScore(Integer.valueOf(scoreboardRowArray[i].score),
+                            Integer.valueOf(scoreboardRowArray[i].noOfHexes),category)==false)
                             {
                                 allUploaded=false;
                             }

@@ -698,7 +698,10 @@ hideAllStages();
         }
 
         //certain options require the entire field to be recalculated, if any of those options are altered, recalculate new field,
-        if(gameStage.isNewGameMode(newGameMode)||gameStage.isNewPortrait1Landscape2(newPortrait1Landscape2)||gameStage.isNewNoOfColumns(newNoOfColumns)||gameStage.isNewNoOfRows(newNoOfRows))
+        if(gameStage.isNewGameMode(newGameMode)||
+                gameStage.isNewPortrait1Landscape2(newPortrait1Landscape2)||
+                gameStage.isNewNoOfColumns(newNoOfColumns)||
+                gameStage.isNewNoOfRows(newNoOfRows))
         {
             if(newPortrait1Landscape2==1)
             {
@@ -824,13 +827,11 @@ hideAllStages();
         }
     }
     @Override
-    public  boolean submitScore(int score, int noOfHexes)
+    public  boolean submitScore(int score, int noOfHexes, int scoreboardIndex)
     {
-        //i intend to have multiple scoreboards which will cover the different  noofhexes
-        //        gsClient.submitToLeaderboard(LEADERBOARD1+noOfHexes, score, gsClient.getGameServiceId());
-
-        return gsClient.submitToLeaderboard(LEADERBOARD1, score, gsClient.getGameServiceId());
+        return gsClient.submitToLeaderboard(LEADERBOARD1+scoreboardIndex, score, gsClient.getGameServiceId());
     }
+
 
 
 
