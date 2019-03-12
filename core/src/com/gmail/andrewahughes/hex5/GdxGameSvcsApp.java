@@ -72,8 +72,8 @@ Platform platform;
        cam=new OrthographicCamera();
        vpLong=1280;// the long edge of the screen
        vpShort=720;
-vpWidth=vpLong;
-vpHeight=vpShort;
+vpWidth=vpShort;
+vpHeight=vpLong;
         stretchViewport = new StretchViewport(vpWidth,vpHeight);
         badlogic = new Texture("badlogic.jpg");
         gameStage = new GameStage(stretchViewport,badlogic,this,portrait);
@@ -809,6 +809,7 @@ hideAllStages();
         gamePauseStage.noOfHexesOptionField.disableOptions();
         gamePauseStage.zoomModeOptionField.disableOptions();
         gamePauseStage.scoreboardOptionField.disableOptions();
+        gamePauseStage.noOfHexesOptionFieldSingles.disableOptions();
     }
 
     @Override
