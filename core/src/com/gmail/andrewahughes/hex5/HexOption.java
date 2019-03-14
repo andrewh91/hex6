@@ -9,6 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.Align;
 
 /**
  * Created by Andrew Hughes on 24/01/2019.
@@ -34,7 +35,7 @@ public class HexOption extends Actor {
         setBounds(centreX - edgeSize, centreY - altitudeSize, edgeSize * 2,
                 altitudeSize * 2);
         disable();
-
+font.getData().setScale(2f);
         /*this.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -47,6 +48,11 @@ public class HexOption extends Actor {
         });
         */
 
+    }
+    public void setText(String a)
+    {
+        text=a;
+        glyphLayout.setText(font,text);
     }
     public boolean pointInCircle(float circleOriginX, float circleOriginY,
                                  float radius, float pointX, float pointY)
@@ -88,7 +94,8 @@ drawHex(sr);
     }
     public void drawText (SpriteBatch sb) {
         if (this.isVisible()) {
-            font.draw(sb, "" + hexIndex + " " + text, centreX + glyphLayout.width / 2, centreY + glyphLayout.height / 2);
+            font.draw(sb, " " + text, centreX-edgeSize*0.95f, centreY +glyphLayout.height / 2,edgeSize*2f, Align.center,true);
+           // font.draw(sb, "" + hexIndex + " " + text, centreX + glyphLayout.width / 2, centreY + glyphLayout.height / 2,altitudeSize*2f, Align.center,true);
         }
 
     }

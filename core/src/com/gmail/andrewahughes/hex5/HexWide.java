@@ -69,7 +69,7 @@ public class HexWide extends Actor {
         this.posX = centreX;
         this.posY = centreY;
         visible = true;
-font.getData().setScale(3f);
+font.getData().setScale(2f);
         for(int i =0;i<6;i++) {
             removeSymbol.add(1);
 
@@ -229,12 +229,12 @@ if(visible) {
         if (visible) {
             //sr.begin(ShapeRenderer.ShapeType.Line);
 
-            sr.setColor(1*red,100,40*blue,1);
-            drawWideHex(sr,posX,posY,edgeSize);
             drawWideSymbol(sr,posX,posY,edgeSize);
-            sr.circle(posX,posY,altitudeSize);
-            sr.setColor(Color.RED);
-            sr.circle(touchX+posX-edgeSize,touchY+posY-altitudeSize,touchRadius);
+           //circle around hex interior
+           // sr.circle(posX,posY,altitudeSize);
+            //touch point
+            //sr.setColor(Color.RED);
+            //sr.circle(touchX+posX-edgeSize,touchY+posY-altitudeSize,touchRadius);
 
 
 
@@ -250,6 +250,9 @@ if(visible) {
         act(Gdx.graphics.getDeltaTime());
 
         if (visible) {
+            sr.setColor(0.95f-0.5f*red,0.74f,0.25f-0.5f*blue,1);
+
+            drawWideHex(sr,posX,posY,edgeSize);
 
 if(symbolType==2) {
     drawSymbolsShapes(sr, posX, posY, edgeSize, altitudeSize);
@@ -281,19 +284,48 @@ if(symbolType==2) {
         visible=false;
     }
 
-    void drawWideHex(ShapeRenderer sr, float originX, float originY, float edgeSize)
+    void drawWideHex(ShapeRenderer sr, float centreX, float centreY, float edgeSize)
     {
         // draws a ‘wide’ hex hex with flat top and bottom. originX and originY are the coordinates passed in which will determine the centre of the hex, edge size will determine the size, altitudeSize is the height (or altitude) of an equilateral triangle with edge size defined by edgeSize
 
 
         //draw 6 lines starting at the bottom right and going around anti clockwise
-
+/*
         sr.line(originX + (edgeSize / 2), originY - altitudeSize, originX + edgeSize, originY);
         sr.line(originX + edgeSize, originY , originX + (edgeSize / 2) , (int)(originY + altitudeSize));
         sr.line(originX + (edgeSize / 2) , (int)(originY + altitudeSize), originX - (edgeSize / 2) , (int)(originY + altitudeSize));
         sr.line(originX - (edgeSize / 2) , (int)(originY + altitudeSize), originX - edgeSize , originY);
         sr.line(originX - edgeSize , originY , originX - (edgeSize / 2) , (int)(originY - altitudeSize));
         sr.line(originX - (edgeSize / 2) , (int)(originY - altitudeSize),originX + (edgeSize / 2) , (int)(originY - altitudeSize));
+*/
+        sr.triangle(
+                centreX+edgeSize,
+                centreY,
+                centreX+edgeSize/2,
+                centreY+altitudeSize,
+                centreX-edgeSize/2,
+                centreY+altitudeSize);
+        sr.triangle(
+                centreX+edgeSize,
+                centreY,
+                centreX-edgeSize/2,
+                centreY+altitudeSize,
+                centreX-edgeSize,
+                centreY);
+        sr.triangle(
+                centreX+edgeSize,
+                centreY,
+                centreX-edgeSize,
+                centreY,
+                centreX-edgeSize/2,
+                centreY-altitudeSize);
+        sr.triangle(
+                centreX+edgeSize,
+                centreY,
+                centreX-edgeSize/2,
+                centreY-altitudeSize,
+                centreX+edgeSize/2,
+                centreY-altitudeSize);
 
     }
     public void drawSymbols (SpriteBatch sb, float originX, float originY , float edgeSize, float altitudeSize)

@@ -128,13 +128,12 @@ boolean practise;
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 {//any changes madehere should be  reflected in the back button
-                    if (practise == false)
-                    {
+
                         continueButton.setVisible(false);
 
                         offlineScoreboardVisible = false;
                         GamePauseStage.this.stageInterface.goToScoreboardOption();
-                    }
+
                 }
             }
         });
@@ -217,14 +216,15 @@ updateUI();
                 hexOptionFieldArray.get(7).hexOptionArray[2].drawHex(shapeRenderer);
 
             }
+            //black out difficulty if not in practise mode
 if(practise==false&&hexOptionFieldArray.get(0).hexOptionArray[2].isVisible())
 {
-    shapeRenderer.setColor(0.04f,0.04f,0.04f, 1);
+    shapeRenderer.setColor(0.09f,0.08f,0.01f, 1);
     hexOptionFieldArray.get(0).hexOptionArray[2].drawHex(shapeRenderer);
 }
 else if(practise&&hexOptionFieldArray.get(0).hexOptionArray[9].isVisible())
 {
-    shapeRenderer.setColor(0.04f,0.04f,0.04f, 1);
+    shapeRenderer.setColor(0.09f,0.08f,0.01f, 1);
     hexOptionFieldArray.get(0).hexOptionArray[9].drawHex(shapeRenderer);
 }
 /*
@@ -412,20 +412,22 @@ else if(practise&&hexOptionFieldArray.get(0).hexOptionArray[9].isVisible())
             }});//end return to main menu
 
 //go to difficulty menu
-        if(this.practise)
-        {
+
             hexOptionField.hexOptionArray[2].addListener(new ClickListener()
             {
                 @Override
                 public void clicked(InputEvent event, float x, float y)
                 {
-                    stageInterface.goToDifficultyOption();
+                    if(practise)
+                    {
+                        stageInterface.goToDifficultyOption();
 
-                    //highlight saved selected option value
-                    stageInterface.setDifficulty(difficulty);
+                        //highlight saved selected option value
+                        stageInterface.setDifficulty(difficulty);
+                    }
                 }
             });//end go to difficulty menu
-        }
+
 //go to swap orientation
         hexOptionField.hexOptionArray[3].addListener(new ClickListener() {
             @Override
@@ -505,18 +507,19 @@ else if(practise&&hexOptionFieldArray.get(0).hexOptionArray[9].isVisible())
 
                 stageInterface.setZoomMode(zoomMode);
             }});//end go to zoom mode
-if(this.practise==false)
-{
+
     hexOptionField.hexOptionArray[9].addListener(new ClickListener()
     {
         @Override
         public void clicked(InputEvent event, float x, float y)
         {
+            if(practise==false)
+        {
             stageInterface.goToScoreboardOption();
-
+        }
         }
     });//end go to scoreboard
-}
+
 //end main menu
 
 //difficulty menu
@@ -791,13 +794,11 @@ if(stageInterface.submitScore(Integer.valueOf(scoreboardRowArray[i].score),
                 screenWidth=stageInterface.getScreenWidth();
                 scoreboardHeight=stageInterface.getScreenHeight();
                 offlineScoreboardVisible=true;
-                if (practise == false)
-                {
 
                     continueButton.setBounds(0, 0, stageInterface.getScreenWidth(), stageInterface.getScreenHeight());
                     continueButton.setVisible(true);
                     updateUIText();
-                }
+
             }
         });
 
@@ -1445,10 +1446,9 @@ if(continueButton.isVisible())
 {
     continueButton.setVisible(false);
     offlineScoreboardVisible=false;
-    if(practise==false)
-    {
+
         GamePauseStage.this.stageInterface.goToScoreboardOption();
-    }
+
 }
 else if(fieldIndex==0)
 {

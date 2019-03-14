@@ -18,6 +18,7 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
@@ -155,7 +156,7 @@ Actor readyButton;
 this.portrait1Landscape2 = portrait;
         //the font isn’t really final, the symbols will be replaced with pictures eventually
         font.setColor(Color.WHITE);
-        font.getData().setScale(1f);
+        font.getData().setScale(2f);
         //create the field with the given default values which we set above
         updateField(noOfRows, noOfColumns, portrait, fieldPosX, fieldPosY, fieldWidth,
                 fieldHeight, gameMode,symbolType);
@@ -932,10 +933,10 @@ hudViewport.apply();
             hudBatch.begin();
             this.act();
 
-            Gdx.gl.glClearColor(0.74f , 0.3f , .2f, 1);
+            Gdx.gl.glClearColor(0.74f , 0.5f , 0.05f, 1);
             Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-            font.draw(hudBatch,"Tap and hold screen to get ready",stageInterface.getScreenWidth()/2,stageInterface.getScreenHeight()/17*9);
-            font.draw(hudBatch,"Release to start",stageInterface.getScreenWidth()/2,stageInterface.getScreenHeight()/17*8);
+            font.draw(hudBatch,"Tap and hold screen to get ready",0,stageInterface.getScreenHeight()/17*9,viewport.getCamera().viewportWidth, Align.center,true);
+            font.draw(hudBatch,"Release to start",0,stageInterface.getScreenHeight()/17*8,viewport.getCamera().viewportWidth, Align.center,true);
 hudBatch.end();
 
 super.draw();
@@ -970,7 +971,7 @@ super.draw();
                     red = 0;
                 }
 
-                Gdx.gl.glClearColor(0 + red, 0 + green, 0, 1);
+                Gdx.gl.glClearColor(0.475f + red, 0.37f + green, 0.125f, 1);
                 Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
                 //spritebatch without matrix transformations
@@ -979,8 +980,7 @@ super.draw();
                 hudViewport.apply();
                 hudBatch.begin();
 
-                font.draw(hudBatch, "timer: " + (int)(timer) + " score: " + score
-                        +" fieldmode score: "+scoreFieldMode+" target: "+targetScoreFieldMode+" width "+viewport.getCamera().viewportWidth,30, 30);
+                font.draw(hudBatch, "timer: " + (int)(timer) ,30, 30);
 
                 hudBatch.end();
 viewport.apply();

@@ -332,7 +332,7 @@ public void setupOptions(int noOfOptions )
 }
     public void asignOptionText(int index, String text)
     {
-        hexOptionArray[index].text = text;
+        hexOptionArray[index].setText(text);
     }
 
     public String[] setupOptionsText(String[] textArray )

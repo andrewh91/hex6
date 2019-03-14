@@ -58,7 +58,8 @@ continueButtonTimer=100;
                     if(continueButtonTimer<=0)
                     {
                     setVisible(false);
-                    GameOverStage.this.stageInterface.goToGamePauseStage(true);
+                    //if practise use false bool as argument, if not use true
+                    GameOverStage.this.stageInterface.goToGamePauseStage(!stageInterface.getPractise());
                     continueButtonTimer=100;
                 }
                 }
