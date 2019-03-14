@@ -119,7 +119,7 @@ Col’s  	rows	total	orientation
 9	14	126	portrait
 */
     //default values for the field
-    public int noOfRows = 3, noOfColumns = 2;
+    public int noOfRows = 6, noOfColumns = 4;
     //prefer not to use Boolean for the orientation, when changing the options in game we can use 0 to show no change, 1 portrait 2 landscape
     //game mode is 0 by default, this is the field mode, many hexes on screen, hexes disappear when matched, game mode 1 would be singles mode, 2 hexes on screen, symbols are replaced when matching
     int portrait1Landscape2 = 1, fieldPosX = 50, fieldPosY = 50, fieldWidth = 620, fieldHeight = 1180

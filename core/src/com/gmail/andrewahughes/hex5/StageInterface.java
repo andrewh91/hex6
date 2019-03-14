@@ -42,6 +42,7 @@ public interface StageInterface {
     void setScore(int score,int hexes, int date );
 
     boolean submitScore(int score, int noOfHexes, int scoreboard );
+    boolean getPractise();
 
 
 }

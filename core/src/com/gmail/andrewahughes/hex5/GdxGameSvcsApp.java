@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -35,6 +36,7 @@ import de.golfgl.gdxgamesvcs.gamestate.ILoadGameStateResponseListener;
 import de.golfgl.gdxgamesvcs.gamestate.ISaveGameStateResponseListener;
 import de.golfgl.gdxgamesvcs.leaderboard.IFetchLeaderBoardEntriesResponseListener;
 import de.golfgl.gdxgamesvcs.leaderboard.ILeaderBoardEntry;
+import sun.security.provider.SHA;
 
 public class GdxGameSvcsApp extends ApplicationAdapter implements IGameServiceListener,StageInterface {
     public static final String LEADERBOARD1 = "BOARD1";
@@ -43,6 +45,8 @@ public class GdxGameSvcsApp extends ApplicationAdapter implements IGameServiceLi
     public static final String REPOLINK = "https://github.com/MrStahlfelge/gdx-gamesvcs";
     public static final String FILE_ID = "cloud";
 Platform platform;
+boolean practise = false;
+
     GameStage gameStage;
     GamePauseStage gamePauseStage;
     GameOverStage gameOverStage;
@@ -63,6 +67,10 @@ Platform platform;
     public int vpWidth,vpHeight,vpShort,vpLong;
     int portrait=1;
 
+    ShapeRenderer sr;
+    SpriteBatch sb;
+    HexOptionField mainMenu;
+
    public GdxGameSvcsApp(Platform platform)
    {
        this.platform=platform;
@@ -77,13 +85,29 @@ vpHeight=vpLong;
         stretchViewport = new StretchViewport(vpWidth,vpHeight);
         badlogic = new Texture("badlogic.jpg");
         gameStage = new GameStage(stretchViewport,badlogic,this,portrait);
-        gamePauseStage = new GamePauseStage(stretchViewport,badlogic,this);
+        gamePauseStage = new GamePauseStage(stretchViewport,badlogic,this,practise);
         gameOverStage = new GameOverStage(stretchViewport,badlogic,this);
         //Gdx.input.setInputProcessor(gameStage);
 
         mainStage = new Stage(stretchViewport);
         Gdx.input.setInputProcessor(mainStage);
         Gdx.input.setCatchBackKey(true);
+
+         sr = new ShapeRenderer();
+         sb = new SpriteBatch();
+        mainMenu = new HexOptionField(vpWidth,vpHeight,
+                3,0,portrait==1,
+                new String[]{"Sign In","Start Practise Game","Start Hiscore Game"},
+                3);
+
+        for(int i =0; i<mainMenu.hexOptionArray.length;i++)
+        {
+            mainStage.addActor(mainMenu.hexOptionArray[i]);
+        }
+        mainMenu.enableOptions();
+setUpHexOptions();
+
+
         setPortrait();
 
         prepareSkin();
@@ -125,6 +149,37 @@ vpHeight=vpLong;
         // needed in case the connection is pending
         refreshStatusLabel();
     }
+public void setUpHexOptions()
+{
+    mainMenu.hexOptionArray[0].addListener(new ClickListener(){
+        @Override
+        public void clicked(InputEvent event,float x, float y)
+        {
+            //sign in
+gsSignInOrOut();
+        }
+    });
+
+    mainMenu.hexOptionArray[1].addListener(new ClickListener(){
+        @Override
+        public void clicked(InputEvent event,float x, float y)
+        {
+//practise
+            practise=true;
+            goToGameStageRefresh();
+        }
+    });
+
+    mainMenu.hexOptionArray[2].addListener(new ClickListener(){
+        @Override
+        public void clicked(InputEvent event,float x, float y)
+        {
+//hiscore
+            practise=false;
+            goToGameStageRefresh();
+        }
+    });
+}
 
     private void prepareUI() {
         gsStatus = new Label("", skin);
@@ -499,6 +554,8 @@ vpHeight=vpLong;
 
         signInButton.setText(gsClient.isSessionActive() ? "Sign out" : "Sign in");
 
+        mainMenu.asignOptionText(0,gsClient.isSessionActive() ? "Sign out" : "Sign in");
+
         newUserText = gsClient.getPlayerDisplayName();
         gsUsername.setText(newUserText != null ? newUserText : "(none)");
     }
@@ -515,12 +572,21 @@ vpHeight=vpLong;
     }
 
     @Override
-    public void render() {
+    public void render(){
         if(visible) {
-            Gdx.gl.glClearColor(0.2f, 0.2f, 0.2f, 1);
+            Gdx.gl.glClearColor(0.9f, 0.8f, 0.1f, 1);
             Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
             mainStage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
-            mainStage.draw();
+
+            // mainStage.draw();
+            sr.begin(ShapeRenderer.ShapeType.Filled);
+            sr.setProjectionMatrix(stretchViewport.getCamera().combined);
+            mainMenu.draw(sr);
+            sr.end();
+            sb.setProjectionMatrix(stretchViewport.getCamera().combined);
+            sb.begin();
+            mainMenu.drawText(sb);
+            sb.end();
         }
 
 
@@ -529,7 +595,11 @@ vpHeight=vpLong;
             gameOverStage.draw();
 
     }
-
+@Override
+public boolean getPractise()
+{
+    return practise;
+}
     @Override
     public void resize(int width, int height) {
         //mainStage.getViewport().update(vpWidth, vpHeight, true);
@@ -734,6 +804,7 @@ hideAllStages();
             goToScoreboardOption();
         }
         gamePauseStage.setVisible(true);
+        gamePauseStage.setPractise(practise);
         Gdx.input.setInputProcessor(gamePauseStage);
         Gdx.input.setCatchBackKey(true);
     }
