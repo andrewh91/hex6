@@ -618,7 +618,14 @@ for(int i = 1;i<3;i++)
                     tempHexOption=(HexOption)event.getTarget();
                     newGameMode=tempHexOption.hexIndex;
                     stageInterface.setGameMode(newGameMode);
-
+if(newGameMode==1)
+{
+    deriveRowsAndColumnsSingles();
+}
+else
+{
+    deriveRowsAndColumns();
+}
                 }
             });
         }//end select game mode
@@ -642,7 +649,6 @@ for(int i = 1;i<3;i++)
                 public void clicked(InputEvent event, float x, float y) {
                     tempHexOption=(HexOption)event.getTarget();
                     newNoOfHexes=tempHexOption.hexIndex;
-                    stageInterface.setNoOfHexes(newNoOfHexes);
 //need to derive noOfRows and columns from noOfHexes
 
                         deriveRowsAndColumnsSingles();
@@ -676,7 +682,6 @@ for(int i = 1;i<noOfHexesOptionField.hexOptionArray.length;i++)
                 stageInterface.setNoOfHexes(newNoOfHexes);
 //need to derive noOfRows and columns from noOfHexes
 deriveRowsAndColumns();
-                    stageInterface.setNoOfHexes(newNoOfHexes);
         //end of noofhexes switch statement
     }
     });//end select no of hexes
@@ -1310,16 +1315,13 @@ void createOptionsMenu()
     }
     public void setNoOfHexes(int n)
     {
-        if(newGameMode==1)
-        {
+
             noOfHexesOptionFieldSingles.setSelectedIndex(n);
-        }
-        else
-        {
+
             noOfHexesOptionField.setSelectedIndex(n);
 
 
-        }
+
 
     }
     public void setZoomMode(int z)

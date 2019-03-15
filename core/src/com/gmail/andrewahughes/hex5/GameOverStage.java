@@ -79,7 +79,7 @@ this.addActor(continueButton);
             }
             sb.setProjectionMatrix(getViewport().getCamera().combined);
 sb.begin();
-            Gdx.gl.glClearColor(0.9f, 0.0f, 0.4f, 1);
+            Gdx.gl.glClearColor(0.86f, 0.65f, 0.22f, 1);
             Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
             for(int i = 0 ; i< centredTextArray.length;i++)
             {

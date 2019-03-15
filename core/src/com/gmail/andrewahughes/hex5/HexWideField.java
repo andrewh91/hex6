@@ -238,9 +238,17 @@ public float deriveEdgeSize(int width, int height,int noOfRows, int noOfColumns)
 
         public void unhighlightAdjacent(ArrayList<Integer> array)
         {
-                for(int i =0; i<array.size();i++)
+
+                for(int i =0; i<hexWideArray.length;i++)
                 {
-                        hexWideArray[array.get(i)].unhighlight(0);
+                        try
+                        {
+                                hexWideArray[array.get(i)].unhighlight(0);
+                        }
+                        catch (Exception e)
+                        {
+
+                        }
                 }
         }
 

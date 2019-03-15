@@ -24,7 +24,6 @@ import java.util.ArrayList;
 public class HexWide extends Actor {
     int selectedSector;
     int approxSector;
-    int blue = 0,red =0,redSymbol=0;
 
     BitmapFont font = new BitmapFont();
     GlyphLayout glyphLayout = new GlyphLayout();
@@ -188,38 +187,32 @@ if(visible) {
     public void highlight(int value)
     {
         if(visible){
-        red = value;
         highlight=true;
     }
     }
 
     public void unhighlight(int value)
     {
-        red = value;
         highlight=false;
     }
     //method to highlight which symbol is selected
     public void highlightSymbol(int symbol)
     {
-        redSymbol = 200;
         highlightSymbol=true;
         selectedSymbol=symbol;
     }
     public void unhighlightSymbol()
     {
-        redSymbol = 0;
         highlightSymbol=false;
         selectedSymbol=-1;
     }
     public void select(int value)
     {
-        blue = value;
         select=true;
     }
     public void unselect(int value)
     {
 
-        blue=value;
         select=false;
     }
 
@@ -229,7 +222,7 @@ if(visible) {
         if (visible) {
             //sr.begin(ShapeRenderer.ShapeType.Line);
 
-            drawWideSymbol(sr,posX,posY,edgeSize);
+            //drawWideSymbol(sr,posX,posY,edgeSize);
            //circle around hex interior
            // sr.circle(posX,posY,altitudeSize);
             //touch point
@@ -250,9 +243,22 @@ if(visible) {
         act(Gdx.graphics.getDeltaTime());
 
         if (visible) {
-            sr.setColor(0.95f-0.5f*red,0.74f,0.25f-0.5f*blue,1);
+            sr.setColor(0.86f,0.65f,0.22f, 1);
 
-            drawWideHex(sr,posX,posY,edgeSize);
+            if(select)
+            {
+                sr.setColor(0.95f,0.9f,0.04f, 1);
+
+            }
+            if(highlight)
+            {
+                sr.setColor(0.83f,0.96f,0.26f, 1);
+
+            }
+
+
+            drawWideHex(sr,posX,posY,edgeSize*0.95f);
+            drawWideSymbol(sr,posX,posY,edgeSize);
 
 if(symbolType==2) {
     drawSymbolsShapes(sr, posX, posY, edgeSize, altitudeSize);
@@ -288,7 +294,7 @@ if(symbolType==2) {
     {
         // draws a ‘wide’ hex hex with flat top and bottom. originX and originY are the coordinates passed in which will determine the centre of the hex, edge size will determine the size, altitudeSize is the height (or altitude) of an equilateral triangle with edge size defined by edgeSize
 
-
+float altitudeSize = edgeSize*0.866025403784439f;
         //draw 6 lines starting at the bottom right and going around anti clockwise
 /*
         sr.line(originX + (edgeSize / 2), originY - altitudeSize, originX + edgeSize, originY);
@@ -515,36 +521,42 @@ public void drawShape(ShapeRenderer shapeRenderer, float originX, float originY,
         //draws the highlighted symbol
         if(highlightSymbol)
         {
-            sr.setColor(redSymbol,50,50,1);
+            sr.setColor(0.86f,0.65f,0.22f, 1);
             if(selectedSymbol==0)
             {
-                sr.line(originX , originY , originX - edgeSize, originY);
-                sr.line(originX  , originY , originX - edgeSize*0.5f, originY+altitudeSize);
+                sr.triangle(originX , originY ,
+                        originX - edgeSize, originY,
+                        originX - edgeSize*0.5f, originY+altitudeSize);
             }
             else if(selectedSymbol==1)
             {
-                sr.line(originX  , originY , originX - edgeSize*0.5f, originY+altitudeSize);
-                sr.line(originX  , originY , originX + edgeSize*0.5f, originY+altitudeSize);
+                sr.triangle(originX  , originY ,
+                        originX - edgeSize*0.5f, originY+altitudeSize,
+                        originX + edgeSize*0.5f, originY+altitudeSize);
             }
             else if(selectedSymbol==2)
             {
-                sr.line(originX  , originY , originX + edgeSize*0.5f, originY+altitudeSize);
-                sr.line(originX , originY , originX +edgeSize, originY);
+                sr.triangle(originX  , originY ,
+                        originX + edgeSize*0.5f, originY+altitudeSize,
+                        originX +edgeSize, originY);
             }
             else if(selectedSymbol==3)
             {
-                sr.line(originX , originY , originX +edgeSize, originY);
-                sr.line(originX  , originY , originX + edgeSize*0.5f, originY-altitudeSize);
+                sr.triangle(originX , originY ,
+                        originX +edgeSize, originY,
+                        originX + edgeSize*0.5f, originY-altitudeSize);
             }
             else if(selectedSymbol==4)
             {
-                sr.line(originX  , originY , originX + edgeSize*0.5f, originY-altitudeSize);
-                sr.line(originX  , originY , originX - edgeSize*0.5f, originY-altitudeSize);
+                sr.triangle(originX  , originY ,
+                        originX + edgeSize*0.5f, originY-altitudeSize,
+                        originX - edgeSize*0.5f, originY-altitudeSize);
             }
             else if(selectedSymbol==5)
             {
-                sr.line(originX  , originY , originX - edgeSize*0.5f, originY-altitudeSize);
-                sr.line(originX , originY , originX - edgeSize, originY);
+                sr.triangle(originX  , originY ,
+                        originX - edgeSize*0.5f, originY-altitudeSize,
+                        originX - edgeSize, originY);
             }
 
         }//end if highlightSymbol

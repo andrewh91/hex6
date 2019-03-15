@@ -92,8 +92,11 @@ public class GameStage extends Stage {
     //timer is incremented when not paused, timerFinal was just a way to stop the timer when we get gameover
     float timer = 0f, timerFinal = 0f, penaltyTime = 5f;
     //green and red are used when drawing the coloured background, they are altered when scoring to change background colour
-    float green = 0;
-    float red = 0;
+    float red = 0.86f;
+    float green = 0.65f;
+    float blue=0.22f;
+    float bkgdr=0.93f,bkgdg=0.84f,bkgdb=0.08f;
+
 
     //recommended number of rows for portrait mode using hexwide in screens with 16:9 aspect ratio
 //can be found using noOfRows =roundup(noOfColumns*2-noOfColumns/2)
@@ -933,7 +936,7 @@ hudViewport.apply();
             hudBatch.begin();
             this.act();
 
-            Gdx.gl.glClearColor(0.74f , 0.5f , 0.05f, 1);
+            Gdx.gl.glClearColor(0.86f , 0.65f , 0.22f, 1);
             Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
             font.draw(hudBatch,"Tap and hold screen to get ready",0,stageInterface.getScreenHeight()/17*9,viewport.getCamera().viewportWidth, Align.center,true);
             font.draw(hudBatch,"Release to start",0,stageInterface.getScreenHeight()/17*8,viewport.getCamera().viewportWidth, Align.center,true);
@@ -960,29 +963,48 @@ super.draw();
 //back to what it was. Use the delta time for effect consistent throughout all frame rates.
 //the colour accepts values from 0-1, we are setting it to 1 then reducing it over time, if you reduce it by a larger number
 //it will fade faster, so - (2 * Gdx.graphics.getDeltaTime()); should take half a second
-                if (green > 0) {
+                if (green > bkgdg*1.05) {
                     green = green - (2 * Gdx.graphics.getDeltaTime());
-                } else {
-                    green = 0;
                 }
-                if (red > 0) {
-                    red = red - (2 * Gdx.graphics.getDeltaTime());
-                } else {
-                    red = 0;
+                else if (green<bkgdg*0.95)
+                {
+                    green = green + (2 * Gdx.graphics.getDeltaTime());
+
+                }
+                else {
+                    green = bkgdg;
                 }
 
-                Gdx.gl.glClearColor(0.475f + red, 0.37f + green, 0.125f, 1);
+                if (red > bkgdr*1.05) {
+                    red = red - (2 * Gdx.graphics.getDeltaTime());
+                }
+                else if (red<bkgdr*0.95)
+                {
+                    red = red + (2 * Gdx.graphics.getDeltaTime());
+
+                }
+                else {
+                    red = bkgdr;
+                }
+
+     if (blue > bkgdb*1.05) {
+         blue = blue - (2 * Gdx.graphics.getDeltaTime());
+     }
+     else if (blue<bkgdb*0.95)
+     {
+         blue = blue + (2 * Gdx.graphics.getDeltaTime());
+
+     }
+     else {
+         blue = bkgdb;
+     }
+     Gdx.gl.glClearColor(red,green,blue, 1);
                 Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
                 //spritebatch without matrix transformations
 
 
-                hudViewport.apply();
-                hudBatch.begin();
 
-                font.draw(hudBatch, "timer: " + (int)(timer) ,30, 30);
-
-                hudBatch.end();
 viewport.apply();
 
                 //handle camera transition
@@ -994,21 +1016,22 @@ viewport.apply();
 
 
                 renderer.setProjectionMatrix(viewport.getCamera().combined);
-                renderer.begin(ShapeRenderer.ShapeType.Line);
-                renderer.setColor(Color.BLUE);
+                //renderer.begin(ShapeRenderer.ShapeType.Line);
+                //renderer.setColor(Color.BLUE);
+     renderer.begin(ShapeRenderer.ShapeType.Filled);
 
                 this.act();
 
                 if (portrait1Landscape2 == 1) {
-                    hexWideField.draw(renderer);
-                    renderer.end();
-                    renderer.begin(ShapeRenderer.ShapeType.Filled);
+                    //hexWideField.draw(renderer);
+                    //renderer.end();
+                    //renderer.begin(ShapeRenderer.ShapeType.Filled);
 hexWideField.drawFilled(renderer,symbolType);
                 } else if (portrait1Landscape2 == 2) {
 
-                    hexTallField.draw(renderer);
-                    renderer.end();
-                    renderer.begin(ShapeRenderer.ShapeType.Filled);
+                    //hexTallField.draw(renderer);
+                    //renderer.end();
+                    //renderer.begin(ShapeRenderer.ShapeType.Filled);
 
                     hexTallField.drawFilled(renderer,symbolType);
 
@@ -1025,7 +1048,12 @@ hexWideField.drawFilled(renderer,symbolType);
 
                 }
  spriteBatch.end();
+     hudViewport.apply();
+     hudBatch.begin();
 
+     font.draw(hudBatch, "timer: " + (int)(timer) ,30, 30);
+
+     hudBatch.end();
 
                 super.draw();
             }
@@ -1196,20 +1224,24 @@ hexWideField.drawFilled(renderer,symbolType);
                             int newFieldHeight,int newGameMode, int newSymbolType)
     {
 //if any of the arguments are not set to 0 then update the corresponding value
-        if(newNoOfColumns!=0){noOfColumns=newNoOfColumns;}
+        /*if(newNoOfColumns!=0){noOfColumns=newNoOfColumns;}
         if(newNoOfRows!=0){noOfRows=newNoOfRows;}
-        if(newPortrait1Landscape2!=0){ portrait1Landscape2 =newPortrait1Landscape2;}
+        if(newPortrait1Landscape2!=0){ portrait1Landscape2 =newPortrait1Landscape2;}*/
+        if(isNewNoOfColumns(newNoOfColumns)){noOfColumns=newNoOfColumns;}
+        if(isNewNoOfRows(newNoOfRows)){noOfRows=newNoOfRows;}
+        if(isNewPortrait1Landscape2(newPortrait1Landscape2)){ portrait1Landscape2 =newPortrait1Landscape2;}
         if(newFieldPosX!=0){ fieldPosX=newFieldPosX;}
         if(newFieldPosY!=0){ fieldPosY=newFieldPosY;}
         if(newFieldWidth!=0){ fieldWidth=newFieldWidth;}
         if(newFieldHeight!=0){ fieldHeight=newFieldHeight;}
 //if the game mode is changed we need to reset the game which will reset the timer and score etc
-        if(newGameMode!=0)
+        if(isNewGameMode(newGameMode))
         {
+
             gameMode=newGameMode;
-            resetGame();// reset the score and timer when starting a new game modes
 
         }
+        resetGame();// reset the score and timer when starting a new game modes
 
         if(newSymbolType!=0){ symbolType=newSymbolType;}
         if(portrait1Landscape2==1) {
@@ -1226,7 +1258,8 @@ resetSelection();
         {
             if(portrait1Landscape2==1)
             {
-                noOfColumns =targetScore;
+                //noOfColumns =targetScore;
+                targetScore=noOfColumns;
                 noOfRows=2;
             }
             else if(portrait1Landscape2==2)
@@ -1466,12 +1499,16 @@ int diffInt = difficulty;
 
     void flashGreenBackground()
     {
-        green=1;
+        red=0.51f;
+        green=0.86f;
+        blue=0.22f;
     }
 
     void flashRedBackground()
     {
-        red= 1;
+        red= 0.86f;
+        green=0.42f;
+        blue=0.22f;
     }
 
     public void updateDifficulty(int newDifficulty)
@@ -1561,7 +1598,8 @@ int diffInt = difficulty;
     void createReadyButton()
     {
         readyButton = new Actor();
-        readyButton.setBounds(0,0,1280,1280);
+        readyButton.setBounds(-8000,-8000,+16000,+16000);
+        readyButton.debug();
         readyButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
