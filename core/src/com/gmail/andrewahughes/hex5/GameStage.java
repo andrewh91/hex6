@@ -1254,7 +1254,7 @@ resetSelection();
         //reset / reload everything
         removeAllActors();
 
-        if(gameMode==1)//if singles mode overwrite number of rows and columns,
+       /* if(gameMode==1)//if singles mode overwrite number of rows and columns,
         {
             if(portrait1Landscape2==1)
             {
@@ -1267,7 +1267,7 @@ resetSelection();
                 noOfRows=targetScore;
                 noOfColumns=2;
             }
-        }
+        }*/
         targetScoreFieldMode=noOfColumns*noOfRows;
 //create a new database, if singles the number of columns and rows has been set to 1 and 2
         database = new Database(35,noOfColumns,noOfRows,portrait1Landscape2);
@@ -1279,7 +1279,10 @@ resetSelection();
 //some specific things if in singles game mode
             if(gameMode==1)
             {
-
+                targetScore=noOfColumns;
+                selectedHex=score;
+                selectedHex2=score+targetScore;
+resetSelection();
                 //we want the 2 hexes to be selected automatically
                 hexWideField.hexWideArray[selectedHex].select(0);
                 hexWideField.hexWideArray[selectedHex2].select(0);
@@ -1598,7 +1601,7 @@ int diffInt = difficulty;
     void createReadyButton()
     {
         readyButton = new Actor();
-        readyButton.setBounds(-8000,-8000,+16000,+16000);
+        readyButton.setBounds(-80000,-80000,+160000,+160000);
         readyButton.debug();
         readyButton.addListener(new ClickListener() {
             @Override

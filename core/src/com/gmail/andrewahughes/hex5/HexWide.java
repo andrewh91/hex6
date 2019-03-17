@@ -574,6 +574,7 @@ public void drawShape(ShapeRenderer shapeRenderer, float originX, float originY,
 
     void unHighlightNonMatchingSymbols()
     {
+
         for(int i =0;i<removeSymbol.size();i++) {// this can have more than 6, so remove everything then add 6 back in
             removeSymbol.clear();
 
