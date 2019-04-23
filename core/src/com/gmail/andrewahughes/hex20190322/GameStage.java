@@ -1,4 +1,4 @@
-package com.gmail.andrewahughes.hex5;
+package com.gmail.andrewahughes.hex20190322;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -9,14 +9,10 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
@@ -95,9 +91,9 @@ public class GameStage extends Stage {
     float red = 0.86f;
     float green = 0.65f;
     float blue=0.22f;
-    float bkgdr=0.93f,bkgdg=0.84f,bkgdb=0.08f;
+    float bkgdr=0.10f,bkgdg=0.70f,bkgdb=0.00f;
 
-
+ArrayList<Bee> beeArray= new ArrayList<Bee>();
     //recommended number of rows for portrait mode using hexwide in screens with 16:9 aspect ratio
 //can be found using noOfRows =roundup(noOfColumns*2-noOfColumns/2)
 //recommended number of columns for landscape mode using hexTall in screens with 16:9 aspect ratio
@@ -1026,6 +1022,12 @@ viewport.apply();
                     //hexWideField.draw(renderer);
                     //renderer.end();
                     //renderer.begin(ShapeRenderer.ShapeType.Filled);
+
+                    for(int i =0;i<beeArray.size();i++)
+                    {
+                        beeArray.get(i).drawFilled(renderer,Gdx.graphics.getDeltaTime());
+                    }
+
 hexWideField.drawFilled(renderer,symbolType);
                 } else if (portrait1Landscape2 == 2) {
 
@@ -1043,6 +1045,10 @@ hexWideField.drawFilled(renderer,symbolType);
                 spriteBatch.begin();
                 if (portrait1Landscape2 == 1) {
                     hexWideField.drawSprites(spriteBatch,symbolType);
+                    for(int i =0;i<beeArray.size();i++)
+                    {
+                        beeArray.get(i).drawSprites(spriteBatch);
+                    }
                 } else if (portrait1Landscape2 == 2) {
                     hexTallField.drawSprites(spriteBatch,symbolType);
 
@@ -1276,6 +1282,11 @@ resetSelection();
             hexWideField = new HexWideField(fieldPosX, fieldPosY, fieldWidth, fieldHeight,
                     noOfRows, noOfColumns,gameMode, this, database);
             addHexesToStage(hexWideField);
+            beeArray.clear();
+            for(int i=0;i<hexWideField.hexWideArray.length;i++)
+            {
+                beeArray.add(new Bee(hexWideField.hexWideArray[i].posX,hexWideField.hexWideArray[i].posY));
+            }
 //some specific things if in singles game mode
             if(gameMode==1)
             {
@@ -1318,6 +1329,7 @@ resetSelection();
                 snapCameraToHex();
             }
         }
+
     }
     public void updateZoom(int newZoom)
     {

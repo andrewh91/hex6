@@ -1,8 +1,6 @@
-package com.gmail.andrewahughes.hex5;
+package com.gmail.andrewahughes.hex20190322;
 
-import android.app.Activity;
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 
 import com.badlogic.gdx.backends.android.AndroidApplication;
@@ -26,17 +24,17 @@ public class AndroidLauncher extends AndroidApplication {
         this.gpgsClient = new GpgsClient() {
             @Override
             public boolean submitEvent(String eventId, int increment) {
-                return super.submitEvent(GpgsMappers.mapToGpgsEvent(eventId), increment);
+                return super.submitEvent(com.gmail.andrewahughes.hex20190322.GpgsMappers.mapToGpgsEvent(eventId), increment);
             }
         }.setGpgsAchievementIdMapper(new IGameServiceIdMapper<String>() {
             @Override
             public String mapToGsId(String independantId) {
-                return GpgsMappers.mapToGpgsAchievement(independantId);
+                return com.gmail.andrewahughes.hex20190322.GpgsMappers.mapToGpgsAchievement(independantId);
             }
         }).setGpgsLeaderboardIdMapper(new IGameServiceIdMapper<String>() {
             @Override
             public String mapToGsId(String independantId) {
-                return GpgsMappers.mapToGpgsLeaderboard(independantId);
+                return com.gmail.andrewahughes.hex20190322.GpgsMappers.mapToGpgsLeaderboard(independantId);
             }
         }).initialize(this, true);
         game.gsClient = this.gpgsClient;

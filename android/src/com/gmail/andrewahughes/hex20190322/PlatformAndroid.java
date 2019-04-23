@@ -1,4 +1,4 @@
-package com.gmail.andrewahughes.hex5;
+package com.gmail.andrewahughes.hex20190322;
 
 import android.app.Activity;
 import android.content.pm.ActivityInfo;
@@ -9,7 +9,8 @@ import com.badlogic.gdx.backends.android.AndroidApplication;
  * Created by Andrew Hughes on 08/11/2018.
  */
 
-public class PlatformAndroid extends AndroidApplication implements Platform {
+public class PlatformAndroid extends AndroidApplication implements Platform
+{
     private Activity activity;
     @Override
     public void SetOrientation(String string) {

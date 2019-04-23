@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">gdx-gamesvcs-app</string>
-    <string name="app_id">418527320837</string>
+    <string name="app_name">HexMatch</string>
+    <!--<string name="app_id">1052547223270</string>--><!--upload cert - debug-->
+    <string name="app_id">815977551154</string><!--app signing cert - release-->
 
 </resources>

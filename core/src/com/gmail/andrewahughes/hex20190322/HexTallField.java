@@ -1,6 +1,5 @@
-package com.gmail.andrewahughes.hex5;
+package com.gmail.andrewahughes.hex20190322;
 
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
@@ -17,7 +16,7 @@ public class HexTallField
 
     HexTall hexTallArray[];
 
-    public HexTallField(int posX, int posY, int width, int height, int noOfRows, int noOfColumns,int gameMode, final GameStage gs, final Database db) {
+    public HexTallField(int posX, int posY, int width, int height, int noOfRows, int noOfColumns, int gameMode, final GameStage gs, final com.gmail.andrewahughes.hex20190322.Database db) {
 // if singles game mode
         if(gameMode==1)
         {

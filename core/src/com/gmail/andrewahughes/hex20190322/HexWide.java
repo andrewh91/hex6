@@ -1,20 +1,15 @@
-package com.gmail.andrewahughes.hex5;
+package com.gmail.andrewahughes.hex20190322;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
-import java.awt.Rectangle;
 import java.util.ArrayList;
 
 /**
@@ -243,16 +238,16 @@ if(visible) {
         act(Gdx.graphics.getDeltaTime());
 
         if (visible) {
-            sr.setColor(0.86f,0.65f,0.22f, 1);
+            sr.setColor(1.00f,0.75f,0.06f, 1);
 
             if(select)
             {
-                sr.setColor(0.95f,0.9f,0.04f, 1);
+                sr.setColor(0.98f,0.84f,0.42f, 1);
 
             }
             if(highlight)
             {
-                sr.setColor(0.83f,0.96f,0.26f, 1);
+                sr.setColor(0.94f,0.67f,0.09f, 1);
 
             }
 

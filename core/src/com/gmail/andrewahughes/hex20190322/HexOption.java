@@ -1,4 +1,4 @@
-package com.gmail.andrewahughes.hex5;
+package com.gmail.andrewahughes.hex20190322;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -79,10 +79,10 @@ font.getData().setScale(2f);
     public void draw(ShapeRenderer sr,boolean selected) {
         act(Gdx.graphics.getDeltaTime());
 if(this.isVisible()) {
-    sr.setColor(0.95f,0.74f,0.25f, 1);
+    sr.setColor(1.00f,0.75f,0.06f, 1);
     if(selected)
     {
-        sr.setColor(0.95f,0.9f,0.04f, 1);
+        sr.setColor(0.94f,0.84f,0.42f, 1);
 
     }
 edgeSize=edgeSizeStatic*0.95f;

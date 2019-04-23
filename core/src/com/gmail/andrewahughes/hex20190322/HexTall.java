@@ -1,20 +1,15 @@
-package com.gmail.andrewahughes.hex5;
+package com.gmail.andrewahughes.hex20190322;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
-import java.awt.Rectangle;
 import java.util.ArrayList;
 
 /**
@@ -56,7 +51,7 @@ public class HexTall extends Actor {
     public int touchX = 0, touchY = 0, touchRadius = 10;
     ArrayList <Integer> removeSymbol= new ArrayList<Integer>(6);
 
-    public HexTall(final float edgeSize, final float centreX, final float centreY, final int index, final GameStage gs, final Database db) {
+    public HexTall(final float edgeSize, final float centreX, final float centreY, final int index, final GameStage gs, final com.gmail.andrewahughes.hex20190322.Database db) {
         indexNo = "" + index;
         text3 = db.getHex(index)[0]+" "+db.getHex(index)[1]+" "+db.getHex(index)[2]+" "+db.getHex(index)[3]+" "+db.getHex(index)[4]+" "+db.getHex(index)[5]+" ";
         symbol0 = ""+db.getHex(index)[0];

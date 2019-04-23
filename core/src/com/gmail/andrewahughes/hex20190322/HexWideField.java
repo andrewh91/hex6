@@ -1,6 +1,5 @@
-package com.gmail.andrewahughes.hex5;
+package com.gmail.andrewahughes.hex20190322;
 
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
@@ -15,9 +14,9 @@ public class HexWideField
 public float edgeSize;
 public int noOfColumns,noOfRows ,noOfHexes,posX,  posY, marginX,  marginY, edgeSizeInt,width, height;
 
-HexWide hexWideArray[];
+com.gmail.andrewahughes.hex20190322.HexWide hexWideArray[];
 
-        public HexWideField(int posX, int posY, int width, int height, int noOfRows, int noOfColumns, int gameMode,final GameStage gs, final Database db) {
+        public HexWideField(int posX, int posY, int width, int height, int noOfRows, int noOfColumns, int gameMode, final GameStage gs, final com.gmail.andrewahughes.hex20190322.Database db) {
                // if singles game mode
                if(gameMode==1)
                {
@@ -36,7 +35,7 @@ HexWide hexWideArray[];
                 this.width=width;
                 this.height=height;
                 edgeSizeInt=(int)edgeSize;
-                hexWideArray = new HexWide[noOfColumns * noOfRows];
+                hexWideArray = new com.gmail.andrewahughes.hex20190322.HexWide[noOfColumns * noOfRows];
 //unless the specified argument result in the ideal ratio of number of hexes across and down then the hex feild will be offset in either the x or y axis, record that to counteract it
                 int marginX = (int) ((width - (0.5 * edgeSize + (noOfColumns * 1.5 * edgeSize))) / 2);
                 int marginY;
@@ -57,7 +56,7 @@ this.marginX=marginX;
         {
         for(int j=0;j<noOfColumns;j++)
         {
-        hexWideArray[noOfHexes] = new HexWide(edgeSize,(float)(posX+marginX+(0.5*edgeSize+((j+1)*1.5*edgeSize))-edgeSize),
+        hexWideArray[noOfHexes] = new com.gmail.andrewahughes.hex20190322.HexWide(edgeSize,(float)(posX+marginX+(0.5*edgeSize+((j+1)*1.5*edgeSize))-edgeSize),
                 (float)(posY+marginY-(edgeSize*0.866025403784439)+(edgeSize*0.866025403784439*2)*(i+1)+(edgeSize*0.866025403784439)*(j%2)),noOfHexes,gs,db);
         noOfHexes++;
         }

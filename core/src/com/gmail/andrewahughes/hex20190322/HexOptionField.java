@@ -1,6 +1,5 @@
-package com.gmail.andrewahughes.hex5;
+package com.gmail.andrewahughes.hex20190322;
 
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -14,7 +13,7 @@ public class HexOptionField
     public int noOfColumns,noOfRows ,noOfHexes,
             edgeSize,width, height,noOfOptions;
     HexOption hexOptionArray[];
-    HexOptionBKGD hexBackgroundArray[];
+    com.gmail.andrewahughes.hex20190322.HexOptionBKGD hexBackgroundArray[];
     String[] optionTextArray;
     int[] ignore=new int[]{};
     int fieldIndex;
@@ -203,7 +202,7 @@ public void setupOptions(int noOfOptions )
         }
 
 
-        hexBackgroundArray=new HexOptionBKGD[(noOfBackgroundColumns+2)*(noOfBackgroundRows+3)];
+        hexBackgroundArray=new com.gmail.andrewahughes.hex20190322.HexOptionBKGD[(noOfBackgroundColumns+2)*(noOfBackgroundRows+3)];
 
 
         int noOfBackgroundHexes=0;
@@ -211,7 +210,7 @@ public void setupOptions(int noOfOptions )
         {
             for(int j=0;j<noOfBackgroundColumns+2;j++)
             {
-                hexBackgroundArray[noOfBackgroundHexes] = new HexOptionBKGD(edgeSize,
+                hexBackgroundArray[noOfBackgroundHexes] = new com.gmail.andrewahughes.hex20190322.HexOptionBKGD(edgeSize,
                         +hexSpacingX * j,
                         -2*hexSpacingY+hexSpacingY * i + hexOffsetY * (j % 2)+backgroundOffsetY);
                 noOfBackgroundHexes++;

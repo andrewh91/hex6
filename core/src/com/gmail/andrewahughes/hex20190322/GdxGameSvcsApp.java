@@ -1,4 +1,4 @@
-package com.gmail.andrewahughes.hex5;
+package com.gmail.andrewahughes.hex20190322;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
@@ -21,9 +21,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
-import com.badlogic.gdx.utils.viewport.Viewport;
 
 import de.golfgl.gdxgamesvcs.GameServiceException;
 import de.golfgl.gdxgamesvcs.IGameServiceClient;
@@ -36,20 +34,20 @@ import de.golfgl.gdxgamesvcs.gamestate.ILoadGameStateResponseListener;
 import de.golfgl.gdxgamesvcs.gamestate.ISaveGameStateResponseListener;
 import de.golfgl.gdxgamesvcs.leaderboard.IFetchLeaderBoardEntriesResponseListener;
 import de.golfgl.gdxgamesvcs.leaderboard.ILeaderBoardEntry;
-import sun.security.provider.SHA;
 
-public class GdxGameSvcsApp extends ApplicationAdapter implements IGameServiceListener,StageInterface {
+public class GdxGameSvcsApp extends ApplicationAdapter implements IGameServiceListener,StageInterface
+{
     public static final String LEADERBOARD1 = "BOARD1";
     public static final String ACHIEVEMENT1 = "ACH1";
     public static final String EVENT1 = "EVENT1";
     public static final String REPOLINK = "https://github.com/MrStahlfelge/gdx-gamesvcs";
     public static final String FILE_ID = "cloud";
-Platform platform;
+com.gmail.andrewahughes.hex20190322.Platform platform;
 boolean practise = false;
 
-    GameStage gameStage;
-    GamePauseStage gamePauseStage;
-    GameOverStage gameOverStage;
+    com.gmail.andrewahughes.hex20190322.GameStage gameStage;
+    com.gmail.andrewahughes.hex20190322.GamePauseStage gamePauseStage;
+    com.gmail.andrewahughes.hex20190322.GameOverStage gameOverStage;
     Texture badlogic;
     private boolean visible = true;
     public IGameServiceClient gsClient;
@@ -71,7 +69,7 @@ boolean practise = false;
     SpriteBatch sb;
     HexOptionField mainMenu;
 
-   public GdxGameSvcsApp(Platform platform)
+   public GdxGameSvcsApp(com.gmail.andrewahughes.hex20190322.Platform platform)
    {
        this.platform=platform;
    }
@@ -84,9 +82,9 @@ vpWidth=vpShort;
 vpHeight=vpLong;
         stretchViewport = new StretchViewport(vpWidth,vpHeight);
         badlogic = new Texture("badlogic.jpg");
-        gameStage = new GameStage(stretchViewport,badlogic,this,portrait);
-        gamePauseStage = new GamePauseStage(stretchViewport,badlogic,this,practise);
-        gameOverStage = new GameOverStage(stretchViewport,badlogic,this);
+        gameStage = new com.gmail.andrewahughes.hex20190322.GameStage(stretchViewport,badlogic,this,portrait);
+        gamePauseStage = new com.gmail.andrewahughes.hex20190322.GamePauseStage(stretchViewport,badlogic,this,practise);
+        gameOverStage = new com.gmail.andrewahughes.hex20190322.GameOverStage(stretchViewport,badlogic,this);
         //Gdx.input.setInputProcessor(gameStage);
 
         mainStage = new Stage(stretchViewport);

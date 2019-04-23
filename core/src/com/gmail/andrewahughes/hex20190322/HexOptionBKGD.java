@@ -1,4 +1,4 @@
-package com.gmail.andrewahughes.hex5;
+package com.gmail.andrewahughes.hex20190322;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -22,7 +22,7 @@ boolean visible = false;
         if(visible) {
 
 
-            sr.setColor(0.77f,0.7f,0.035f, 1);
+            sr.setColor(0.94f,0.67f,0.09f, 1);
 
 
 
