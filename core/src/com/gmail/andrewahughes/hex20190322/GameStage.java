@@ -58,7 +58,7 @@ public class GameStage extends Stage {
     float camSnapTimePeriod=0.1f;
     //the current progress through the camera transition
     float camSnapTime=0f;
-    //the speed to move the camera
+    //the speedConstant to move the camera
     float  camSnapSpeedX;
     float  camSnapSpeedY;
     float  camSnapSpeedZ;
@@ -399,7 +399,7 @@ this.portrait1Landscape2 = portrait;
         {
 //increment this timer so we know when to stop
             camSnapTime+=Gdx.graphics.getDeltaTime();
-//increment the position of the camera by the speed times delta time, so it should reach the target position in the defined period of time
+//increment the position of the camera by the speedConstant times delta time, so it should reach the target position in the defined period of time
             viewport.getCamera().translate(camSnapSpeedX*Gdx.graphics.getDeltaTime(),camSnapSpeedY*Gdx.graphics.getDeltaTime(),0f);
 
 //do the same for the zoom
@@ -459,7 +459,7 @@ this.portrait1Landscape2 = portrait;
             // re select the first 2 hexes and set the nooselected to 2, this means we won’t have to tap the hexes before
 //looking for a symbol that matches, it would be pointless requiring the player to tap the hexes to select them since there
 //are only 2 hexes to select
-            if(score<targetScore) {//if we ran reset sele tion twice this could lead to out of bouns, selectedHex2 should no exceed target score*2
+            if(score<targetScore) {//if we sway reset sele tion twice this could lead to out of bouns, selectedHex2 should no exceed target score*2
                 selectedHex = score;
                 selectedHex2 = score + targetScore;
             }
