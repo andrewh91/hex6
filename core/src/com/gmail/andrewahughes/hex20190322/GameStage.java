@@ -1449,7 +1449,7 @@ resetSelection();
                 hexWideField.hexWideArray[selectedHex].hide();
                 beeArray.get(selectedHex).visible=true;
                 hexWideField.hexWideArray[selectedHex2].hide();
-                beeArray.get(selectedHex2).visible=true;
+               // beeArray.get(selectedHex2).visible=true;
 
                 scoreFieldMode++;
                 scoreFieldMode++;

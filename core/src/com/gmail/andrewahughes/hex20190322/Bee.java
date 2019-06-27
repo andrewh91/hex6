@@ -188,6 +188,8 @@ public class Bee
         if(idle)
         {
 
+            circle(dx);
+            waggle(dx);
             if(circleTimer<=0)
             {
                 if(circle)
@@ -207,21 +209,33 @@ public class Bee
                     {
                         circleDirection =false;
                     }
-                    circle(dx);
-                    waggle(dx);
                 }
             }
 
 
-            if(idleTimer <=0)
+            if(idleTimer+waggleTimer+circleTimer <=0)
             {
                 idle=false;
             }
             else
             {
-                idleTimer =idleTimer -dx;
-                waggleTimer = waggleTimer -dx;
-                circleTimer= circleTimer-dx;
+                if(idleTimer>0)
+                {
+                    idleTimer = idleTimer - dx;
+                }
+                if(waggleTimer>0)
+                {
+                    waggleTimer = waggleTimer -dx;
+                }
+                else
+                {
+                    waggleTimer=1*rand.nextFloat();
+                            waggle=!waggle;
+                }
+                if(circleTimer>0)
+                {
+                    circleTimer = circleTimer - dx;
+                }
             }
         }
         else
@@ -256,11 +270,12 @@ public class Bee
 
             posx += speedConstant * speedMod * dx * Math.cos(angle) ;
             posy -= speedConstant * speedMod * dx * Math.sin(angle) ;
-            if(circleAngleCounter==2*Math.PI)
+            if(circleAngleCounter>2*Math.PI)
             {
                 circleAngleCounter=0;
                 circle=false;
-                waggle=true;
+                circleTimer=(float)5+rand.nextInt(2);
+
             }
         }
     }
@@ -269,7 +284,8 @@ public class Bee
     {
         if(waggle)
         {
-            if(waggleCounter<1.5f)
+
+            if(waggleCounter<1f)
             {
                 if(waggleDirection)
                 {
@@ -287,6 +303,7 @@ public class Bee
             else
             {
                 waggleCounter=0f;
+                waggle=false;
             }
         }
     }
@@ -315,15 +332,25 @@ public class Bee
 
     public void drawSprites(SpriteBatch sb)
     {
-        font.draw(sb, "x " + (int) posx, posx + 12, posy);
-        font.draw(sb, " y " + (int) posy, posx + 12, posy + 20);
-        font.draw(sb, " angle " + (int) (angle * 180 / Math.PI), posx + 12, posy + 40);
-        if (target.size() > 1)
+        if(visible)
         {
-            font.draw(sb, "dist " + (int) (dist(posx, target.get(target.size() - 1).x, posy, target.get(target.size() - 1).y)), posx + 12, posy + 60);
+            font.draw(sb, "x " + (int) posx, posx + 12, posy);
+            font.draw(sb, " y " + (int) posy, posx + 12, posy + 20);
+            font.draw(sb, " angle " + (int) (angle * 180 / Math.PI), posx + 12, posy + 40);
+            if (target.size() > 1)
+            {
+                font.draw(sb, "dist " + (int) (dist(posx, target.get(target.size() - 1).x, posy, target.get(target.size() - 1).y)), posx + 12, posy + 60);
+            }
+            font.draw(sb, "target angle " + (int) (targetAngle * 180 / Math.PI), posx, posy + 80);
+            font.draw(sb, "speed " + speedMod, posx + 12, posy + 100);
+            font.draw(sb, "idletimer " + idleTimer, posx + 12, posy + 120);
+            font.draw(sb, "waggletimer " + waggleTimer, posx + 12, posy + 140);
+            font.draw(sb, "circletimer " + circleTimer, posx + 12, posy + 160);
+            font.draw(sb, "wagglecounter " + waggleCounter, posx + 12, posy + 180);
+            font.draw(sb, "circleanglecounter " + circleAngleCounter, posx + 12, posy + 200);
+
+
         }
-        font.draw(sb, "target angle " + (int) (targetAngle * 180 / Math.PI), posx, posy + 80);
-        font.draw(sb, "speed " +  speedMod, posx + 12, posy+100);
 
     }
 
