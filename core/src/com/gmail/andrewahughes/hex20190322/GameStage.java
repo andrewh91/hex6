@@ -1463,6 +1463,7 @@ resetSelection();
 //if any are isolated we should hide them too, consider increasing score?
                     if(hexWideField.hexWideArray[list.get(i)].visible) {
                         hexWideField.hexWideArray[list.get(i)].hide();
+                        beeArray.get(list.get(i)).visible=true;
                         scoreFieldMode++;
                     }
                 }
