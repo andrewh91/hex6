@@ -78,9 +78,9 @@ font.getData().setScale(2f);
                 //worldCoordinates = orthographicCamera.unproject(new Vector3(x,y,0));
                 //x=worldCoordinates.x;
                 //y=worldCoordinates.y;
-if(visible) {
+if(true) {//this used to be if visiblr, but i still want to process the touch if its invisible, cos the camer ashould zoom out if touching an invisible hex
     touchLogic(event, x, y);
-    gs.setSelected(index, selectedSector);
+    gs.setSelected(index, selectedSector,visible);
     //approx sector will indicate where the potential overlaps, need to check if the is a hex there then select the hex
 }
             }

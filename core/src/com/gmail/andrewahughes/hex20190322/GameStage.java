@@ -174,10 +174,16 @@ this.portrait1Landscape2 = portrait;
     //confirm which hex was actually touched. We can use maths to figure out the index number of the adjacent hexes if we
     //know the number of rows and columns, and if it’s portrait or landscape
     //in fact this method is for portrait and wide hexes only
-    public void setSelected(int index, int sector) {
+    public void setSelected(int index, int sector,boolean visible) {
 //index will refer to the hex index in the field, sector will be the proposed sector we will confirm if the proposed sector
 //is the correct sector below
 
+        if(visible==false)//if we touch a hex that is invisible, reset selection
+        {
+            resetSelection();
+        }
+        else
+        {
         //we need totalHexes, number of columns and rows to figure out what the adjacent hexes are and if the current hexes
         //is on the extreme edges of the field
         int totalHexes = noOfColumns * noOfRows;
@@ -324,28 +330,29 @@ this.portrait1Landscape2 = portrait;
                 resetSelection();
             }
         }//end else if(noOfSelected==2)
-    }
-    public void snapCameraToHex() {
-        int posArray[] ={0,0};
-        if(portrait1Landscape2==1)
-        {
-
-            posArray=  hexWideField.getNextHexPairCoords( selectedHex, selectedHex2);
-            setNewCameraZoomTarget(hexWideField.getNextHexZoom(selectedHex,selectedHex2));
+            }//end else if visible
 
         }
-        else if(portrait1Landscape2==2)
+    public void snapCameraToHex()
+    {
+        int posArray[] = {0, 0};
+        if (portrait1Landscape2 == 1)
         {
-            posArray=  hexTallField.getNextHexPairCoords( selectedHex, selectedHex2);
-            setNewCameraZoomTarget(hexTallField.getNextHexZoom(selectedHex,selectedHex2));
+
+            posArray = hexWideField.getNextHexPairCoords(selectedHex, selectedHex2);
+            setNewCameraZoomTarget(hexWideField.getNextHexZoom(selectedHex, selectedHex2));
+
+        } else if (portrait1Landscape2 == 2)
+        {
+            posArray = hexTallField.getNextHexPairCoords(selectedHex, selectedHex2);
+            setNewCameraZoomTarget(hexTallField.getNextHexZoom(selectedHex, selectedHex2));
 
         }
-        hexPairPosX=posArray[0];
-        hexPairPosY=posArray[1];
-        setNewCameraPosTarget(hexPairPosX,hexPairPosY);
-        camSnapOutdated=true;
+        hexPairPosX = posArray[0];
+        hexPairPosY = posArray[1];
+        setNewCameraPosTarget(hexPairPosX, hexPairPosY);
+        camSnapOutdated = true;
         setCamSnapSpeed();
-
     }
     public void snapCameraToField() {
 
@@ -624,7 +631,8 @@ this.portrait1Landscape2 = portrait;
     }
     //this method is largely the same but for the tall hexes to be used in landscape some things are different because the hexes
 //are set out so differently
-    public void setSelectedTall(int index, int sector) {
+    public void setSelectedTall(int index, int sector)
+    {
         int totalHexes = noOfColumns * noOfRows;
 
         //overlap
@@ -641,11 +649,14 @@ this.portrait1Landscape2 = portrait;
             //if hex is in an even row below left would be hex index - noOfRows -1
 
             //if hex is in an even rows (the bottom most row is 0 which is even)
-            if ((index % noOfRows) % 2 == 0) {
-                if (sector == 10) {
+            if ((index % noOfRows) % 2 == 0)
+            {
+                if (sector == 10)
+                {
                     //if not on left edge AND not on top edge
-                    if (index >=noOfRows && index % noOfRows < noOfRows-1) {
-                        proposedSelectedHex = index+ 1-noOfRows;
+                    if (index >= noOfRows && index % noOfRows < noOfRows - 1)
+                    {
+                        proposedSelectedHex = index + 1 - noOfRows;
                     }
                 }// this should be impossible, as an adjacent hex would be placed more recently and that would handle the touch
 	                /*if (sector == 11) {
@@ -654,15 +665,18 @@ this.portrait1Landscape2 = portrait;
 	                        proposedSelectedHex = index + 1;
 	                    }
 	                }*/
-                else if (sector == 13) {
+                else if (sector == 13)
+                {
                     //if  not on the bottom - doesnt matter if its on tbe right
-                    if (index % noOfRows > 0) {
-                        proposedSelectedHex = index -  1;
+                    if (index % noOfRows > 0)
+                    {
+                        proposedSelectedHex = index - 1;
                     }
-                }
-                else if (sector == 14) {
+                } else if (sector == 14)
+                {
                     //if not on left edge AND not on bottom edge
-                    if (index >=noOfRows &&index % noOfRows > 0) {
+                    if (index >= noOfRows && index % noOfRows > 0)
+                    {
                         proposedSelectedHex = index - noOfRows - 1;
                     }
                 }
@@ -673,7 +687,8 @@ this.portrait1Landscape2 = portrait;
             //else if odd row below left would be hex index - 1
 
             //if the given hex is in an even row;
-            else {//if in odd row
+            else
+            {//if in odd row
                 //only one corner case is not covered by overlapping adjacent hexes that were placed more recwntly
 	                /*if (sector == 10) {
 	//if not on left edge AND not on top edge
@@ -693,9 +708,11 @@ this.portrait1Landscape2 = portrait;
 	                        proposedSelectedHex = index +noOfRows- 1;
 	                    }
 	                }*/
-                if (sector == 14) {
+                if (sector == 14)
+                {
                     //if not on bottom edge - doesnt matter if its on the keft or not
-                    if (index % noOfRows > 0) {
+                    if (index % noOfRows > 0)
+                    {
                         proposedSelectedHex = index - 1;
                     }
                 }
@@ -706,27 +723,33 @@ this.portrait1Landscape2 = portrait;
             proposedSelectedSector = (sector + 3 - 10) % 6;
 
         }//end overlap logic
-        else {
+        else
+        {
             proposedSelectedSector = sector;
             proposedSelectedHex = index;
         }
-        if (noOfSelected == 0) {
+        if (noOfSelected == 0)
+        {
             selectFirstHexTall();
         }//end if(noOfSelected==0)
 
-        else if (noOfSelected == 1) {
-            if (hexTallField.hexTallArray[proposedSelectedHex].highlight) {
+        else if (noOfSelected == 1)
+        {
+            if (hexTallField.hexTallArray[proposedSelectedHex].highlight)
+            {
                 selectSecondHexTall();
                 //if not zoomSelectionMode compare sector with all sectors on first hex
-                if (!zoomSelectionMode) {
-                    if( compareAllTall(selectedHex2,selectedHex,proposedSelectedSector))
+                if (!zoomSelectionMode)
+                {
+                    if (compareAllTall(selectedHex2, selectedHex, proposedSelectedSector))
                     {
                         resetSelectionTall();
                     }
                 }
 
             }//end if highlighted
-            else if (hexTallField.hexTallArray[proposedSelectedHex].select) {
+            else if (hexTallField.hexTallArray[proposedSelectedHex].select)
+            {
                 resetSelectionTall();
 
             }//end if selected
@@ -735,37 +758,43 @@ this.portrait1Landscape2 = portrait;
                 resetSelectionTall();
             }
         }//end else if(noOfSelected==1)
-        else if (noOfSelected == 2) {
-            if (hexTallField.hexTallArray[proposedSelectedHex].select) {
-                if (selectedHex == proposedSelectedHex) {
-                    if(compareAllTall(selectedHex,selectedHex2,proposedSelectedSector)){
+        else if (noOfSelected == 2)
+        {
+            if (hexTallField.hexTallArray[proposedSelectedHex].select)
+            {
+                if (selectedHex == proposedSelectedHex)
+                {
+                    if (compareAllTall(selectedHex, selectedHex2, proposedSelectedSector))
+                    {
                         increaseScore();
                         resetSelectionTall();
                         highlightNonMatchingTall();
-                    }
-                    else
+                    } else
                     {
                         decreaseScore();
-                        swapSector1Tall(selectedHex,selectedSector,proposedSelectedSector);
+                        swapSector1Tall(selectedHex, selectedSector, proposedSelectedSector);
                     }
-                } else if (selectedHex2 == proposedSelectedHex) {
-                    if(compareAllTall(selectedHex2,selectedHex,proposedSelectedSector)){
+                } else if (selectedHex2 == proposedSelectedHex)
+                {
+                    if (compareAllTall(selectedHex2, selectedHex, proposedSelectedSector))
+                    {
                         increaseScore();
                         resetSelectionTall();
                         highlightNonMatchingTall();
-                    }
-                    else
+                    } else
                     {
                         decreaseScore();
-                        swapSector2Tall(selectedHex2,selectedSector2,proposedSelectedSector);
+                        swapSector2Tall(selectedHex2, selectedSector2, proposedSelectedSector);
 
                     }
                 }
             }//end if selected
-            else {
+            else
+            {
                 resetSelectionTall();
             }
         }//end else if(noOfSelected==2)
+
     }
 
     public void resetSelectionTall()
@@ -1418,7 +1447,10 @@ resetSelection();
             {
 //hide both hexes
                 hexWideField.hexWideArray[selectedHex].hide();
+                beeArray.get(selectedHex).visible=true;
                 hexWideField.hexWideArray[selectedHex2].hide();
+                beeArray.get(selectedHex2).visible=true;
+
                 scoreFieldMode++;
                 scoreFieldMode++;
 //create a list for temporary use
