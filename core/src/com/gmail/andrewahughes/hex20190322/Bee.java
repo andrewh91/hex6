@@ -213,7 +213,7 @@ public class Bee
             }
 
 
-            if(idleTimer+waggleTimer+circleTimer <=0)
+            if(idleTimer <=0&&circle==false)
             {
                 idle=false;
             }
@@ -229,7 +229,7 @@ public class Bee
                 }
                 else
                 {
-                    waggleTimer=1*rand.nextFloat();
+                    waggleTimer=0.5f+1*rand.nextFloat();
                             waggle=!waggle;
                 }
                 if(circleTimer>0)
@@ -237,10 +237,6 @@ public class Bee
                     circleTimer = circleTimer - dx;
                 }
             }
-        }
-        else
-        {
-            idle=false;
         }
     }
 
@@ -289,11 +285,11 @@ public class Bee
             {
                 if(waggleDirection)
                 {
-                    angle = angle- 0.1f;
+                    angle = angle- 0.2f;
                 }
                 else
                 {
-                    angle = angle+ 0.1f;
+                    angle = angle+ 0.2f;
                 }
 
                 waggleCounter+=dx;
