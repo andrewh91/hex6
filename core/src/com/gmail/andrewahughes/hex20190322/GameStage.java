@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -144,6 +145,7 @@ Col’s  	rows	total	orientation
 boolean ready = false;
 Actor readyButton;
 
+FlowerPosList flowerPosList;
 
 
     public GameStage(Viewport viewport, Texture texture, final StageInterface stageInterface, int portrait) {
@@ -1453,6 +1455,14 @@ resetSelection();
 
                 scoreFieldMode++;
                 scoreFieldMode++;
+
+                flowerPosList.add( hexWideField.hexWideArray[selectedHex].posX
+                ,hexWideField.hexWideArray[selectedHex].posY);
+                flowerPosList.add( hexWideField.hexWideArray[selectedHex2].posX
+                        ,hexWideField.hexWideArray[selectedHex2].posY);
+
+beeArray.get(selectedHex).addNewTarget();
+
 //create a list for temporary use
                 ArrayList<Integer> list = new ArrayList<Integer>();
 //use the get isolated method to find out if removing the two selected hexes has resulted in any hexes
@@ -1464,7 +1474,13 @@ resetSelection();
                     if(hexWideField.hexWideArray[list.get(i)].visible) {
                         hexWideField.hexWideArray[list.get(i)].hide();
                         beeArray.get(list.get(i)).visible=true;
+
                         scoreFieldMode++;
+
+                        flowerPosList.add( hexWideField.hexWideArray[list.get(i)].posX
+                                ,hexWideField.hexWideArray[list.get(i)].posY);
+                        beeArray.get(list.get(i)).addNewTarget();
+
                     }
                 }
 

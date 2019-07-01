@@ -33,33 +33,37 @@ public class Bee
     float sway = 0.0f;
     float timer = 0.0f;
 
-    float waggleCounter=0f;
-    boolean waggle= false;
-    boolean waggleDirection= false;
-    boolean circle= false;
-    boolean circleDirection =false;
     boolean idle = false;
+    boolean pause = false;
     Random rand = new Random();
     float idleTimer =0f;
-    float waggleTimer =0f;
-    float circleTimer=0f;
-    float circleAngleCounter=0f;
+    float pauseTimer =0f;
+
+    FlowerPosList flowerPosList;
+Vector2 lastPos;
 
     public Bee(float x, float y)
     {
         posx = x;
         posy = y;
-        addTarget(0, 0);
-        addTarget(800, 100);
-        addTarget(400, 1000);
-        setTargetAngle();
+        lastPos = new Vector2(x,y);
+        //addTarget(400, 1000);
     }
 
     public void addTarget(float x, float y)
     {
-        target.add(new Vector2(x, y));
+        lastPos=new Vector2(x, y);
+        target.add(lastPos);
+        setTargetAngle();
     }
 
+    public void addNewTarget()
+    {
+        lastPos=flowerPosList.getRand();
+
+        target.add(lastPos);
+        setTargetAngle();
+    }
     public void setTargetAngle()
     {
         if (target.size() > 0)
@@ -76,10 +80,10 @@ public class Bee
         {
             if (dist(posx, target.get(target.size() - 1).x, posy, target.get(target.size() - 1).y) < angleHelperRadius * angleHelperRadius)
             {
-                angleDiff = angleDiff * dx + 0.01f;
+                angleDiff = angleDiff  + 0.01f;
             } else
             {
-                angleDiff = angleDiffConstant * dx;
+                angleDiff = angleDiffConstant ;
             }
             double diff = angle - targetAngle;
             angleDirection = angleDiff;
@@ -88,7 +92,7 @@ public class Bee
                 angleDirection = -angleDiff;
             }
 
-            if (diff + 0.3 < 0.6)//if angle is close to correct, speed up
+            if (diff  < 0.3 && diff >0.3)//if angle is close to correct, speed up
             {
                 speedUp(dx);
             }//end if angle is close to correct, speed up
@@ -97,7 +101,7 @@ public class Bee
 
                 slowDown(dx);
             }
-                if (diff + 0.01 < 0.02)//if angle is very close to correct then set angle to the correct angle
+                if (diff  < 0.01&& diff > -0.01)//if angle is very close to correct then set angle to the correct angle
                 {
 
                     angle = targetAngle;
@@ -114,12 +118,12 @@ public class Bee
                     }
                     if (diff < 0)//if target clockwise
                     {
-                        angle = angle + angleDirection;//turn clockwise
+                        angle = angle + angleDirection * dx;//turn clockwise
 
 
                     } else
                     {
-                        angle = angle - angleDirection;
+                        angle = angle - angleDirection * dx;
                     }
                 }
 
@@ -151,155 +155,82 @@ public class Bee
 
     public void updatePos(float dx)
     {
-        if(!idle)
+if(!pause)
+{
+    if (target.size() > 0)
+    {
+        timer = timer + 6 * speedMod * dx;
+        sway = speedConstant * speedMod * (float) Math.sin(timer);
+        if (dist(posx, target.get(target.size() - 1).x, posy, target.get(target.size() - 1).y) < slowDownRadius * slowDownRadius)
         {
-            if (target.size() > 0)
+            slowDown(dx);
+            if (dist(posx, target.get(target.size() - 1).x, posy, target.get(target.size() - 1).y) < targetRadius * targetRadius)
             {
-                timer = timer + 6 * speedMod * dx;
-                sway = speedConstant / 2 * (float) Math.sin(timer);
-                if (dist(posx, target.get(target.size() - 1).x, posy, target.get(target.size() - 1).y) < slowDownRadius * slowDownRadius)
-                {
-                    slowDown(dx);
-                    if (dist(posx, target.get(target.size() - 1).x, posy, target.get(target.size() - 1).y) < targetRadius * targetRadius)
-                    {
-                        //posx = target.get(target.size() - 1).x;
-                        //posy = target.get(target.size() - 1).y;
-                        target.remove(target.size() - 1);
-                        beginIdle();
-                    }
-                }
-
-
-                updateAngle(dx);
-                posx += speedConstant * speedMod * dx * Math.cos(angle) + sway * speedMod * dx * Math.cos(angle + Math.PI / 2);
-                posy -= speedConstant * speedMod * dx * Math.sin(angle) + sway * speedMod * dx * Math.sin(angle + Math.PI / 2);
-
+                //posx = target.get(target.size() - 1).x;
+                //posy = target.get(target.size() - 1).y;
+                target.remove(target.size() - 1);
+                angleDiff = angleDiffConstant;
+                beginIdle();
             }
         }
+
+
+        updateAngle(dx);
+        posx += speedConstant * speedMod * dx * Math.cos(angle) + sway * speedMod * dx * Math.cos(angle + Math.PI / 2);
+        posy -= speedConstant * speedMod * dx * Math.sin(angle) + sway * speedMod * dx * Math.sin(angle + Math.PI / 2);
+
+    }
+}
     }
     private void beginIdle()
     {
         idle=true;
-        idleTimer = (float)10+rand.nextInt(20);
-        circleTimer= (float)5+rand.nextInt(2);
+        pause=true;
+        if(idleTimer<=0)
+        {
+            idleTimer = (float) 10 + rand.nextInt(20);
+
+        }
     }
     private void idle(float dx)
     {
         if(idle)
         {
 
-            circle(dx);
-            waggle(dx);
-            if(circleTimer<=0)
+            if(pauseTimer<=0)
             {
-                if(circle)
-                {
-                    circle=false;
-                    circleTimer= (float)5+rand.nextInt(2);
-                }
-                else
-                {
-                    circleTimer= (float)5+rand.nextInt(2);
-                    circle=true;
-                    if(rand.nextInt(2)==1)
-                    {
-                        circleDirection =true;
-                    }
-                    else
-                    {
-                        circleDirection =false;
-                    }
-                }
+pause=!pause;
+if(pause)
+{
+    addTarget((float)(posx-(20*Math.cos(angle))),(float)(posy-(20*Math.sin(angle))));
+
+}
+else
+{
+    addTarget(lastPos.x +rand.nextInt(20)-10,lastPos.y+ rand.nextInt(20)-10);
+}
+pauseTimer = (float) 4 + rand.nextInt(5);
             }
 
 
-            if(idleTimer <=0&&circle==false)
+            if(idleTimer <=0)
             {
                 idle=false;
+                pause= false;
+                addNewTarget();
             }
             else
             {
                 if(idleTimer>0)
                 {
                     idleTimer = idleTimer - dx;
+                    if(pauseTimer>0)
+                    {
+                        pauseTimer = pauseTimer - dx;
+                    }
+
+
                 }
-                if(waggleTimer>0)
-                {
-                    waggleTimer = waggleTimer -dx;
-                }
-                else
-                {
-                    waggleTimer=0.5f+1*rand.nextFloat();
-                            waggle=!waggle;
-                }
-                if(circleTimer>0)
-                {
-                    circleTimer = circleTimer - dx;
-                }
-            }
-        }
-    }
-
-    private void circle(float dx)
-    {
-        if(circle)
-        {
-
-            if(circleDirection )
-            {
-                angle+=Math.PI*dx;
-                circleAngleCounter+=Math.PI*dx;
-            }
-            else
-            {
-                angle-=Math.PI*dx;
-                circleAngleCounter+=Math.PI*dx;
-            }
-            if (angle < 0)
-            {
-                angle = Math.PI * 2;
-            }
-            if (angle > Math.PI * 2)
-            {
-                angle = 0;
-            }
-
-            posx += speedConstant * speedMod * dx * Math.cos(angle) ;
-            posy -= speedConstant * speedMod * dx * Math.sin(angle) ;
-            if(circleAngleCounter>2*Math.PI)
-            {
-                circleAngleCounter=0;
-                circle=false;
-                circleTimer=(float)5+rand.nextInt(2);
-
-            }
-        }
-    }
-
-    private void waggle(float dx)
-    {
-        if(waggle)
-        {
-
-            if(waggleCounter<1f)
-            {
-                if(waggleDirection)
-                {
-                    angle = angle- 0.2f;
-                }
-                else
-                {
-                    angle = angle+ 0.2f;
-                }
-
-                waggleCounter+=dx;
-//toggle waggleDirection
-                waggleDirection=!waggleDirection;
-            }
-            else
-            {
-                waggleCounter=0f;
-                waggle=false;
             }
         }
     }
@@ -328,7 +259,7 @@ public class Bee
 
     public void drawSprites(SpriteBatch sb)
     {
-        if(visible)
+        if(false)
         {
             font.draw(sb, "x " + (int) posx, posx + 12, posy);
             font.draw(sb, " y " + (int) posy, posx + 12, posy + 20);
@@ -340,10 +271,7 @@ public class Bee
             font.draw(sb, "target angle " + (int) (targetAngle * 180 / Math.PI), posx, posy + 80);
             font.draw(sb, "speed " + speedMod, posx + 12, posy + 100);
             font.draw(sb, "idletimer " + idleTimer, posx + 12, posy + 120);
-            font.draw(sb, "waggletimer " + waggleTimer, posx + 12, posy + 140);
-            font.draw(sb, "circletimer " + circleTimer, posx + 12, posy + 160);
-            font.draw(sb, "wagglecounter " + waggleCounter, posx + 12, posy + 180);
-            font.draw(sb, "circleanglecounter " + circleAngleCounter, posx + 12, posy + 200);
+            font.draw(sb, "pausetimer " + pauseTimer, posx + 12, posy + 140);
 
 
         }
