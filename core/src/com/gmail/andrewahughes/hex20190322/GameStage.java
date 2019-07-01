@@ -1053,7 +1053,51 @@ viewport.apply();
                     //hexWideField.draw(renderer);
                     //renderer.end();
                     //renderer.begin(ShapeRenderer.ShapeType.Filled);
+for(int i =0;i<flowerPosList.list.size();i++)
+{
+    renderer.setColor(Color.ORANGE);
+    renderer.circle(flowerPosList.list.get(i).x,flowerPosList.list.get(i).y,35);
+    renderer.setColor(Color.RED);
+    renderer.circle(flowerPosList.list.get(i).x,flowerPosList.list.get(i).y,31);
+    renderer.setColor(Color.ORANGE);
+    renderer.circle(flowerPosList.list.get(i).x-17,flowerPosList.list.get(i).y,20);
+    renderer.setColor(Color.RED);
+    renderer.circle(flowerPosList.list.get(i).x-17,flowerPosList.list.get(i).y,16);
+    renderer.setColor(Color.ORANGE);
+    renderer.circle(flowerPosList.list.get(i).x+17,flowerPosList.list.get(i).y,20);
+    renderer.setColor(Color.RED);
+    renderer.circle(flowerPosList.list.get(i).x+17,flowerPosList.list.get(i).y,16);
+    renderer.setColor(Color.ORANGE);
+    renderer.circle(flowerPosList.list.get(i).x,flowerPosList.list.get(i).y-17,20);
+    renderer.setColor(Color.RED);
+    renderer.circle(flowerPosList.list.get(i).x,flowerPosList.list.get(i).y-17,16);
+    renderer.setColor(Color.ORANGE);
+    renderer.circle(flowerPosList.list.get(i).x,flowerPosList.list.get(i).y+17,20);
+    renderer.setColor(Color.RED);
+    renderer.circle(flowerPosList.list.get(i).x,flowerPosList.list.get(i).y+17,16);
+    renderer.setColor(Color.ORANGE);
+    renderer.circle(flowerPosList.list.get(i).x-15,flowerPosList.list.get(i).y-15,20);
+    renderer.setColor(Color.RED);
+    renderer.circle(flowerPosList.list.get(i).x-15,flowerPosList.list.get(i).y-15,16);
+    renderer.setColor(Color.ORANGE);
+    renderer.circle(flowerPosList.list.get(i).x+15,flowerPosList.list.get(i).y-15,20);
+    renderer.setColor(Color.RED);
+    renderer.circle(flowerPosList.list.get(i).x+15,flowerPosList.list.get(i).y-15,16);
+    renderer.setColor(Color.ORANGE);
+    renderer.circle(flowerPosList.list.get(i).x-15,flowerPosList.list.get(i).y+15,20);
+    renderer.setColor(Color.RED);
+    renderer.circle(flowerPosList.list.get(i).x-15,flowerPosList.list.get(i).y+15,16);
+    renderer.setColor(Color.ORANGE);
+    renderer.circle(flowerPosList.list.get(i).x+15,flowerPosList.list.get(i).y+15,20);
+    renderer.setColor(Color.RED);
+    renderer.circle(flowerPosList.list.get(i).x+15,flowerPosList.list.get(i).y+15,16);
+    renderer.setColor(Color.ORANGE);
+    renderer.circle(flowerPosList.list.get(i).x,flowerPosList.list.get(i).y,25);
+    renderer.setColor(Color.YELLOW);
+    renderer.circle(flowerPosList.list.get(i).x,flowerPosList.list.get(i).y,21);
 
+
+}
                     for(int i =0;i<beeArray.size();i++)
                     {
                         beeArray.get(i).drawFilled(renderer,Gdx.graphics.getDeltaTime());
