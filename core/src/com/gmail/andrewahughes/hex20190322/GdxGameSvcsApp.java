@@ -102,9 +102,9 @@ int loadTimer =0;
 
             sb = new SpriteBatch();
             mainMenu = new HexOptionField(vpWidth, vpHeight,
-                    3, 0, portrait == 1,
-                    new String[]{"Sign In", "Start Practise Game", "Start Hiscore Game"},
-                    3);
+                    4, 0, portrait == 1,
+                    new String[]{"Sign In", "Start Practise Game", "Start Hiscore Game","Exit"},
+                    2);
 
             for (int i = 0; i < mainMenu.hexOptionArray.length; i++)
             {
@@ -192,6 +192,15 @@ gsSignInOrOut();
 //hiscore
             practise=false;
             goToGameStageRefresh();
+        }
+    });
+
+    mainMenu.hexOptionArray[3].addListener(new ClickListener(){
+        @Override
+        public void clicked(InputEvent event,float x, float y)
+        {
+
+            Gdx.app.exit();
         }
     });
 }

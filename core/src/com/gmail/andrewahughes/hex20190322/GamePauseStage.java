@@ -425,17 +425,17 @@ else if(practise&&hexOptionFieldArray.get(0).hexOptionArray[9].isVisible())
                 }
             });//end go to difficulty menu
 
-//go to swap orientation
-        hexOptionField.hexOptionArray[3].addListener(new ClickListener() {
+//go to swap orientation//disabling this, swap orientation was number 3, need to decrement all buttons following this now to fill its placr
+        /*hexOptionField.hexOptionArray[3].addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 stageInterface.goToSwapOrientationOption();
 
                 stageInterface.setOrientation(orientation);
             }});//end go to swap orientation
-
+*/
 //go to symbol
-        hexOptionField.hexOptionArray[4].addListener(new ClickListener() {
+        hexOptionField.hexOptionArray[3].addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 stageInterface.goToSymbolOption();
@@ -444,7 +444,7 @@ else if(practise&&hexOptionFieldArray.get(0).hexOptionArray[9].isVisible())
             }});//end go to symbol
 
 //save changes
-        hexOptionField.hexOptionArray[5].addListener(new ClickListener() {
+        hexOptionField.hexOptionArray[4].addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 difficulty = newDifficulty;
@@ -466,7 +466,7 @@ else if(practise&&hexOptionFieldArray.get(0).hexOptionArray[9].isVisible())
             }});//end save changes
 
 //go to game mode
-        hexOptionField.hexOptionArray[6].addListener(new ClickListener() {
+        hexOptionField.hexOptionArray[5].addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 stageInterface.goToGameModeOption();
@@ -475,7 +475,7 @@ else if(practise&&hexOptionFieldArray.get(0).hexOptionArray[9].isVisible())
             }});//end go to game mode
 
 //go to no of hexes
-        hexOptionField.hexOptionArray[7].addListener(new ClickListener() {
+        hexOptionField.hexOptionArray[6].addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 stageInterface.goToNoOfHexesOption();
@@ -497,7 +497,7 @@ else if(practise&&hexOptionFieldArray.get(0).hexOptionArray[9].isVisible())
             }});//end go to no of hexes
 
 //go to zoom mode
-        hexOptionField.hexOptionArray[8].addListener(new ClickListener() {
+        hexOptionField.hexOptionArray[7].addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 stageInterface.goToZoomModeOption();
@@ -505,7 +505,7 @@ else if(practise&&hexOptionFieldArray.get(0).hexOptionArray[9].isVisible())
                 stageInterface.setZoomMode(zoomMode);
             }});//end go to zoom mode
 
-    hexOptionField.hexOptionArray[9].addListener(new ClickListener()
+    hexOptionField.hexOptionArray[8].addListener(new ClickListener()
     {
         @Override
         public void clicked(InputEvent event, float x, float y)
@@ -1259,10 +1259,9 @@ if(portrait)
 
 void createOptionsMenu()
 {
-    hexOptionField = new HexOptionField(width,height,10,
+    hexOptionField = new HexOptionField(width,height,9,
             0,portrait,
-            new String[]{"Cancel Changes","Return to Main Menu","Change Difficulty" ,
-                    "Swap Orientation","Change Symbol Type",
+            new String[]{"Cancel Changes","Return to Main Menu","Change Difficulty" ,"Change Symbol Type",
                     "Save Changes","Change Game Mode","Change Number of Hexes","Change Zoom Mode","Scoreboard"
             }
             ,0);
