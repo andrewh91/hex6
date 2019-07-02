@@ -2,12 +2,14 @@ package com.gmail.andrewahughes.hex20190322;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -68,84 +70,99 @@ boolean practise = false;
     ShapeRenderer sr;
     SpriteBatch sb;
     HexOptionField mainMenu;
-
+int loadTimer =0;
    public GdxGameSvcsApp(com.gmail.andrewahughes.hex20190322.Platform platform)
    {
        this.platform=platform;
    }
     @Override
     public void create() {
-       cam=new OrthographicCamera();
-       vpLong=1280;// the long edge of the screen
-       vpShort=720;
-vpWidth=vpShort;
-vpHeight=vpLong;
-        stretchViewport = new StretchViewport(vpWidth,vpHeight);
-        badlogic = new Texture("badlogic.jpg");
-        gameStage = new com.gmail.andrewahughes.hex20190322.GameStage(stretchViewport,badlogic,this,portrait);
-        gamePauseStage = new com.gmail.andrewahughes.hex20190322.GamePauseStage(stretchViewport,badlogic,this,practise);
-        gameOverStage = new com.gmail.andrewahughes.hex20190322.GameOverStage(stretchViewport,badlogic,this);
-        //Gdx.input.setInputProcessor(gameStage);
-
-        mainStage = new Stage(stretchViewport);
-        Gdx.input.setInputProcessor(mainStage);
-        Gdx.input.setCatchBackKey(true);
-
-         sr = new ShapeRenderer();
-         sb = new SpriteBatch();
-        mainMenu = new HexOptionField(vpWidth,vpHeight,
-                3,0,portrait==1,
-                new String[]{"Sign In","Start Practise Game","Start Hiscore Game"},
-                3);
-
-        for(int i =0; i<mainMenu.hexOptionArray.length;i++)
+       if(loadTimer==1)
+       {
+           cam = new OrthographicCamera();
+           vpLong = 1280;// the long edge of the screen
+           vpShort = 720;
+           vpWidth = vpShort;
+           vpHeight = vpLong;
+           stretchViewport = new StretchViewport(vpWidth, vpHeight);
+           sr = new ShapeRenderer();
+       }
+        //the below takes a while to load
+        else if(loadTimer==4)
         {
-            mainStage.addActor(mainMenu.hexOptionArray[i]);
+            badlogic = new Texture("badlogic.jpg");
+            gameStage = new com.gmail.andrewahughes.hex20190322.GameStage(stretchViewport, badlogic, this, portrait);
+            gamePauseStage = new com.gmail.andrewahughes.hex20190322.GamePauseStage(stretchViewport, badlogic, this, practise);
+            gameOverStage = new com.gmail.andrewahughes.hex20190322.GameOverStage(stretchViewport, badlogic, this);
+            //Gdx.input.setInputProcessor(gameStage);
+
+            mainStage = new Stage(stretchViewport);
+            Gdx.input.setInputProcessor(mainStage);
+            Gdx.input.setCatchBackKey(true);
+
+            sb = new SpriteBatch();
+            mainMenu = new HexOptionField(vpWidth, vpHeight,
+                    3, 0, portrait == 1,
+                    new String[]{"Sign In", "Start Practise Game", "Start Hiscore Game"},
+                    3);
+
+            for (int i = 0; i < mainMenu.hexOptionArray.length; i++)
+            {
+                mainStage.addActor(mainMenu.hexOptionArray[i]);
+            }
+            mainMenu.enableOptions();
+            setUpHexOptions();
+
+
+            setPortrait();
+
+            prepareSkin();
+
+            if (gsClient == null)
+                gsClient = new MockGameServiceClient(1)
+                {
+                    @Override
+                    protected Array<ILeaderBoardEntry> getLeaderboardEntries()
+                    {
+                        return null;
+                    }
+
+                    @Override
+                    protected Array<String> getGameStates()
+                    {
+                        return null;
+                    }
+
+                    @Override
+                    protected byte[] getGameState()
+                    {
+                        return new byte[0];
+                    }
+
+                    @Override
+                    protected Array<IAchievement> getAchievements()
+                    {
+                        return null;
+                    }
+
+                    @Override
+                    protected String getPlayerName()
+                    {
+                        return null;
+                    }
+                };
+
+            gsClient.setListener(this);
+
+            prepareUI();
+
+            gsClient.resumeSession();
+
+            // needed in case the connection is pending
+            refreshStatusLabel();
+
+            //this is the end of the bits that take time to load
         }
-        mainMenu.enableOptions();
-setUpHexOptions();
-
-
-        setPortrait();
-
-        prepareSkin();
-
-        if (gsClient == null)
-            gsClient = new MockGameServiceClient(1) {
-                @Override
-                protected Array<ILeaderBoardEntry> getLeaderboardEntries() {
-                    return null;
-                }
-
-                @Override
-                protected Array<String> getGameStates() {
-                    return null;
-                }
-
-                @Override
-                protected byte[] getGameState() {
-                    return new byte[0];
-                }
-
-                @Override
-                protected Array<IAchievement> getAchievements() {
-                    return null;
-                }
-
-                @Override
-                protected String getPlayerName() {
-                    return null;
-                }
-            };
-
-        gsClient.setListener(this);
-
-        prepareUI();
-
-        gsClient.resumeSession();
-
-        // needed in case the connection is pending
-        refreshStatusLabel();
     }
 public void setUpHexOptions()
 {
@@ -570,13 +587,15 @@ gsSignInOrOut();
     }
 
     @Override
-    public void render(){
-        if(visible) {
+    public void render()
+    {
+
+        if(loadTimer>4) {
+        if (visible)
+        {
+            // mainStage.draw();
             Gdx.gl.glClearColor(0.9f, 0.8f, 0.1f, 1);
             Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-            mainStage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
-
-            // mainStage.draw();
             sr.begin(ShapeRenderer.ShapeType.Filled);
             sr.setProjectionMatrix(stretchViewport.getCamera().combined);
             mainMenu.draw(sr);
@@ -587,11 +606,40 @@ gsSignInOrOut();
             sb.end();
         }
 
+        mainStage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
 
-            gameStage.draw();
-            gamePauseStage.draw();
-            gameOverStage.draw();
 
+        gameStage.draw();
+        gamePauseStage.draw();
+        gameOverStage.draw();
+    }
+    else
+       {
+           loadTimer++;
+           create();
+
+
+           Gdx.gl.glClearColor(0.68f, 0.77f, 0.88f, 1);
+           Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+           float es = 200;
+           float as = es*0.866025403784439f;
+           float cx = vpWidth/2;
+           float cy = vpHeight/2;
+
+           sr.begin(ShapeRenderer.ShapeType.Filled);
+           sr.setColor(1f,0.62f,0.62f,1f);
+
+           sr.triangle(  cx+es/2,cy+as/2,
+                   cx+es/2,cy-as/2,
+                   cx,cy-as/2);
+           sr.setColor(0.96f,0.96f,0.60f,1f);
+           sr.arc(cx-es/2,cy+as/2,es,(float)(300),(float)(60));
+           sr.setColor(0.56f,0.82f,1f,1f);
+           sr.triangle(cx-es/2,cy+as/2,
+                   cx+es/2,cy+as/2,
+                   cx,cy-as/2);
+           sr.end();
+       }
     }
 @Override
 public boolean getPractise()
