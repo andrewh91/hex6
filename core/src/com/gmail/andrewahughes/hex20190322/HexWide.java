@@ -49,6 +49,8 @@ public class HexWide extends Actor {
     public int touchX = 0, touchY = 0, touchRadius = 10;
    ArrayList <Integer> removeSymbol= new ArrayList<Integer>(6);
 
+   public int scorePenaltyMultiplier =0;
+
     public HexWide(final float edgeSize, final float centreX, final float centreY, final int index, final GameStage gs, final Database db) {
         indexNo = "" + index;
         text3 = db.getHex(index)[0]+" "+db.getHex(index)[1]+" "+db.getHex(index)[2]+" "+db.getHex(index)[3]+" "+db.getHex(index)[4]+" "+db.getHex(index)[5]+" ";
@@ -579,4 +581,12 @@ public void drawShape(ShapeRenderer shapeRenderer, float originX, float originY,
 
         }
     }//end of method
+
+    void increaseScorePenaltyMultiplier()
+    {
+        if(scorePenaltyMultiplier<5)
+        {
+            scorePenaltyMultiplier++;
+        }
+    }
 }

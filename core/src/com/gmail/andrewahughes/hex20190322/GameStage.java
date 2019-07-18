@@ -84,7 +84,7 @@ public class GameStage extends Stage {
 
     //score is incremented when matching when target score is reached we end some game modes
     int score = 0, targetScore = 10;
-    int scoreFieldMode=0, targetScoreFieldMode=0;
+    int scoreFieldMode=0, targetScoreFieldMode=0, displayScore=0;
     boolean gameOver = false;
     //timer is incremented when not paused, timerFinal was just a way to stop the timer when we get gameover
     float timer = 0f, timerFinal = 0f, penaltyTime = 5f;
@@ -315,6 +315,8 @@ this.portrait1Landscape2 = portrait;
 //if the touched symbol does not match any of the symbols on the other hex then decrease score and swap sector which will unhighlight the previous selected sector (if there was one) and select the new one.
                     else {
                         decreaseScore();
+                        hexWideField.hexWideArray[selectedHex].increaseScorePenaltyMultiplier();
+
                         swapSector1(selectedHex, selectedSector, proposedSelectedSector);
                     }
 //this is the same logic but for if we touched the symbol on the other hex
@@ -325,6 +327,8 @@ this.portrait1Landscape2 = portrait;
                         highlightNonMatching();
                     } else {
                         decreaseScore();
+                        hexWideField.hexWideArray[selectedHex2].increaseScorePenaltyMultiplier();
+
                         swapSector2(selectedHex2, selectedSector2, proposedSelectedSector);
 
                     }
@@ -1135,7 +1139,18 @@ hexWideField.drawFilled(renderer,symbolType);
      hudViewport.apply();
      hudBatch.begin();
 
-     font.draw(hudBatch, "timer: " + (int)(timer) ,30, 30);
+     font.draw(hudBatch, "timer: " + (int)(timer) ,stageInterface.getScreenWidth()/3, 30);
+     if(gameMode==1)
+     {
+
+     }
+     else
+     {
+         font.draw(hudBatch, "score: " + (int)(displayScore) ,2*stageInterface.getScreenWidth()/3, 30);
+         font.draw(hudBatch, "score: " + (int)(displayScore-timer*1000) ,stageInterface.getScreenWidth()/2, 70);
+
+     }
+
 
      hudBatch.end();
 
@@ -1502,6 +1517,13 @@ resetSelection();
 
                 scoreFieldMode++;
                 scoreFieldMode++;
+                int scoremultiplier = hexWideField.hexWideArray[selectedHex].scorePenaltyMultiplier+hexWideField.hexWideArray[selectedHex2].scorePenaltyMultiplier;
+                if(scoremultiplier>5)
+                {
+                    scoremultiplier=5;
+                }
+                displayScore = displayScore +3200 /(int)(Math.pow(2,scoremultiplier));
+                displayScore = displayScore +3200 /(int)(Math.pow(2,scoremultiplier));
 
                 flowerPosList.add( hexWideField.hexWideArray[selectedHex].posX
                 ,hexWideField.hexWideArray[selectedHex].posY);
@@ -1523,6 +1545,7 @@ beeArray.get(selectedHex).addNewTarget();
                         beeArray.get(list.get(i)).visible=true;
 
                         scoreFieldMode++;
+                        displayScore = displayScore +3200 /(int)(Math.pow(2,scoremultiplier));
 
                         flowerPosList.add( hexWideField.hexWideArray[list.get(i)].posX
                                 ,hexWideField.hexWideArray[list.get(i)].posY);
@@ -1600,9 +1623,20 @@ int diffInt = difficulty;
         int month = calendarG.get(Calendar.MONTH)+1;
         int day = calendarG.get(Calendar.DAY_OF_MONTH);
         int intDate = year*10000+month*100+day;
-        GameStage.this.stageInterface.setScore(timerInt,noOfRows*noOfColumns,intDate);
-        GameStage.this.stageInterface.goToGameOverStage(noOfRows*noOfColumns,timerInt,
-                difficulty,gameMode);
+        if(gameMode==1)
+        {
+            GameStage.this.stageInterface.setScore(timerInt, noOfRows * noOfColumns, intDate);
+            GameStage.this.stageInterface.goToGameOverStage(noOfRows * noOfColumns, timerInt,
+                    difficulty, gameMode);
+        }
+        else
+        {
+            int fieldScore=displayScore-timerInt;
+
+            GameStage.this.stageInterface.setScore(fieldScore, noOfRows * noOfColumns, intDate);
+            GameStage.this.stageInterface.goToGameOverStage(noOfRows * noOfColumns, fieldScore,
+                    difficulty, gameMode);
+        }
     }
     void resetGame()
     {
