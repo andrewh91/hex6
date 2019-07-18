@@ -27,7 +27,7 @@ public class GameOverStage extends Stage {
 
     int scoreValue, difficultyValue,noOfHexesValue, gameModeValue;
 
-    public GameOverStage(Viewport viewport, Texture texture, final StageInterface stageInterface) {
+    public GameOverStage(Viewport viewport, final StageInterface stageInterface) {
         super( viewport );
 
         this.stageInterface =stageInterface;

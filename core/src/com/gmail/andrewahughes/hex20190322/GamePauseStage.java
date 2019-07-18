@@ -111,10 +111,12 @@ String offlineScoreboardPathString=new String("offlineScoreboard14.txt");
     int scoreboardDate;
     int category=0;
 boolean practise;
-    public GamePauseStage(Viewport viewport, Texture texture,
+    public GamePauseStage(Viewport viewport,
                           final StageInterface stageInterface, final boolean practise) {
         super( viewport );
         this.practise=practise;
+        width=stageInterface.getScreenWidth();
+        height=stageInterface.getScreenHeight();
         setupFields();
 
         continueButton = new Actor();
@@ -175,9 +177,9 @@ updateUI();
         skin.load(Gdx.files.internal("skin/uiskin.json"));
 
 
-        final Image pauseImg = new Image(texture);
-        this.pauseImg1 =pauseImg;
-        this.pauseImg1.setVisible(false);//start off invisible
+        //final Image pauseImg = new Image(texture);
+        //this.pauseImg1 =pauseImg;
+      //  this.pauseImg1.setVisible(false);//start off invisible
         prepareUI();
 
 
@@ -733,6 +735,7 @@ public void clicked(InputEvent event, float x, float y) {
         scoreboardOptionField.hexOptionArray[1].addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                stageInterface.gsSignIn();
                 tempHexOption=(HexOption)event.getTarget();
                 newScoreboardMode=tempHexOption.hexIndex;
                 stageInterface.setScoreboardMode(newScoreboardMode);

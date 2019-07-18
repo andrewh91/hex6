@@ -62,11 +62,10 @@ boolean practise = false;
     private TextureAtlas atlas;
     private TextField scoreFillin;
     private TextField cloudData;
-    OrthographicCamera cam;
     StretchViewport stretchViewport;
     public int vpWidth,vpHeight,vpShort,vpLong;
     int portrait=1;
-
+boolean resizeBool = false;
     ShapeRenderer sr;
     SpriteBatch sb;
     HexOptionField mainMenu;
@@ -75,25 +74,26 @@ int loadTimer =0;
    {
        this.platform=platform;
    }
+
     @Override
     public void create() {
-       if(loadTimer==1)
+       if(loadTimer==0)
        {
-           cam = new OrthographicCamera();
-           vpLong = 1280;// the long edge of the screen
-           vpShort = 720;
+           vpLong = Gdx.graphics.getHeight();// the long edge of the screen
+           vpShort = Gdx.graphics.getWidth();
            vpWidth = vpShort;
            vpHeight = vpLong;
-           stretchViewport = new StretchViewport(vpWidth, vpHeight);
+           stretchViewport = new StretchViewport(vpWidth,vpHeight);
            sr = new ShapeRenderer();
        }
         //the below takes a while to load
         else if(loadTimer==4)
         {
-            badlogic = new Texture("badlogic.jpg");
-            gameStage = new com.gmail.andrewahughes.hex20190322.GameStage(stretchViewport, badlogic, this, portrait);
-            gamePauseStage = new com.gmail.andrewahughes.hex20190322.GamePauseStage(stretchViewport, badlogic, this, practise);
-            gameOverStage = new com.gmail.andrewahughes.hex20190322.GameOverStage(stretchViewport, badlogic, this);
+
+            //badlogic = new Texture("badlogic.jpg");
+            gameStage = new com.gmail.andrewahughes.hex20190322.GameStage(stretchViewport, this, portrait);
+            gamePauseStage = new com.gmail.andrewahughes.hex20190322.GamePauseStage(stretchViewport, this, practise);
+            gameOverStage = new com.gmail.andrewahughes.hex20190322.GameOverStage(stretchViewport, this);
             //Gdx.input.setInputProcessor(gameStage);
 
             mainStage = new Stage(stretchViewport);
@@ -562,7 +562,18 @@ gsSignInOrOut();
             refreshStatusLabel();
         }
     }
+@Override
+    public void gsSignIn() {
+        if (gsClient.isSessionActive())
+        {//gsClient.logOff();
+        }
+        else {
+            if (!gsClient.logIn())
+                Gdx.app.error("GS_ERROR", "Cannot sign in: No credentials or session id given.");
 
+            refreshStatusLabel();
+        }
+    }
     private void refreshStatusLabel() {
         String newStatusText;
         String newUserText;
@@ -600,6 +611,11 @@ gsSignInOrOut();
     {
 
         if(loadTimer>4) {
+            if(resizeBool==false)
+            {
+                resize(vpWidth,vpHeight);
+            }
+
         if (visible)
         {
             // mainStage.draw();
@@ -655,10 +671,7 @@ public boolean getPractise()
 {
     return practise;
 }
-    @Override
-    public void resize(int width, int height) {
-        //mainStage.getViewport().update(vpWidth, vpHeight, true);
-    }
+
 
     @Override
     public void dispose() {
@@ -1004,12 +1017,12 @@ hideAllStages();
     @Override
     public int getScreenHeight()
     {
-        return vpHeight;
+        return this.vpHeight;
     }
     @Override
     public int getScreenWidth()
     {
-        return vpWidth;
+        return this.vpWidth;
     }
 
 
@@ -1027,6 +1040,12 @@ hideAllStages();
         gameOverStage.setVisible(true);
         Gdx.input.setInputProcessor(gameOverStage);
         Gdx.input.setCatchBackKey(true);
+    }
+
+    @Override
+    public void resize(int x,int y)
+    {
+
     }
 
     void hideAllStages()

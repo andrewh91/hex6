@@ -10,6 +10,7 @@ public interface StageInterface {
     void goToGamePauseStage(boolean gameOver);
     void goToScoreboardOption();
 
+    void gsSignIn();
     void setScoreboardMode(int scoreboardMode);
 
     void showScoreboard();

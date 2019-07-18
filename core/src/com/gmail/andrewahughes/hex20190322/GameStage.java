@@ -123,6 +123,7 @@ Col’s  	rows	total	orientation
     public int noOfRows = 6, noOfColumns = 4;
     //prefer not to use Boolean for the orientation, when changing the options in game we can use 0 to show no change, 1 portrait 2 landscape
     //game mode is 0 by default, this is the field mode, many hexes on screen, hexes disappear when matched, game mode 1 would be singles mode, 2 hexes on screen, symbols are replaced when matching
+    //field width and height are just defaults, they will be changed later
     int portrait1Landscape2 = 1, fieldPosX = 50, fieldPosY = 50, fieldWidth = 620, fieldHeight = 1180
             , gameMode = 2,symbolType=1;
 
@@ -148,7 +149,7 @@ Actor readyButton;
 FlowerPosList flowerPosList;
 
 
-    public GameStage(Viewport viewport, Texture texture, final StageInterface stageInterface, int portrait) {
+    public GameStage(Viewport viewport, final StageInterface stageInterface, int portrait) {
         super(viewport);
         this.viewport = viewport;
         hudViewport = new StretchViewport(stageInterface.getScreenWidth(),stageInterface.getScreenHeight());
@@ -159,6 +160,8 @@ this.portrait1Landscape2 = portrait;
         font.setColor(Color.WHITE);
         font.getData().setScale(2f);
         //create the field with the given default values which we set above
+        fieldWidth= stageInterface.getScreenWidth()-fieldPosX*2;
+                fieldHeight = stageInterface.getScreenHeight()-fieldPosY*2;
         updateField(noOfRows, noOfColumns, portrait, fieldPosX, fieldPosY, fieldWidth,
                 fieldHeight, gameMode,symbolType);
         //the stage interface is used to go from one stage to another and pass variables over
@@ -1562,13 +1565,19 @@ beeArray.get(selectedHex).addNewTarget();
 
     void isTargetReached(int currentScore)
     {
-        if(currentScore==targetScore)
+        if(gameMode==1)
+        {
+            if (currentScore == targetScore)
+            {
+                gameOver();
+            }
+        }
+        else
+        {
+         if (scoreFieldMode == targetScoreFieldMode)
         {
             gameOver();
         }
-        else if(scoreFieldMode==targetScoreFieldMode)
-        {
-            gameOver();
         }
     }
     void gameOver()
