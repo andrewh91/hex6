@@ -19,12 +19,14 @@ public class GameOverStage extends Stage {
     public StageInterface stageInterface;
     SpriteBatch sb = new SpriteBatch();
     BitmapFont font = new BitmapFont();
+    float fontScale=5f;
+    float fontSpeed=1;
     GlyphLayout glyphLayout = new GlyphLayout();
     CentredText[] centredTextArray = new CentredText[12];
     int screenWidth, screenHeight;
     Actor continueButton = new Actor();
-    int continueButtonTimer;
-
+    float continueButtonTimer;
+int scorePosY=0;
     int scoreValue, difficultyValue,noOfHexesValue, gameModeValue;
 
     public GameOverStage(Viewport viewport, final StageInterface stageInterface) {
@@ -33,19 +35,21 @@ public class GameOverStage extends Stage {
         this.stageInterface =stageInterface;
         screenWidth=stageInterface.getScreenWidth();
         screenHeight=stageInterface.getScreenHeight();
-continueButtonTimer=100;
+continueButtonTimer=0;
          continueButton = new Actor();
         continueButton.setBounds(0,0,screenWidth,screenHeight);
         continueButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 {
-                    if(continueButtonTimer<=0)
+                    if(continueButtonTimer>3)
                     {
                     setVisible(false);
                     //if practise use false bool as argument, if not use true
                     GameOverStage.this.stageInterface.goToGamePauseStage(!stageInterface.getPractise());
-                    continueButtonTimer=100;
+                    stageInterface.prepareNewGame();
+                    continueButtonTimer=0;
+                    fontScale=5f;
                 }
                 }
             }
@@ -58,18 +62,49 @@ this.addActor(continueButton);
     public void draw() {
         act(Gdx.graphics.getDeltaTime());
         if (visible) {
-            if(continueButtonTimer>0)
+
+                continueButtonTimer += Gdx.graphics.getDeltaTime();
+
+
+            if(continueButtonTimer>3)
             {
-                continueButtonTimer -= Gdx.graphics.getDeltaTime();
+               if(scorePosY >50)
+               {
+                   scorePosY-=Gdx.graphics.getDeltaTime()*fontSpeed;
+               }
+               else
+               {
+                   scorePosY=50;
+               }
+               if(fontScale>2f)
+               {
+                   fontScale-=(Gdx.graphics.getDeltaTime()*3);
+               }
+               else
+               {
+                   fontScale=2f;
+               }
+               font.getData().setScale(fontScale);
             }
             sb.setProjectionMatrix(getViewport().getCamera().combined);
 sb.begin();
-            Gdx.gl.glClearColor(0.86f, 0.65f, 0.22f, 1);
-            Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+           // Gdx.gl.glClearColor(0.86f, 0.65f, 0.22f, 1);
+           // Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+            /*
             for(int i = 0 ; i< centredTextArray.length;i++)
+
             {
                 centredTextArray[i].draw(sb);
             }
+            */
+
+
+            glyphLayout.setText(font,("Complete! Score:" + (int)(scoreValue)));
+
+            font.draw(sb, "Complete! Score:" + (int)(scoreValue) ,
+                    stageInterface.getScreenWidth()/2-glyphLayout.width/2
+                    , scorePosY);
+
             sb.end();
             super.draw();
         }
@@ -86,7 +121,10 @@ sb.begin();
 
     public void setScore(int noOfHexes,int score,int difficulty, int gameMode)
     {
-
+scoreValue=score;
+scorePosY=stageInterface.getScreenHeight()/2;
+font.getData().setScale(fontScale);
+fontSpeed = (stageInterface.getScreenHeight()-50)/2;
         screenWidth=stageInterface.getScreenWidth();
         screenHeight=stageInterface.getScreenHeight();
         centredTextArray[0]= new CentredText("Complete!");

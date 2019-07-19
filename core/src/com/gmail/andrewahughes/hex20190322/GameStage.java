@@ -1139,14 +1139,15 @@ hexWideField.drawFilled(renderer,symbolType);
      hudViewport.apply();
      hudBatch.begin();
 
-     font.draw(hudBatch, "timer: " + (int)(timer) ,stageInterface.getScreenWidth()/3, 30);
      if(gameMode==1)
      {
+         font.draw(hudBatch, "timer: " + (int)(timer) ,stageInterface.getScreenWidth()/3, 30);
 
      }
-     else
+     else if(gameOver==false)
      {
-         font.draw(hudBatch, "score: " + (int)(displayScore) ,2*stageInterface.getScreenWidth()/3, 30);
+         font.draw(hudBatch, "timer: " + (int)(timer) ,stageInterface.getScreenWidth()/3, 30);
+
          font.draw(hudBatch, "score: " + (int)(displayScore-timer*1000) ,stageInterface.getScreenWidth()/2, 70);
 
      }
@@ -1603,15 +1604,19 @@ beeArray.get(selectedHex).addNewTarget();
         }
         }
     }
+    public void prepareNewGame()
+    {
+
+        resetGame();
+        updateField(noOfRows, noOfColumns, portrait1Landscape2, fieldPosX,
+                fieldPosY, fieldWidth, fieldHeight, gameMode,symbolType);
+    }
     void gameOver()
     {
         gameOver=true;
         timerFinal=timer;
 int timerInt = (int)(timer*1000);
 int diffInt = difficulty;
-        resetGame();
-        updateField(noOfRows, noOfColumns, portrait1Landscape2, fieldPosX,
-                fieldPosY, fieldWidth, fieldHeight, gameMode,symbolType);
         Date date = new Date();
         Calendar calendarG = new GregorianCalendar();
         calendarG.setTime(date);

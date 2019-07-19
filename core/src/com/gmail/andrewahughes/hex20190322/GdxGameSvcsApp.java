@@ -972,7 +972,11 @@ hideAllStages();
         return gsClient.submitToLeaderboard(LEADERBOARD1+scoreboardIndex, score, gsClient.getGameServiceId());
     }
 
-
+@Override
+public void prepareNewGame()
+{
+    gameStage.prepareNewGame();
+}
 
 
 
@@ -1038,6 +1042,7 @@ hideAllStages();
         hideAllStages();
         gameOverStage.setScore(noOfHexes,score,difficulty, gameMode);
         gameOverStage.setVisible(true);
+        gameStage.setVisible(true);
         Gdx.input.setInputProcessor(gameOverStage);
         Gdx.input.setCatchBackKey(true);
     }

@@ -6,6 +6,7 @@ package com.gmail.andrewahughes.hex20190322;
 
 public interface StageInterface {
     void goToGameStage();
+    void prepareNewGame();
     void goToMainStage();
     void goToGamePauseStage(boolean gameOver);
     void goToScoreboardOption();

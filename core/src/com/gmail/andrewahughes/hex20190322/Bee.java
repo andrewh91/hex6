@@ -16,7 +16,7 @@ public class Bee
 {
     BitmapFont font = new BitmapFont();
     float posx = 0, posy = 0;
-    int radius = 5;
+    int radius = 12;
     float speedConstant = 50;
     float speedMod = 0.5f;
     double angle = Math.PI;
