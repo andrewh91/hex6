@@ -1062,48 +1062,14 @@ viewport.apply();
                     //renderer.begin(ShapeRenderer.ShapeType.Filled);
 for(int i =0;i<flowerPosList.list.size();i++)
 {
-    renderer.setColor(Color.ORANGE);
-    renderer.circle(flowerPosList.list.get(i).x,flowerPosList.list.get(i).y,35);
-    renderer.setColor(Color.RED);
-    renderer.circle(flowerPosList.list.get(i).x,flowerPosList.list.get(i).y,31);
-    renderer.setColor(Color.ORANGE);
-    renderer.circle(flowerPosList.list.get(i).x-17,flowerPosList.list.get(i).y,20);
-    renderer.setColor(Color.RED);
-    renderer.circle(flowerPosList.list.get(i).x-17,flowerPosList.list.get(i).y,16);
-    renderer.setColor(Color.ORANGE);
-    renderer.circle(flowerPosList.list.get(i).x+17,flowerPosList.list.get(i).y,20);
-    renderer.setColor(Color.RED);
-    renderer.circle(flowerPosList.list.get(i).x+17,flowerPosList.list.get(i).y,16);
-    renderer.setColor(Color.ORANGE);
-    renderer.circle(flowerPosList.list.get(i).x,flowerPosList.list.get(i).y-17,20);
-    renderer.setColor(Color.RED);
-    renderer.circle(flowerPosList.list.get(i).x,flowerPosList.list.get(i).y-17,16);
-    renderer.setColor(Color.ORANGE);
-    renderer.circle(flowerPosList.list.get(i).x,flowerPosList.list.get(i).y+17,20);
-    renderer.setColor(Color.RED);
-    renderer.circle(flowerPosList.list.get(i).x,flowerPosList.list.get(i).y+17,16);
-    renderer.setColor(Color.ORANGE);
-    renderer.circle(flowerPosList.list.get(i).x-15,flowerPosList.list.get(i).y-15,20);
-    renderer.setColor(Color.RED);
-    renderer.circle(flowerPosList.list.get(i).x-15,flowerPosList.list.get(i).y-15,16);
-    renderer.setColor(Color.ORANGE);
-    renderer.circle(flowerPosList.list.get(i).x+15,flowerPosList.list.get(i).y-15,20);
-    renderer.setColor(Color.RED);
-    renderer.circle(flowerPosList.list.get(i).x+15,flowerPosList.list.get(i).y-15,16);
-    renderer.setColor(Color.ORANGE);
-    renderer.circle(flowerPosList.list.get(i).x-15,flowerPosList.list.get(i).y+15,20);
-    renderer.setColor(Color.RED);
-    renderer.circle(flowerPosList.list.get(i).x-15,flowerPosList.list.get(i).y+15,16);
-    renderer.setColor(Color.ORANGE);
-    renderer.circle(flowerPosList.list.get(i).x+15,flowerPosList.list.get(i).y+15,20);
-    renderer.setColor(Color.RED);
-    renderer.circle(flowerPosList.list.get(i).x+15,flowerPosList.list.get(i).y+15,16);
-    renderer.setColor(Color.ORANGE);
-    renderer.circle(flowerPosList.list.get(i).x,flowerPosList.list.get(i).y,25);
-    renderer.setColor(Color.YELLOW);
-    renderer.circle(flowerPosList.list.get(i).x,flowerPosList.list.get(i).y,21);
+    float scale =0.3f;
 
-
+    float ox =flowerPosList.list.get(i).x-320*scale;
+    float oy =flowerPosList.list.get(i).y-240*scale;
+Color secondaryColour = new Color(Color.YELLOW);
+Color primaryColour = new Color(Color.RED);
+    renderer.setColor(primaryColour);
+    drawFlower(i%9,ox,oy,scale,primaryColour,secondaryColour);
 }
                     for(int i =0;i<beeArray.size();i++)
                     {
@@ -1170,7 +1136,7 @@ hexWideField.drawFilled(renderer,symbolType);
 
     public void drawWideHex(ShapeRenderer sr, int originX, int originY, int edgeSize)
     {
-        // draws a ‘wide’ hex hex with flat top and bottom. originX and originY are the coordinates passed in which will determine the centre of the hex, edge size will determine the size, altitudeSize is the height (or altitude) of an equilateral triangle with edge size defined by edgeSize
+        // draws a ‘wide’ hex hex with flat top and bottom. originX and originY are the coordinates passed in which will determine the centre of the hex, edge size will determine the size, altitudeSize is the height (or altitude) of an equilateral triange with edge size defined by edgeSize
         double altitudeSize = edgeSize * 0.866025403784439;
 
         //draw 6 lines starting at the bottom right and going around anti clockwise
@@ -1679,7 +1645,7 @@ int diffInt = difficulty;
     }
     public void drawTallHex(ShapeRenderer sr, int originX, int originY, int edgeSize)
     {
-        // draws a ‘tall’ hex hex with flat sides . originX and originY are the coordinates passed in which will determine the centre of the hex, edge size will determine the size, altitudeSize is the height (or altitude) of an equilateral triangle with edge size defined by edgeSize
+        // draws a ‘tall’ hex hex with flat sides . originX and originY are the coordinates passed in which will determine the centre of the hex, edge size will determine the size, altitudeSize is the height (or altitude) of an equilateral tringle with edge size defined by edgeSize
 
         double altitudeSize = edgeSize * 0.866025403784439;
 
@@ -1694,7 +1660,101 @@ int diffInt = difficulty;
         sr.line( originX , originY - edgeSize, (int)(originX + altitudeSize) , originY - (edgeSize / 2));
 
     }
+void drawFlower(int index,float  ox,float oy,float scale, Color primaryColour, Color secondaryColour)
+{
+    if(index==0)
+    {
+// moonflower 5 petal simple
+        renderer.triangle(ox + scale * 320, oy + scale * 240, ox + scale * 320, oy + scale * 120, ox + scale * 420, oy + scale * 92);
+        renderer.triangle(ox + scale * 320, oy + scale * 240, ox + scale * 420, oy + scale * 92, ox + scale * 432, oy + scale * 202);
+        renderer.triangle(ox + scale * 320, oy + scale * 240, ox + scale * 206, oy + scale * 203, ox + scale * 210, oy + scale * 99);
+        renderer.triangle(ox + scale * 320, oy + scale * 240, ox + scale * 210, oy + scale * 99, ox + scale * 319, oy + scale * 122);
+        renderer.triangle(ox + scale * 320, oy + scale * 240, ox + scale * 249, oy + scale * 337, ox + scale * 152, oy + scale * 301);
+        renderer.triangle(ox + scale * 320, oy + scale * 240, ox + scale * 152, oy + scale * 301, ox + scale * 207, oy + scale * 205);
+        renderer.triangle(ox + scale * 320, oy + scale * 240, ox + scale * 391, oy + scale * 337, ox + scale * 326, oy + scale * 418);
+        renderer.triangle(ox + scale * 320, oy + scale * 240, ox + scale * 326, oy + scale * 418, ox + scale * 251, oy + scale * 336);
+        renderer.triangle(ox + scale * 320, oy + scale * 240, ox + scale * 434, oy + scale * 203, ox + scale * 492, oy + scale * 290);
+        renderer.triangle(ox + scale * 320, oy + scale * 240, ox + scale * 492, oy + scale * 290, ox + scale * 390, oy + scale * 335);
+    }
+    else if (index==1)
+    {
+        //vinca 5 petal simple
+        renderer.setColor(secondaryColour);
 
+        renderer.triangle(ox+scale*320	,oy+scale*240	,ox+scale*377	,oy+scale*221	,ox+scale*320	,oy+scale*180); renderer.triangle(ox+scale*331	,oy+scale*226	,ox+scale*488	,oy+scale*180	,ox+scale*328	,oy+scale*62); renderer.triangle(ox+scale*320	,oy+scale*240	,ox+scale*320	,oy+scale*180	,ox+scale*263	,oy+scale*221); renderer.triangle(ox+scale*310	,oy+scale*226	,ox+scale*315	,oy+scale*62	,ox+scale*153	,oy+scale*177); renderer.triangle(ox+scale*320	,oy+scale*240	,ox+scale*263	,oy+scale*221	,ox+scale*285	,oy+scale*289);
+        renderer.setColor(primaryColour);
+
+        renderer.triangle(ox+scale*303	,oy+scale*245	,ox+scale*149	,oy+scale*190	,ox+scale*209	,oy+scale*379); renderer.triangle(ox+scale*320	,oy+scale*240	,ox+scale*285	,oy+scale*289	,ox+scale*355	,oy+scale*289); renderer.triangle(ox+scale*320	,oy+scale*257	,ox+scale*220	,oy+scale*387	,ox+scale*418	,oy+scale*389); renderer.triangle(ox+scale*320	,oy+scale*240	,ox+scale*355	,oy+scale*289	,ox+scale*377	,oy+scale*221); renderer.triangle(ox+scale*337	,oy+scale*246	,ox+scale*429	,oy+scale*381	,ox+scale*492	,oy+scale*193);
+
+    }
+
+    else if (index==2)
+    {
+        //hibiscus 6 petal simple
+        renderer.setColor(secondaryColour);
+
+        renderer.triangle(ox+scale*320	,oy+scale*240	,ox+scale*289	,oy+scale*190	,ox+scale*320	,oy+scale*122); renderer.triangle(ox+scale*320	,oy+scale*240	,ox+scale*320	,oy+scale*122	,ox+scale*417	,oy+scale*91); renderer.triangle(ox+scale*320	,oy+scale*240	,ox+scale*417	,oy+scale*91	,ox+scale*475	,oy+scale*150); renderer.triangle(ox+scale*320	,oy+scale*240	,ox+scale*475	,oy+scale*150	,ox+scale*479	,oy+scale*232); renderer.triangle(ox+scale*320	,oy+scale*240	,ox+scale*261	,oy+scale*242	,ox+scale*218	,oy+scale*181); renderer.triangle(ox+scale*320	,oy+scale*240	,ox+scale*218	,oy+scale*181	,ox+scale*239	,oy+scale*81);
+        renderer.setColor(primaryColour);
+
+        renderer.triangle(ox+scale*320	,oy+scale*240	,ox+scale*239	,oy+scale*81	,ox+scale*320	,oy+scale*61); renderer.triangle(ox+scale*320	,oy+scale*240	,ox+scale*320	,oy+scale*61	,ox+scale*393	,oy+scale*98); renderer.triangle(ox+scale*320	,oy+scale*240	,ox+scale*292	,oy+scale*292	,ox+scale*218	,oy+scale*299); renderer.triangle(ox+scale*320	,oy+scale*240	,ox+scale*218	,oy+scale*299	,ox+scale*142	,oy+scale*230); renderer.triangle(ox+scale*320	,oy+scale*240	,ox+scale*142	,oy+scale*230	,ox+scale*165	,oy+scale*151); renderer.triangle(ox+scale*320	,oy+scale*240	,ox+scale*165	,oy+scale*151	,ox+scale*234	,oy+scale*106); renderer.triangle(ox+scale*320	,oy+scale*240	,ox+scale*351	,oy+scale*290	,ox+scale*320	,oy+scale*358); renderer.triangle(ox+scale*320	,oy+scale*240	,ox+scale*320	,oy+scale*358	,ox+scale*223	,oy+scale*389); renderer.triangle(ox+scale*320	,oy+scale*240	,ox+scale*223	,oy+scale*389	,ox+scale*165	,oy+scale*330); renderer.triangle(ox+scale*320	,oy+scale*240	,ox+scale*165	,oy+scale*330	,ox+scale*161	,oy+scale*248); renderer.triangle(ox+scale*320	,oy+scale*240	,ox+scale*379	,oy+scale*238	,ox+scale*422	,oy+scale*299); renderer.triangle(ox+scale*320	,oy+scale*240	,ox+scale*422	,oy+scale*299	,ox+scale*401	,oy+scale*399); renderer.triangle(ox+scale*320	,oy+scale*240	,ox+scale*401	,oy+scale*399	,ox+scale*320	,oy+scale*419); renderer.triangle(ox+scale*320	,oy+scale*240	,ox+scale*320	,oy+scale*419	,ox+scale*247	,oy+scale*382); renderer.triangle(ox+scale*320	,oy+scale*240	,ox+scale*348	,oy+scale*188	,ox+scale*422	,oy+scale*181); renderer.triangle(ox+scale*320	,oy+scale*240	,ox+scale*422	,oy+scale*181	,ox+scale*498	,oy+scale*250); renderer.triangle(ox+scale*320	,oy+scale*240	,ox+scale*498	,oy+scale*250	,ox+scale*475	,oy+scale*329); renderer.triangle(ox+scale*320	,oy+scale*240	,ox+scale*475	,oy+scale*329	,ox+scale*406	,oy+scale*374);
+
+    }
+
+    else if (index==3)
+    {
+        //hibiscus 5 petal simple
+        renderer.triangle(ox+scale*320	,oy+scale*240	,ox+scale*284	,oy+scale*194	,ox+scale*320	,oy+scale*122); renderer.triangle(ox+scale*320	,oy+scale*240	,ox+scale*320	,oy+scale*122	,ox+scale*434	,oy+scale*103); renderer.triangle(ox+scale*320	,oy+scale*240	,ox+scale*434	,oy+scale*103	,ox+scale*490	,oy+scale*184); renderer.triangle(ox+scale*320	,oy+scale*240	,ox+scale*490	,oy+scale*184	,ox+scale*474	,oy+scale*280); renderer.triangle(ox+scale*320	,oy+scale*240	,ox+scale*265	,oy+scale*260	,ox+scale*208	,oy+scale*204); renderer.triangle(ox+scale*320	,oy+scale*240	,ox+scale*208	,oy+scale*204	,ox+scale*225	,oy+scale*90); renderer.triangle(ox+scale*320	,oy+scale*240	,ox+scale*225	,oy+scale*90	,ox+scale*319	,oy+scale*61); renderer.triangle(ox+scale*320	,oy+scale*240	,ox+scale*319	,oy+scale*61	,ox+scale*406	,oy+scale*106); renderer.triangle(ox+scale*320	,oy+scale*240	,ox+scale*322	,oy+scale*299	,ox+scale*251	,oy+scale*335); renderer.triangle(ox+scale*320	,oy+scale*240	,ox+scale*251	,oy+scale*335	,ox+scale*148	,oy+scale*284); renderer.triangle(ox+scale*320	,oy+scale*240	,ox+scale*148	,oy+scale*284	,ox+scale*149	,oy+scale*185); renderer.triangle(ox+scale*320	,oy+scale*240	,ox+scale*149	,oy+scale*185	,ox+scale*219	,oy+scale*117); renderer.triangle(ox+scale*320	,oy+scale*240	,ox+scale*377	,oy+scale*256	,ox+scale*389	,oy+scale*335); renderer.triangle(ox+scale*320	,oy+scale*240	,ox+scale*389	,oy+scale*335	,ox+scale*309	,oy+scale*417); renderer.triangle(ox+scale*320	,oy+scale*240	,ox+scale*309	,oy+scale*417	,ox+scale*215	,oy+scale*385); renderer.triangle(ox+scale*320	,oy+scale*240	,ox+scale*215	,oy+scale*385	,ox+scale*172	,oy+scale*298); renderer.triangle(ox+scale*320	,oy+scale*240	,ox+scale*353	,oy+scale*191	,ox+scale*432	,oy+scale*204); renderer.triangle(ox+scale*320	,oy+scale*240	,ox+scale*432	,oy+scale*204	,ox+scale*485	,oy+scale*306); renderer.triangle(ox+scale*320	,oy+scale*240	,ox+scale*485	,oy+scale*306	,ox+scale*426	,oy+scale*385); renderer.triangle(ox+scale*320	,oy+scale*240	,ox+scale*426	,oy+scale*385	,ox+scale*330	,oy+scale*399);
+    }
+
+    else if (index==4)
+    {
+        //hibiscus 3 petal simplr
+        renderer.triangle(ox+scale*320	,oy+scale*240	,ox+scale*267	,oy+scale*214	,ox+scale*320	,oy+scale*122); renderer.triangle(ox+scale*320	,oy+scale*240	,ox+scale*320	,oy+scale*122	,ox+scale*483	,oy+scale*168); renderer.triangle(ox+scale*320	,oy+scale*240	,ox+scale*483	,oy+scale*168	,ox+scale*476	,oy+scale*329); renderer.triangle(ox+scale*320	,oy+scale*240	,ox+scale*476	,oy+scale*329	,ox+scale*336	,oy+scale*398); renderer.triangle(ox+scale*320	,oy+scale*240	,ox+scale*324	,oy+scale*299	,ox+scale*218	,oy+scale*299); renderer.triangle(ox+scale*320	,oy+scale*240	,ox+scale*218	,oy+scale*299	,ox+scale*176	,oy+scale*135); renderer.triangle(ox+scale*320	,oy+scale*240	,ox+scale*176	,oy+scale*135	,ox+scale*319	,oy+scale*61); renderer.triangle(ox+scale*320	,oy+scale*240	,ox+scale*319	,oy+scale*61	,ox+scale*449	,oy+scale*147); renderer.triangle(ox+scale*320	,oy+scale*240	,ox+scale*369	,oy+scale*207	,ox+scale*422	,oy+scale*299); renderer.triangle(ox+scale*320	,oy+scale*240	,ox+scale*422	,oy+scale*299	,ox+scale*301	,oy+scale*417); renderer.triangle(ox+scale*320	,oy+scale*240	,ox+scale*301	,oy+scale*417	,ox+scale*165	,oy+scale*330); renderer.triangle(ox+scale*320	,oy+scale*240	,ox+scale*165	,oy+scale*330	,ox+scale*175	,oy+scale*175);
+    }
+
+    else if (index==5)
+    {
+//dogwood 4 petal simple
+        renderer.setColor(secondaryColour);
+
+        renderer.triangle(ox+scale*320	,oy+scale*240	,ox+scale*380	,oy+scale*240	,ox+scale*320	,oy+scale*180); renderer.triangle(ox+scale*325	,oy+scale*236	,ox+scale*364	,oy+scale*227	,ox+scale*391	,oy+scale*232); renderer.triangle(ox+scale*325	,oy+scale*236	,ox+scale*391	,oy+scale*232	,ox+scale*416	,oy+scale*227); renderer.triangle(ox+scale*325	,oy+scale*236	,ox+scale*416	,oy+scale*227	,ox+scale*448	,oy+scale*114);
+        renderer.setColor(primaryColour);
+
+        renderer.triangle(ox+scale*325	,oy+scale*236	,ox+scale*448	,oy+scale*114	,ox+scale*334	,oy+scale*148); renderer.triangle(ox+scale*325	,oy+scale*236	,ox+scale*334	,oy+scale*148	,ox+scale*329	,oy+scale*170); renderer.triangle(ox+scale*325	,oy+scale*236	,ox+scale*329	,oy+scale*170	,ox+scale*336	,oy+scale*213); renderer.triangle(ox+scale*320	,oy+scale*240	,ox+scale*320	,oy+scale*180	,ox+scale*260	,oy+scale*240); renderer.triangle(ox+scale*316	,oy+scale*235	,ox+scale*307	,oy+scale*196	,ox+scale*312	,oy+scale*169); renderer.triangle(ox+scale*316	,oy+scale*235	,ox+scale*312	,oy+scale*169	,ox+scale*307	,oy+scale*144); renderer.triangle(ox+scale*316	,oy+scale*235	,ox+scale*307	,oy+scale*144	,ox+scale*194	,oy+scale*112); renderer.triangle(ox+scale*316	,oy+scale*235	,ox+scale*194	,oy+scale*112	,ox+scale*228	,oy+scale*226); renderer.triangle(ox+scale*316	,oy+scale*235	,ox+scale*228	,oy+scale*226	,ox+scale*250	,oy+scale*231); renderer.triangle(ox+scale*316	,oy+scale*235	,ox+scale*250	,oy+scale*231	,ox+scale*293	,oy+scale*224); renderer.triangle(ox+scale*320	,oy+scale*240	,ox+scale*260	,oy+scale*240	,ox+scale*320	,oy+scale*300); renderer.triangle(ox+scale*315	,oy+scale*244	,ox+scale*276	,oy+scale*253	,ox+scale*249	,oy+scale*248); renderer.triangle(ox+scale*315	,oy+scale*244	,ox+scale*249	,oy+scale*248	,ox+scale*224	,oy+scale*253); renderer.triangle(ox+scale*315	,oy+scale*244	,ox+scale*224	,oy+scale*253	,ox+scale*192	,oy+scale*366); renderer.triangle(ox+scale*315	,oy+scale*244	,ox+scale*192	,oy+scale*366	,ox+scale*306	,oy+scale*332); renderer.triangle(ox+scale*315	,oy+scale*244	,ox+scale*306	,oy+scale*332	,ox+scale*311	,oy+scale*310); renderer.triangle(ox+scale*315	,oy+scale*244	,ox+scale*311	,oy+scale*310	,ox+scale*304	,oy+scale*267); renderer.triangle(ox+scale*320	,oy+scale*240	,ox+scale*320	,oy+scale*300	,ox+scale*380	,oy+scale*240); renderer.triangle(ox+scale*324	,oy+scale*245	,ox+scale*333	,oy+scale*284	,ox+scale*328	,oy+scale*311); renderer.triangle(ox+scale*324	,oy+scale*245	,ox+scale*328	,oy+scale*311	,ox+scale*333	,oy+scale*336); renderer.triangle(ox+scale*324	,oy+scale*245	,ox+scale*333	,oy+scale*336	,ox+scale*446	,oy+scale*368); renderer.triangle(ox+scale*324	,oy+scale*245	,ox+scale*446	,oy+scale*368	,ox+scale*412	,oy+scale*254); renderer.triangle(ox+scale*324	,oy+scale*245	,ox+scale*412	,oy+scale*254	,ox+scale*390	,oy+scale*249); renderer.triangle(ox+scale*324	,oy+scale*245	,ox+scale*390	,oy+scale*249	,ox+scale*347	,oy+scale*256);
+
+    }
+    else if (index ==6)
+    {
+        //daisy 6 petal simple
+        renderer.setColor(secondaryColour);
+
+        renderer.triangle(ox+scale*320	,oy+scale*240	,ox+scale*372	,oy+scale*210	,ox+scale*320	,oy+scale*180); renderer.triangle(ox+scale*340	,oy+scale*202	,ox+scale*371	,oy+scale*210	,ox+scale*396	,oy+scale*189); renderer.triangle(ox+scale*340	,oy+scale*202	,ox+scale*396	,oy+scale*189	,ox+scale*399	,oy+scale*160); renderer.triangle(ox+scale*340	,oy+scale*202	,ox+scale*399	,oy+scale*160	,ox+scale*378	,oy+scale*135); renderer.triangle(ox+scale*340	,oy+scale*202	,ox+scale*378	,oy+scale*135	,ox+scale*346	,oy+scale*136); renderer.triangle(ox+scale*340	,oy+scale*202	,ox+scale*346	,oy+scale*136	,ox+scale*325	,oy+scale*148);
+        renderer.setColor(primaryColour);
+        renderer.triangle(ox+scale*340	,oy+scale*202	,ox+scale*325	,oy+scale*148	,ox+scale*321	,oy+scale*181); renderer.triangle(ox+scale*320	,oy+scale*240	,ox+scale*320	,oy+scale*180	,ox+scale*268	,oy+scale*210); renderer.triangle(ox+scale*297	,oy+scale*204	,ox+scale*320	,oy+scale*181	,ox+scale*314	,oy+scale*149); renderer.triangle(ox+scale*297	,oy+scale*204	,ox+scale*314	,oy+scale*149	,ox+scale*290	,oy+scale*132); renderer.triangle(ox+scale*297	,oy+scale*204	,ox+scale*290	,oy+scale*132	,ox+scale*258	,oy+scale*137); renderer.triangle(ox+scale*297	,oy+scale*204	,ox+scale*258	,oy+scale*137	,ox+scale*243	,oy+scale*165); renderer.triangle(ox+scale*297	,oy+scale*204	,ox+scale*243	,oy+scale*165	,ox+scale*243	,oy+scale*190); renderer.triangle(ox+scale*297	,oy+scale*204	,ox+scale*243	,oy+scale*190	,ox+scale*269	,oy+scale*210); renderer.triangle(ox+scale*320	,oy+scale*240	,ox+scale*268	,oy+scale*210	,ox+scale*268	,oy+scale*270); renderer.triangle(ox+scale*277	,oy+scale*242	,ox+scale*269	,oy+scale*211	,ox+scale*238	,oy+scale*200); renderer.triangle(ox+scale*277	,oy+scale*242	,ox+scale*238	,oy+scale*200	,ox+scale*211	,oy+scale*212); renderer.triangle(ox+scale*277	,oy+scale*242	,ox+scale*211	,oy+scale*212	,ox+scale*200	,oy+scale*242); renderer.triangle(ox+scale*277	,oy+scale*242	,ox+scale*200	,oy+scale*242	,ox+scale*217	,oy+scale*269); renderer.triangle(ox+scale*277	,oy+scale*242	,ox+scale*217	,oy+scale*269	,ox+scale*238	,oy+scale*282); renderer.triangle(ox+scale*277	,oy+scale*242	,ox+scale*238	,oy+scale*282	,ox+scale*268	,oy+scale*269); renderer.triangle(ox+scale*320	,oy+scale*240	,ox+scale*268	,oy+scale*270	,ox+scale*320	,oy+scale*300); renderer.triangle(ox+scale*300	,oy+scale*278	,ox+scale*269	,oy+scale*270	,ox+scale*244	,oy+scale*291); renderer.triangle(ox+scale*300	,oy+scale*278	,ox+scale*244	,oy+scale*291	,ox+scale*241	,oy+scale*320); renderer.triangle(ox+scale*300	,oy+scale*278	,ox+scale*241	,oy+scale*320	,ox+scale*262	,oy+scale*345); renderer.triangle(ox+scale*300	,oy+scale*278	,ox+scale*262	,oy+scale*345	,ox+scale*294	,oy+scale*344); renderer.triangle(ox+scale*300	,oy+scale*278	,ox+scale*294	,oy+scale*344	,ox+scale*315	,oy+scale*332); renderer.triangle(ox+scale*300	,oy+scale*278	,ox+scale*315	,oy+scale*332	,ox+scale*319	,oy+scale*299); renderer.triangle(ox+scale*320	,oy+scale*240	,ox+scale*320	,oy+scale*300	,ox+scale*372	,oy+scale*270); renderer.triangle(ox+scale*343	,oy+scale*276	,ox+scale*320	,oy+scale*299	,ox+scale*326	,oy+scale*331); renderer.triangle(ox+scale*343	,oy+scale*276	,ox+scale*326	,oy+scale*331	,ox+scale*350	,oy+scale*348); renderer.triangle(ox+scale*343	,oy+scale*276	,ox+scale*350	,oy+scale*348	,ox+scale*382	,oy+scale*343); renderer.triangle(ox+scale*343	,oy+scale*276	,ox+scale*382	,oy+scale*343	,ox+scale*397	,oy+scale*315); renderer.triangle(ox+scale*343	,oy+scale*276	,ox+scale*397	,oy+scale*315	,ox+scale*397	,oy+scale*290); renderer.triangle(ox+scale*343	,oy+scale*276	,ox+scale*397	,oy+scale*290	,ox+scale*371	,oy+scale*270); renderer.triangle(ox+scale*320	,oy+scale*240	,ox+scale*372	,oy+scale*270	,ox+scale*372	,oy+scale*210); renderer.triangle(ox+scale*363	,oy+scale*238	,ox+scale*371	,oy+scale*269	,ox+scale*402	,oy+scale*280); renderer.triangle(ox+scale*363	,oy+scale*238	,ox+scale*402	,oy+scale*280	,ox+scale*429	,oy+scale*268); renderer.triangle(ox+scale*363	,oy+scale*238	,ox+scale*429	,oy+scale*268	,ox+scale*440	,oy+scale*238); renderer.triangle(ox+scale*363	,oy+scale*238	,ox+scale*440	,oy+scale*238	,ox+scale*423	,oy+scale*211); renderer.triangle(ox+scale*363	,oy+scale*238	,ox+scale*423	,oy+scale*211	,ox+scale*402	,oy+scale*198); renderer.triangle(ox+scale*363	,oy+scale*238	,ox+scale*402	,oy+scale*198	,ox+scale*372	,oy+scale*320);
+
+
+    }
+    else if (index ==7)
+    {
+        //daisy 7 petal simple
+             renderer.setColor(secondaryColour);
+
+        renderer.triangle(ox+scale*320	,oy+scale*240	,ox+scale*367	,oy+scale*203	,ox+scale*320	,oy+scale*180); renderer.triangle(ox+scale*337	,oy+scale*201	,ox+scale*366	,oy+scale*203	,ox+scale*388	,oy+scale*179); renderer.triangle(ox+scale*337	,oy+scale*201	,ox+scale*388	,oy+scale*179	,ox+scale*390	,oy+scale*152); renderer.triangle(ox+scale*337	,oy+scale*201	,ox+scale*390	,oy+scale*152	,ox+scale*370	,oy+scale*131); renderer.triangle(ox+scale*337	,oy+scale*201	,ox+scale*370	,oy+scale*131	,ox+scale*342	,oy+scale*135); renderer.triangle(ox+scale*337	,oy+scale*201	,ox+scale*342	,oy+scale*135	,ox+scale*324	,oy+scale*148); renderer.triangle(ox+scale*337	,oy+scale*201	,ox+scale*324	,oy+scale*148	,ox+scale*321	,oy+scale*181);
+        renderer.setColor(primaryColour);
+        renderer.triangle(ox+scale*320	,oy+scale*240	,ox+scale*320	,oy+scale*180	,ox+scale*273	,oy+scale*203); renderer.triangle(ox+scale*300	,oy+scale*202	,ox+scale*320	,oy+scale*181	,ox+scale*315	,oy+scale*149); renderer.triangle(ox+scale*300	,oy+scale*202	,ox+scale*315	,oy+scale*149	,ox+scale*294	,oy+scale*131); renderer.triangle(ox+scale*300	,oy+scale*202	,ox+scale*294	,oy+scale*131	,ox+scale*266	,oy+scale*133); renderer.triangle(ox+scale*300	,oy+scale*202	,ox+scale*266	,oy+scale*133	,ox+scale*252	,oy+scale*157); renderer.triangle(ox+scale*300	,oy+scale*202	,ox+scale*252	,oy+scale*157	,ox+scale*251	,oy+scale*179); renderer.triangle(ox+scale*300	,oy+scale*202	,ox+scale*251	,oy+scale*179	,ox+scale*274	,oy+scale*203); renderer.triangle(ox+scale*320	,oy+scale*240	,ox+scale*273	,oy+scale*203	,ox+scale*262	,oy+scale*253); renderer.triangle(ox+scale*278	,oy+scale*232	,ox+scale*273	,oy+scale*203	,ox+scale*245	,oy+scale*187); renderer.triangle(ox+scale*278	,oy+scale*232	,ox+scale*245	,oy+scale*187	,ox+scale*218	,oy+scale*192); renderer.triangle(ox+scale*278	,oy+scale*232	,ox+scale*218	,oy+scale*192	,ox+scale*203	,oy+scale*215); renderer.triangle(ox+scale*278	,oy+scale*232	,ox+scale*203	,oy+scale*215	,ox+scale*213	,oy+scale*242); renderer.triangle(ox+scale*278	,oy+scale*232	,ox+scale*213	,oy+scale*242	,ox+scale*229	,oy+scale*256); renderer.triangle(ox+scale*278	,oy+scale*232	,ox+scale*229	,oy+scale*256	,ox+scale*262	,oy+scale*252); renderer.triangle(ox+scale*320	,oy+scale*240	,ox+scale*261	,oy+scale*253	,ox+scale*294	,oy+scale*294); renderer.triangle(ox+scale*287	,oy+scale*268	,ox+scale*262	,oy+scale*254	,ox+scale*232	,oy+scale*265); renderer.triangle(ox+scale*287	,oy+scale*268	,ox+scale*232	,oy+scale*265	,ox+scale*219	,oy+scale*289); renderer.triangle(ox+scale*287	,oy+scale*268	,ox+scale*219	,oy+scale*289	,ox+scale*227	,oy+scale*316); renderer.triangle(ox+scale*287	,oy+scale*268	,ox+scale*227	,oy+scale*316	,ox+scale*254	,oy+scale*325); renderer.triangle(ox+scale*287	,oy+scale*268	,ox+scale*254	,oy+scale*325	,ox+scale*276	,oy+scale*321); renderer.triangle(ox+scale*287	,oy+scale*268	,ox+scale*276	,oy+scale*321	,ox+scale*294	,oy+scale*293); renderer.triangle(ox+scale*320	,oy+scale*240	,ox+scale*294	,oy+scale*294	,ox+scale*346	,oy+scale*294); renderer.triangle(ox+scale*321	,oy+scale*283	,ox+scale*295	,oy+scale*293	,ox+scale*285	,oy+scale*325); renderer.triangle(ox+scale*321	,oy+scale*283	,ox+scale*285	,oy+scale*325	,ox+scale*296	,oy+scale*350); renderer.triangle(ox+scale*321	,oy+scale*283	,ox+scale*296	,oy+scale*350	,ox+scale*322	,oy+scale*360); renderer.triangle(ox+scale*321	,oy+scale*283	,ox+scale*322	,oy+scale*360	,ox+scale*345	,oy+scale*344); renderer.triangle(ox+scale*321	,oy+scale*283	,ox+scale*345	,oy+scale*344	,ox+scale*356	,oy+scale*325); renderer.triangle(ox+scale*321	,oy+scale*283	,ox+scale*356	,oy+scale*325	,ox+scale*345	,oy+scale*294); renderer.triangle(ox+scale*320	,oy+scale*240	,ox+scale*346	,oy+scale*294	,ox+scale*378	,oy+scale*253); renderer.triangle(ox+scale*354	,oy+scale*266	,ox+scale*346	,oy+scale*293	,ox+scale*364	,oy+scale*320); renderer.triangle(ox+scale*354	,oy+scale*266	,ox+scale*364	,oy+scale*320	,ox+scale*391	,oy+scale*328); renderer.triangle(ox+scale*354	,oy+scale*266	,ox+scale*391	,oy+scale*328	,ox+scale*415	,oy+scale*313); renderer.triangle(ox+scale*354	,oy+scale*266	,ox+scale*415	,oy+scale*313	,ox+scale*417	,oy+scale*285); renderer.triangle(ox+scale*354	,oy+scale*266	,ox+scale*417	,oy+scale*285	,ox+scale*409	,oy+scale*265); renderer.triangle(ox+scale*354	,oy+scale*266	,ox+scale*409	,oy+scale*265	,ox+scale*377	,oy+scale*254); renderer.triangle(ox+scale*320	,oy+scale*240	,ox+scale*379	,oy+scale*253	,ox+scale*367	,oy+scale*203); renderer.triangle(ox+scale*362	,oy+scale*229	,ox+scale*378	,oy+scale*253	,ox+scale*410	,oy+scale*255); renderer.triangle(ox+scale*362	,oy+scale*229	,ox+scale*410	,oy+scale*255	,ox+scale*432	,oy+scale*239); renderer.triangle(ox+scale*362	,oy+scale*229	,ox+scale*432	,oy+scale*239	,ox+scale*436	,oy+scale*211); renderer.triangle(ox+scale*362	,oy+scale*229	,ox+scale*436	,oy+scale*211	,ox+scale*416	,oy+scale*192); renderer.triangle(ox+scale*362	,oy+scale*229	,ox+scale*416	,oy+scale*192	,ox+scale*395	,oy+scale*186); renderer.triangle(ox+scale*362	,oy+scale*229	,ox+scale*395	,oy+scale*186	,ox+scale*367	,oy+scale*204);
+    }
+
+    else if (index ==8)
+    {
+        //dogwood 5 petals simple
+        renderer.setColor(secondaryColour);
+        renderer.triangle(ox+scale*320	,oy+scale*240	,ox+scale*377	,oy+scale*221	,ox+scale*320	,oy+scale*180); renderer.triangle(ox+scale*324	,oy+scale*235	,ox+scale*359	,oy+scale*216	,ox+scale*386	,oy+scale*212); renderer.triangle(ox+scale*324	,oy+scale*235	,ox+scale*386	,oy+scale*212	,ox+scale*408	,oy+scale*200); renderer.triangle(ox+scale*324	,oy+scale*235	,ox+scale*408	,oy+scale*200	,ox+scale*426	,oy+scale*95); renderer.triangle(ox+scale*324	,oy+scale*235	,ox+scale*426	,oy+scale*95	,ox+scale*331	,oy+scale*148);
+        renderer.setColor(primaryColour);
+        renderer.triangle(ox+scale*324	,oy+scale*235	,ox+scale*331	,oy+scale*148	,ox+scale*327	,oy+scale*170); renderer.triangle(ox+scale*324	,oy+scale*235	,ox+scale*327	,oy+scale*170	,ox+scale*333	,oy+scale*211); renderer.triangle(ox+scale*320	,oy+scale*240	,ox+scale*320	,oy+scale*180	,ox+scale*263	,oy+scale*221); renderer.triangle(ox+scale*317	,oy+scale*235	,ox+scale*310	,oy+scale*195	,ox+scale*314	,oy+scale*169); renderer.triangle(ox+scale*317	,oy+scale*235	,ox+scale*314	,oy+scale*169	,ox+scale*310	,oy+scale*144); renderer.triangle(ox+scale*317	,oy+scale*235	,ox+scale*310	,oy+scale*144	,ox+scale*215	,oy+scale*94); renderer.triangle(ox+scale*317	,oy+scale*235	,ox+scale*215	,oy+scale*94	,ox+scale*236	,oy+scale*201); renderer.triangle(ox+scale*317	,oy+scale*235	,ox+scale*236	,oy+scale*201	,ox+scale*255	,oy+scale*211); renderer.triangle(ox+scale*317	,oy+scale*235	,ox+scale*255	,oy+scale*211	,ox+scale*297	,oy+scale*219); renderer.triangle(ox+scale*320	,oy+scale*240	,ox+scale*263	,oy+scale*221	,ox+scale*285	,oy+scale*289); renderer.triangle(ox+scale*314	,oy+scale*241	,ox+scale*274	,oy+scale*236	,ox+scale*250	,oy+scale*224); renderer.triangle(ox+scale*314	,oy+scale*241	,ox+scale*250	,oy+scale*224	,ox+scale*225	,oy+scale*220); renderer.triangle(ox+scale*314	,oy+scale*241	,ox+scale*225	,oy+scale*220	,ox+scale*149	,oy+scale*294); renderer.triangle(ox+scale*314	,oy+scale*241	,ox+scale*149	,oy+scale*294	,ox+scale*257	,oy+scale*308); renderer.triangle(ox+scale*314	,oy+scale*241	,ox+scale*257	,oy+scale*308	,ox+scale*273	,oy+scale*293); renderer.triangle(ox+scale*314	,oy+scale*241	,ox+scale*273	,oy+scale*293	,ox+scale*293	,oy+scale*255); renderer.triangle(ox+scale*320	,oy+scale*240	,ox+scale*285	,oy+scale*289	,ox+scale*355	,oy+scale*289); renderer.triangle(ox+scale*319	,oy+scale*246	,ox+scale*302	,oy+scale*282	,ox+scale*283	,oy+scale*301); renderer.triangle(ox+scale*319	,oy+scale*246	,ox+scale*283	,oy+scale*301	,ox+scale*272	,oy+scale*324); renderer.triangle(ox+scale*319	,oy+scale*246	,ox+scale*272	,oy+scale*324	,ox+scale*319	,oy+scale*420); renderer.triangle(ox+scale*319	,oy+scale*246	,ox+scale*319	,oy+scale*420	,ox+scale*365	,oy+scale*321); renderer.triangle(ox+scale*319	,oy+scale*246	,ox+scale*365	,oy+scale*321	,ox+scale*355	,oy+scale*301); renderer.triangle(ox+scale*319	,oy+scale*246	,ox+scale*355	,oy+scale*301	,ox+scale*326	,oy+scale*271); renderer.triangle(ox+scale*320	,oy+scale*240	,ox+scale*355	,oy+scale*289	,ox+scale*377	,oy+scale*221); renderer.triangle(ox+scale*326	,oy+scale*243	,ox+scale*355	,oy+scale*270	,ox+scale*367	,oy+scale*294); renderer.triangle(ox+scale*326	,oy+scale*243	,ox+scale*367	,oy+scale*294	,ox+scale*385	,oy+scale*312); renderer.triangle(ox+scale*326	,oy+scale*243	,ox+scale*385	,oy+scale*312	,ox+scale*490	,oy+scale*297); renderer.triangle(ox+scale*326	,oy+scale*243	,ox+scale*490	,oy+scale*297	,ox+scale*411	,oy+scale*222); renderer.triangle(ox+scale*326	,oy+scale*243	,ox+scale*411	,oy+scale*222	,ox+scale*389	,oy+scale*225); renderer.triangle(ox+scale*326	,oy+scale*243	,ox+scale*389	,oy+scale*225	,ox+scale*351	,oy+scale*244);
+
+
+    }
+    }
     void setNewCameraPos(int x, int y)
     {
         newCamPosX=x;
