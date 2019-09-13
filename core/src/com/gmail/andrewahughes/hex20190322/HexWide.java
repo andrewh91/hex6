@@ -574,10 +574,14 @@ public void drawShape(ShapeRenderer shapeRenderer, float originX, float originY,
     void drawFlower(ShapeRenderer renderer,int index, float  ox, float oy, float scale, Color primaryColour, Color secondaryColour, Color tertiaryColour)
     {
 
-ox=ox-edgeSize/4;
-oy=oy-altitudeSize/4;
-scale = edgeSize /1000;
-        renderer.setColor(secondaryColour); renderer.triangle(ox,oy,ox+scale*320,oy+scale*180,ox+scale*362,oy+scale*198);
+//ox=ox-edgeSize/4;
+//oy=oy-altitudeSize/4;
+
+        //scale = edgeSize /1000;
+        scale = edgeSize / 320 /3;
+
+        ox = ox - 320 * scale;
+        oy = oy - 240 * scale;
         if(index==0)
         {
 // dogwood 4
