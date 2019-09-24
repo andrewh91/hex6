@@ -570,7 +570,7 @@ public void drawShape(ShapeRenderer shapeRenderer, float originX, float originY,
         }
 float scale= edgeSize/320/3;
 
-        FlowerDB.draw(shapeRenderer,sym,originX,originY,scale);
+        FlowerDB.draw(shapeRenderer,sym,originX,originY,scale,true);
            // drawFlower(shapeRenderer,sym1,originX,originY,0.15f,primaryColour,secondaryColour,tertiaryColour);
     }
     void drawFlower(ShapeRenderer renderer,int index, float  ox, float oy, float scale, Color primaryColour, Color secondaryColour, Color tertiaryColour)

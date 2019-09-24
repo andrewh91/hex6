@@ -30,209 +30,22 @@ this.ox = x;
 this.oy =y;
 this.scale=scale;
 }
-    static public void draw(ShapeRenderer renderer, int index, float x, float y,float scale)
+    static public void draw(ShapeRenderer renderer, int index, float x, float y,float scale,boolean background)
     {
 //index should be from 0 to 30
-                setColour(index);
-                renderer.setColor(contrastColour);
-                renderer.circle(x,y,scale);
+        setColour(index);
+        if(background)
+        {
+
+            renderer.setColor(contrastColour);
+            renderer.circle(x, y, scale * 200);
+        }
                 drawFlower(renderer, index, x, y, scale);
 
     }
 
 
-            static public void setColour(int index)
-            {
-                switch (index) {
-                    case 0:
-                        primaryColour = new Color(255,250,3,1);//light yellow
-                        secondaryColour = new Color(79,45,0,1);//dark red
-                        tertiaryColour = new Color(255,187,12,1);//light orange
-                        contrastColour = new Color(59,94,250,1);//light teal
-                        break;
-                    case 1:
-                        primaryColour = new Color(123,0,0,1);//dark red
-                        secondaryColour = new Color(134,0,0,1);//dark red
-                        tertiaryColour = new Color(136,0,0,1);//dark red
-                        contrastColour = new Color(124,255,255,1);//light cyan
-                        break;
-                    case 2:
-                        primaryColour = new Color(255,126,13,1);//orange
-                        secondaryColour = new Color(255,84,20,1);//red
-                        tertiaryColour = new Color(255,196,15,1);//light orange
-                        contrastColour = new Color(0,120,239,1);//teal
-                        break;
-                    case 3:
-                        primaryColour = new Color(191,0,0,1);//dark red
-                        secondaryColour = new Color(234,130,0,1);//orange
-                        tertiaryColour = new Color(255,0,0,1);//red
-                        contrastColour = new Color(28,212,255,1);//light teal
-                        break;
-                    case 4:
-                        primaryColour = new Color(255,255,255,1);//white
-                        secondaryColour = new Color(219,167,0,1);//orange
-                        tertiaryColour = new Color(255,255,198,1);//light yellow
-                        contrastColour = new Color(12,29,104,1);//dark blue
-                        break;
-                    case 5:
-                        primaryColour = new Color(125,187,255,1);//light teal
-                        secondaryColour = new Color(0,0,181,1);//dark blue
-                        tertiaryColour = new Color(75,94,255,1);//light blue
-                        contrastColour = new Color(188,161,25,1);//yellow
-                        break;
-                    case 6:
-                        primaryColour = new Color(162,162,255,1);//light teal
-                        secondaryColour = new Color(0,120,189,1);//teal
-                        tertiaryColour = new Color(115,115,255,1);//light teal
-                        contrastColour = new Color(163,123,22,1);//orange
-                        break;
-                    case 7:
-                        primaryColour = new Color(255,240,255,1);//white
-                        secondaryColour = new Color(255,255,255,1);//white
-                        tertiaryColour = new Color(3,2,0,1);//black
-                        contrastColour = new Color(84,89,85,1);//green
-                        break;
-                    case 8:
-                        primaryColour = new Color(151,151,255,1);//light teal
-                        secondaryColour = new Color(151,151,255,1);//light teal
-                        tertiaryColour = new Color(177,0,0,1);//dark red
-                        contrastColour = new Color(95,154,85,1);//green
-                        break;
-                    case 9:
-                        primaryColour = new Color(255,157,255,1);//light magenta
-                        secondaryColour = new Color(255,255,140,1);//light yellow
-                        tertiaryColour = new Color(255,216,255,1);//light magenta
-                        contrastColour = new Color(0,46,38,1);//dark green
-                        break;
-                    case 10:
-                        primaryColour = new Color(193,193,255,1);//light teal
-                        secondaryColour = new Color(242,242,255,1);//white
-                        tertiaryColour = new Color(133,133,255,1);//light teal
-                        contrastColour = new Color(66,66,0,1);//dark red
-                        break;
-                    case 11:
-                        primaryColour = new Color(69,0,102,1);//dark blue
-                        secondaryColour = new Color(255,255,225,1);//light yellow
-                        tertiaryColour = new Color(104,0,174,1);//purple
-                        contrastColour = new Color(112,170,88,1);//yellow green
-                        break;
-                    case 12:
-                        primaryColour = new Color(255,181,255,1);//light magenta
-                        secondaryColour = new Color(126,193,0,1);//yellow green
-                        tertiaryColour = new Color(255,227,255,1);//white
-                        contrastColour = new Color(43,55,85,1);//dark blue
-                        break;
-                    case 13:
-                        primaryColour = new Color(255,14,163,1);//light magenta
-                        secondaryColour = new Color(0,128,52,1);//dark green
-                        tertiaryColour = new Color(255,8,8,1);//red
-                        contrastColour = new Color(85,205,181,1);//light cyan
-                        break;
-                    case 14:
-                        primaryColour = new Color(244,255,194,1);//light yellow
-                        secondaryColour = new Color(255,243,157,1);//light yellow
-                        tertiaryColour = new Color(255,255,195,1);//light yellow
-                        contrastColour = new Color(4,4,73,1);//dark blue
-                        break;
-                    case 15:
-                        primaryColour = new Color(195,0,0,1);//dark red
-                        secondaryColour = new Color(255,238,238,1);//light magenta
-                        tertiaryColour = new Color(255,255,186,1);//light yellow
-                        contrastColour = new Color(20,91,114,1);//blue
-                        break;
-                    case 16:
-                        primaryColour = new Color(255,243,255,1);//white
-                        secondaryColour = new Color(111,0,240,1);//purple
-                        tertiaryColour = new Color(190,76,255,1);//light purple
-                        contrastColour = new Color(70,149,5,1);//green
-                        break;
-                    case 17:
-                        primaryColour = new Color(208,208,255,1);//light teal
-                        secondaryColour = new Color(85,85,255,1);//light blue
-                        tertiaryColour = new Color(255,255,177,1);//light yellow
-                        contrastColour = new Color(72,72,26,1);//dark red
-                        break;
-                    case 18:
-                        primaryColour = new Color(251,169,0,1);//light orange
-                        secondaryColour = new Color(175,0,0,1);//dark red
-                        tertiaryColour = new Color(255,255,60,1);//light yellow
-                        contrastColour = new Color(28,114,235,1);//teal
-                        break;
-                    case 19:
-                        primaryColour = new Color(255,172,105,1);//light orange
-                        secondaryColour = new Color(199,255,109,1);//light yellow green
-                        tertiaryColour = new Color(153,255,94,1);//light yellow green
-                        contrastColour = new Color(53,28,152,1);//blue
-                        break;
-                    case 20:
-                        primaryColour = new Color(255,209,15,1);//light orange
-                        secondaryColour = new Color(255,255,35,1);//light yellow
-                        tertiaryColour = new Color(255,146,23,1);//light orange
-                        contrastColour = new Color(0,52,231,1);//blue
-                        break;
-                    case 21:
-                        primaryColour = new Color(238,204,0,1);//light yellow
-                        secondaryColour = new Color(255,255,189,1);//light yellow
-                        tertiaryColour = new Color(161,7,0,1);//dark orange
-                        contrastColour = new Color(37,100,192,1);//teal
-                        break;
-                    case 22:
-                        primaryColour = new Color(255,202,255,1);//light magenta
-                        secondaryColour = new Color(255,255,35,1);//light yellow
-                        tertiaryColour = new Color(179,78,255,1);//light purple
-                        contrastColour = new Color(25,77,73,1);//dark green
-                        break;
-                    case 23:
-                        primaryColour = new Color(255,255,200,1);//light yellow
-                        secondaryColour = new Color(255,174,255,1);//light magenta
-                        tertiaryColour = new Color(184,32,255,1);//light purple
-                        contrastColour = new Color(24,101,18,1);//dark green
-                        break;
-                    case 24:
-                        primaryColour = new Color(255,229,3,1);//light yellow
-                        secondaryColour = new Color(81,0,173,1);//purple
-                        tertiaryColour = new Color(66,57,0,1);//dark red
-                        contrastColour = new Color(121,160,196,1);//light cyan
-                        break;
-                    case 25:
-                        primaryColour = new Color(243,170,255,1);//light magenta
-                        secondaryColour = new Color(76,0,190,1);//purple
-                        tertiaryColour = new Color(255,255,193,1);//light yellow
-                        contrastColour = new Color(64,113,42,1);//green
-                        break;
-                    case 26:
-                        primaryColour = new Color(122,0,0,1);//dark red
-                        secondaryColour = new Color(71,0,0,1);//dark red
-                        tertiaryColour = new Color(255,179,55,1);//light orange
-                        contrastColour = new Color(106,195,237,1);//light teal
-                        break;
-                    case 27:
-                        primaryColour = new Color(255,184,184,1);//light magenta
-                        secondaryColour = new Color(255,4,4,1);//red
-                        tertiaryColour = new Color(255,145,145,1);//light magenta
-                        contrastColour = new Color(0,144,144,1);//green
-                        break;
-                    case 28:
-                        primaryColour = new Color(29,214,255,1);//light teal
-                        secondaryColour = new Color(0,165,216,1);//teal
-                        tertiaryColour = new Color(93,248,255,1);//light cyan
-                        contrastColour = new Color(214,46,13,1);//red
-                        break;
-                    case 29:
-                        primaryColour = new Color(238,127,255,1);//light magenta
-                        secondaryColour = new Color(150,0,254,1);//light purple
-                        tertiaryColour = new Color(255,195,255,1);//light magenta
-                        contrastColour = new Color(41,148,0,1);//dark green
-                        break;
-                    case 30:
-                        primaryColour = new Color(255,255,220,1);//light yellow
-                        secondaryColour = new Color(255,255,169,1);//light yellow
-                        tertiaryColour = new Color(251,255,66,1);//light yellow
-                        contrastColour = new Color(1,0,103,1);//dark blue
-                        break;
-                }
-            }
-
+         
 
 
 
@@ -333,19 +146,19 @@ oy=oy-240*scale;
         else if (index==15)
         {
             //gloxinia 4 20190924
-            renderer.setColor(primaryColour); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*320,oy+scale*88,ox+scale*360,oy+scale*84); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*360,oy+scale*84,ox+scale*408,oy+scale*84); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*408,oy+scale*84,ox+scale*476,oy+scale*148); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*476,oy+scale*148,ox+scale*476,oy+scale*200); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*476,oy+scale*200,ox+scale*472,oy+scale*240); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*168,oy+scale*240,ox+scale*164,oy+scale*200); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*164,oy+scale*200,ox+scale*164,oy+scale*152); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*164,oy+scale*152,ox+scale*228,oy+scale*84); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*228,oy+scale*84,ox+scale*280,oy+scale*84); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*280,oy+scale*84,ox+scale*320,oy+scale*88); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*320,oy+scale*392,ox+scale*280,oy+scale*396); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*280,oy+scale*396,ox+scale*232,oy+scale*396); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*232,oy+scale*396,ox+scale*164,oy+scale*332); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*164,oy+scale*332,ox+scale*164,oy+scale*280); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*164,oy+scale*280,ox+scale*168,oy+scale*240); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*472,oy+scale*240,ox+scale*476,oy+scale*280); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*476,oy+scale*280,ox+scale*476,oy+scale*328); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*476,oy+scale*328,ox+scale*412,oy+scale*396); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*412,oy+scale*396,ox+scale*360,oy+scale*396); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*360,oy+scale*396,ox+scale*320,oy+scale*392); renderer.setColor(primaryColour); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*320,oy+scale*108,ox+scale*376,oy+scale*104); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*376,oy+scale*104,ox+scale*420,oy+scale*108); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*420,oy+scale*108,ox+scale*452,oy+scale*140); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*452,oy+scale*140,ox+scale*456,oy+scale*184); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*456,oy+scale*184,ox+scale*452,oy+scale*240); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*188,oy+scale*240,ox+scale*184,oy+scale*184); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*184,oy+scale*184,ox+scale*188,oy+scale*140); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*188,oy+scale*140,ox+scale*220,oy+scale*108); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*220,oy+scale*108,ox+scale*264,oy+scale*104); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*264,oy+scale*104,ox+scale*320,oy+scale*108); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*320,oy+scale*372,ox+scale*264,oy+scale*376); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*264,oy+scale*376,ox+scale*220,oy+scale*372); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*220,oy+scale*372,ox+scale*188,oy+scale*340); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*188,oy+scale*340,ox+scale*184,oy+scale*296); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*184,oy+scale*296,ox+scale*188,oy+scale*240); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*452,oy+scale*240,ox+scale*456,oy+scale*296); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*456,oy+scale*296,ox+scale*452,oy+scale*340); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*452,oy+scale*340,ox+scale*420,oy+scale*372); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*420,oy+scale*372,ox+scale*376,oy+scale*376); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*376,oy+scale*376,ox+scale*320,oy+scale*372); renderer.setColor(tertiaryColour); renderer.triangle(ox+scale*352,oy+scale*208,ox+scale*380,oy+scale*160,ox+scale*400,oy+scale*180); renderer.triangle(ox+scale*288,oy+scale*208,ox+scale*240,oy+scale*180,ox+scale*260,oy+scale*160); renderer.triangle(ox+scale*288,oy+scale*272,ox+scale*260,oy+scale*320,ox+scale*240,oy+scale*300); renderer.triangle(ox+scale*352,oy+scale*272,ox+scale*400,oy+scale*300,ox+scale*380,oy+scale*320);
+            renderer.setColor(primaryColour); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*320,oy+scale*88,ox+scale*360,oy+scale*84); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*360,oy+scale*84,ox+scale*408,oy+scale*84); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*408,oy+scale*84,ox+scale*476,oy+scale*148); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*476,oy+scale*148,ox+scale*476,oy+scale*200); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*476,oy+scale*200,ox+scale*472,oy+scale*240); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*168,oy+scale*240,ox+scale*164,oy+scale*200); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*164,oy+scale*200,ox+scale*164,oy+scale*152); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*164,oy+scale*152,ox+scale*228,oy+scale*84); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*228,oy+scale*84,ox+scale*280,oy+scale*84); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*280,oy+scale*84,ox+scale*320,oy+scale*88); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*320,oy+scale*392,ox+scale*280,oy+scale*396); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*280,oy+scale*396,ox+scale*232,oy+scale*396); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*232,oy+scale*396,ox+scale*164,oy+scale*332); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*164,oy+scale*332,ox+scale*164,oy+scale*280); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*164,oy+scale*280,ox+scale*168,oy+scale*240); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*472,oy+scale*240,ox+scale*476,oy+scale*280); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*476,oy+scale*280,ox+scale*476,oy+scale*328); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*476,oy+scale*328,ox+scale*412,oy+scale*396); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*412,oy+scale*396,ox+scale*360,oy+scale*396); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*360,oy+scale*396,ox+scale*320,oy+scale*392); renderer.setColor(secondaryColour); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*320,oy+scale*108,ox+scale*376,oy+scale*104); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*376,oy+scale*104,ox+scale*420,oy+scale*108); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*420,oy+scale*108,ox+scale*452,oy+scale*140); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*452,oy+scale*140,ox+scale*456,oy+scale*184); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*456,oy+scale*184,ox+scale*452,oy+scale*240); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*188,oy+scale*240,ox+scale*184,oy+scale*184); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*184,oy+scale*184,ox+scale*188,oy+scale*140); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*188,oy+scale*140,ox+scale*220,oy+scale*108); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*220,oy+scale*108,ox+scale*264,oy+scale*104); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*264,oy+scale*104,ox+scale*320,oy+scale*108); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*320,oy+scale*372,ox+scale*264,oy+scale*376); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*264,oy+scale*376,ox+scale*220,oy+scale*372); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*220,oy+scale*372,ox+scale*188,oy+scale*340); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*188,oy+scale*340,ox+scale*184,oy+scale*296); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*184,oy+scale*296,ox+scale*188,oy+scale*240); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*452,oy+scale*240,ox+scale*456,oy+scale*296); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*456,oy+scale*296,ox+scale*452,oy+scale*340); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*452,oy+scale*340,ox+scale*420,oy+scale*372); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*420,oy+scale*372,ox+scale*376,oy+scale*376); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*376,oy+scale*376,ox+scale*320,oy+scale*372); renderer.setColor(tertiaryColour); renderer.triangle(ox+scale*352,oy+scale*208,ox+scale*380,oy+scale*160,ox+scale*400,oy+scale*180); renderer.triangle(ox+scale*288,oy+scale*208,ox+scale*240,oy+scale*180,ox+scale*260,oy+scale*160); renderer.triangle(ox+scale*288,oy+scale*272,ox+scale*260,oy+scale*320,ox+scale*240,oy+scale*300); renderer.triangle(ox+scale*352,oy+scale*272,ox+scale*400,oy+scale*300,ox+scale*380,oy+scale*320);
 
         }
         else if (index==16)
         {
             //gloxinia 5 20190924
-            renderer.setColor(primaryColour); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*320,oy+scale*88,ox+scale*352,oy+scale*82); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*352,oy+scale*82,ox+scale*392,oy+scale*76); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*392,oy+scale*76,ox+scale*454,oy+scale*118); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*454,oy+scale*118,ox+scale*460,oy+scale*161); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*460,oy+scale*161,ox+scale*465,oy+scale*193); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*175,oy+scale*193,ox+scale*180,oy+scale*161); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*180,oy+scale*161,ox+scale*186,oy+scale*121); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*186,oy+scale*121,ox+scale*245,oy+scale*75); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*245,oy+scale*75,ox+scale*288,oy+scale*82); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*288,oy+scale*82,ox+scale*320,oy+scale*88); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*231,oy+scale*363,ox+scale*201,oy+scale*349); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*201,oy+scale*349,ox+scale*166,oy+scale*331); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*166,oy+scale*331,ox+scale*140,oy+scale*260); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*140,oy+scale*260,ox+scale*160,oy+scale*222); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*160,oy+scale*222,ox+scale*175,oy+scale*193); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*409,oy+scale*363,ox+scale*387,oy+scale*387); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*387,oy+scale*387,ox+scale*359,oy+scale*415); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*359,oy+scale*415,ox+scale*284,oy+scale*417); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*284,oy+scale*417,ox+scale*253,oy+scale*387); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*253,oy+scale*387,ox+scale*231,oy+scale*363); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*465,oy+scale*193,ox+scale*480,oy+scale*222); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*480,oy+scale*222,ox+scale*498,oy+scale*257); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*498,oy+scale*257,ox+scale*478,oy+scale*329); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*478,oy+scale*329,ox+scale*439,oy+scale*349); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*439,oy+scale*349,ox+scale*409,oy+scale*363); renderer.setColor(primaryColour); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*320,oy+scale*108,ox+scale*365,oy+scale*100); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*365,oy+scale*100,ox+scale*402,oy+scale*96); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*402,oy+scale*96,ox+scale*431,oy+scale*117); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*431,oy+scale*117,ox+scale*439,oy+scale*154); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*439,oy+scale*154,ox+scale*446,oy+scale*199); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*194,oy+scale*199,ox+scale*201,oy+scale*154); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*201,oy+scale*154,ox+scale*209,oy+scale*117); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*209,oy+scale*117,ox+scale*238,oy+scale*96); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*238,oy+scale*96,ox+scale*275,oy+scale*100); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*275,oy+scale*100,ox+scale*320,oy+scale*108); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*242,oy+scale*347,ox+scale*201,oy+scale*327); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*201,oy+scale*327,ox+scale*169,oy+scale*308); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*169,oy+scale*308,ox+scale*158,oy+scale*274); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*158,oy+scale*274,ox+scale*173,oy+scale*240); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*173,oy+scale*240,ox+scale*194,oy+scale*199); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*398,oy+scale*347,ox+scale*366,oy+scale*380); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*366,oy+scale*380,ox+scale*338,oy+scale*405); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*338,oy+scale*405,ox+scale*302,oy+scale*405); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*302,oy+scale*405,ox+scale*274,oy+scale*380); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*274,oy+scale*380,ox+scale*242,oy+scale*347); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*446,oy+scale*199,ox+scale*467,oy+scale*240); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*467,oy+scale*240,ox+scale*482,oy+scale*274); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*482,oy+scale*274,ox+scale*471,oy+scale*308); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*471,oy+scale*308,ox+scale*439,oy+scale*327); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*439,oy+scale*327,ox+scale*398,oy+scale*347); renderer.setColor(tertiaryColour); renderer.triangle(ox+scale*347,oy+scale*203,ox+scale*369,oy+scale*153,ox+scale*388,oy+scale*166); renderer.triangle(ox+scale*293,oy+scale*203,ox+scale*252,oy+scale*166,ox+scale*271,oy+scale*153); renderer.triangle(ox+scale*277,oy+scale*254,ox+scale*229,oy+scale*281,ox+scale*222,oy+scale*260); renderer.triangle(ox+scale*320,oy+scale*285,ox+scale*331,oy+scale*339,ox+scale*309,oy+scale*339); renderer.triangle(ox+scale*363,oy+scale*254,ox+scale*418,oy+scale*260,ox+scale*411,oy+scale*281);
+            renderer.setColor(primaryColour); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*320,oy+scale*88,ox+scale*352,oy+scale*82); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*352,oy+scale*82,ox+scale*392,oy+scale*76); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*392,oy+scale*76,ox+scale*454,oy+scale*118); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*454,oy+scale*118,ox+scale*460,oy+scale*161); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*460,oy+scale*161,ox+scale*465,oy+scale*193); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*175,oy+scale*193,ox+scale*180,oy+scale*161); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*180,oy+scale*161,ox+scale*186,oy+scale*121); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*186,oy+scale*121,ox+scale*245,oy+scale*75); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*245,oy+scale*75,ox+scale*288,oy+scale*82); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*288,oy+scale*82,ox+scale*320,oy+scale*88); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*231,oy+scale*363,ox+scale*201,oy+scale*349); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*201,oy+scale*349,ox+scale*166,oy+scale*331); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*166,oy+scale*331,ox+scale*140,oy+scale*260); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*140,oy+scale*260,ox+scale*160,oy+scale*222); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*160,oy+scale*222,ox+scale*175,oy+scale*193); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*409,oy+scale*363,ox+scale*387,oy+scale*387); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*387,oy+scale*387,ox+scale*359,oy+scale*415); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*359,oy+scale*415,ox+scale*284,oy+scale*417); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*284,oy+scale*417,ox+scale*253,oy+scale*387); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*253,oy+scale*387,ox+scale*231,oy+scale*363); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*465,oy+scale*193,ox+scale*480,oy+scale*222); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*480,oy+scale*222,ox+scale*498,oy+scale*257); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*498,oy+scale*257,ox+scale*478,oy+scale*329); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*478,oy+scale*329,ox+scale*439,oy+scale*349); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*439,oy+scale*349,ox+scale*409,oy+scale*363); renderer.setColor(secondaryColour); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*320,oy+scale*108,ox+scale*365,oy+scale*100); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*365,oy+scale*100,ox+scale*402,oy+scale*96); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*402,oy+scale*96,ox+scale*431,oy+scale*117); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*431,oy+scale*117,ox+scale*439,oy+scale*154); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*439,oy+scale*154,ox+scale*446,oy+scale*199); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*194,oy+scale*199,ox+scale*201,oy+scale*154); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*201,oy+scale*154,ox+scale*209,oy+scale*117); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*209,oy+scale*117,ox+scale*238,oy+scale*96); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*238,oy+scale*96,ox+scale*275,oy+scale*100); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*275,oy+scale*100,ox+scale*320,oy+scale*108); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*242,oy+scale*347,ox+scale*201,oy+scale*327); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*201,oy+scale*327,ox+scale*169,oy+scale*308); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*169,oy+scale*308,ox+scale*158,oy+scale*274); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*158,oy+scale*274,ox+scale*173,oy+scale*240); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*173,oy+scale*240,ox+scale*194,oy+scale*199); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*398,oy+scale*347,ox+scale*366,oy+scale*380); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*366,oy+scale*380,ox+scale*338,oy+scale*405); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*338,oy+scale*405,ox+scale*302,oy+scale*405); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*302,oy+scale*405,ox+scale*274,oy+scale*380); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*274,oy+scale*380,ox+scale*242,oy+scale*347); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*446,oy+scale*199,ox+scale*467,oy+scale*240); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*467,oy+scale*240,ox+scale*482,oy+scale*274); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*482,oy+scale*274,ox+scale*471,oy+scale*308); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*471,oy+scale*308,ox+scale*439,oy+scale*327); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*439,oy+scale*327,ox+scale*398,oy+scale*347); renderer.setColor(tertiaryColour); renderer.triangle(ox+scale*347,oy+scale*203,ox+scale*369,oy+scale*153,ox+scale*388,oy+scale*166); renderer.triangle(ox+scale*293,oy+scale*203,ox+scale*252,oy+scale*166,ox+scale*271,oy+scale*153); renderer.triangle(ox+scale*277,oy+scale*254,ox+scale*229,oy+scale*281,ox+scale*222,oy+scale*260); renderer.triangle(ox+scale*320,oy+scale*285,ox+scale*331,oy+scale*339,ox+scale*309,oy+scale*339); renderer.triangle(ox+scale*363,oy+scale*254,ox+scale*418,oy+scale*260,ox+scale*411,oy+scale*281);
 
         }
         else if (index==17)
         {
             //gloxinia 6 20190924
-            renderer.setColor(primaryColour); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*320,oy+scale*88,ox+scale*347,oy+scale*81); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*347,oy+scale*81,ox+scale*380,oy+scale*71); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*380,oy+scale*71,ox+scale*436,oy+scale*101); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*436,oy+scale*101,ox+scale*444,oy+scale*137); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*444,oy+scale*137,ox+scale*452,oy+scale*164); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*188,oy+scale*164,ox+scale*196,oy+scale*137); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*196,oy+scale*137,ox+scale*204,oy+scale*104); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*204,oy+scale*104,ox+scale*257,oy+scale*70); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*257,oy+scale*70,ox+scale*293,oy+scale*81); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*293,oy+scale*81,ox+scale*320,oy+scale*88); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*188,oy+scale*316,ox+scale*169,oy+scale*296); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*169,oy+scale*296,ox+scale*144,oy+scale*272); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*144,oy+scale*272,ox+scale*141,oy+scale*210); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*141,oy+scale*210,ox+scale*169,oy+scale*184); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*169,oy+scale*184,ox+scale*188,oy+scale*164); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*320,oy+scale*392,ox+scale*293,oy+scale*399); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*293,oy+scale*399,ox+scale*260,oy+scale*409); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*260,oy+scale*409,ox+scale*204,oy+scale*379); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*204,oy+scale*379,ox+scale*196,oy+scale*343); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*196,oy+scale*343,ox+scale*188,oy+scale*316); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*452,oy+scale*316,ox+scale*444,oy+scale*343); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*444,oy+scale*343,ox+scale*436,oy+scale*376); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*436,oy+scale*376,ox+scale*383,oy+scale*410); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*383,oy+scale*410,ox+scale*347,oy+scale*399); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*347,oy+scale*399,ox+scale*320,oy+scale*392); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*452,oy+scale*164,ox+scale*471,oy+scale*184); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*471,oy+scale*184,ox+scale*496,oy+scale*208); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*496,oy+scale*208,ox+scale*499,oy+scale*270); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*499,oy+scale*270,ox+scale*471,oy+scale*296); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*471,oy+scale*296,ox+scale*452,oy+scale*316); renderer.setColor(primaryColour); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*320,oy+scale*108,ox+scale*358,oy+scale*98); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*358,oy+scale*98,ox+scale*389,oy+scale*90); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*389,oy+scale*90,ox+scale*416,oy+scale*105); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*416,oy+scale*105,ox+scale*424,oy+scale*136); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*424,oy+scale*136,ox+scale*434,oy+scale*174); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*206,oy+scale*174,ox+scale*216,oy+scale*136); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*216,oy+scale*136,ox+scale*224,oy+scale*105); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*224,oy+scale*105,ox+scale*251,oy+scale*90); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*251,oy+scale*90,ox+scale*282,oy+scale*98); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*282,oy+scale*98,ox+scale*320,oy+scale*108); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*206,oy+scale*306,ox+scale*178,oy+scale*278); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*178,oy+scale*278,ox+scale*155,oy+scale*255); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*155,oy+scale*255,ox+scale*155,oy+scale*225); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*155,oy+scale*225,ox+scale*178,oy+scale*202); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*178,oy+scale*202,ox+scale*206,oy+scale*174); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*320,oy+scale*372,ox+scale*282,oy+scale*382); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*282,oy+scale*382,ox+scale*251,oy+scale*390); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*251,oy+scale*390,ox+scale*224,oy+scale*375); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*224,oy+scale*375,ox+scale*216,oy+scale*344); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*216,oy+scale*344,ox+scale*206,oy+scale*306); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*434,oy+scale*306,ox+scale*424,oy+scale*344); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*424,oy+scale*344,ox+scale*416,oy+scale*375); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*416,oy+scale*375,ox+scale*389,oy+scale*390); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*389,oy+scale*390,ox+scale*358,oy+scale*382); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*358,oy+scale*382,ox+scale*320,oy+scale*372); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*434,oy+scale*174,ox+scale*462,oy+scale*202); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*462,oy+scale*202,ox+scale*485,oy+scale*225); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*485,oy+scale*225,ox+scale*485,oy+scale*255); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*485,oy+scale*255,ox+scale*462,oy+scale*278); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*462,oy+scale*278,ox+scale*434,oy+scale*306); renderer.setColor(tertiaryColour); renderer.triangle(ox+scale*343,oy+scale*201,ox+scale*362,oy+scale*149,ox+scale*378,oy+scale*159); renderer.triangle(ox+scale*297,oy+scale*201,ox+scale*262,oy+scale*159,ox+scale*278,oy+scale*149); renderer.triangle(ox+scale*275,oy+scale*240,ox+scale*220,oy+scale*249,ox+scale*220,oy+scale*231); renderer.triangle(ox+scale*297,oy+scale*279,ox+scale*278,oy+scale*331,ox+scale*262,oy+scale*321); renderer.triangle(ox+scale*343,oy+scale*279,ox+scale*378,oy+scale*321,ox+scale*362,oy+scale*331); renderer.triangle(ox+scale*365,oy+scale*240,ox+scale*420,oy+scale*231,ox+scale*420,oy+scale*249);
+            renderer.setColor(primaryColour); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*320,oy+scale*88,ox+scale*347,oy+scale*81); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*347,oy+scale*81,ox+scale*380,oy+scale*71); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*380,oy+scale*71,ox+scale*436,oy+scale*101); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*436,oy+scale*101,ox+scale*444,oy+scale*137); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*444,oy+scale*137,ox+scale*452,oy+scale*164); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*188,oy+scale*164,ox+scale*196,oy+scale*137); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*196,oy+scale*137,ox+scale*204,oy+scale*104); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*204,oy+scale*104,ox+scale*257,oy+scale*70); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*257,oy+scale*70,ox+scale*293,oy+scale*81); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*293,oy+scale*81,ox+scale*320,oy+scale*88); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*188,oy+scale*316,ox+scale*169,oy+scale*296); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*169,oy+scale*296,ox+scale*144,oy+scale*272); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*144,oy+scale*272,ox+scale*141,oy+scale*210); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*141,oy+scale*210,ox+scale*169,oy+scale*184); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*169,oy+scale*184,ox+scale*188,oy+scale*164); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*320,oy+scale*392,ox+scale*293,oy+scale*399); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*293,oy+scale*399,ox+scale*260,oy+scale*409); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*260,oy+scale*409,ox+scale*204,oy+scale*379); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*204,oy+scale*379,ox+scale*196,oy+scale*343); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*196,oy+scale*343,ox+scale*188,oy+scale*316); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*452,oy+scale*316,ox+scale*444,oy+scale*343); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*444,oy+scale*343,ox+scale*436,oy+scale*376); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*436,oy+scale*376,ox+scale*383,oy+scale*410); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*383,oy+scale*410,ox+scale*347,oy+scale*399); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*347,oy+scale*399,ox+scale*320,oy+scale*392); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*452,oy+scale*164,ox+scale*471,oy+scale*184); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*471,oy+scale*184,ox+scale*496,oy+scale*208); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*496,oy+scale*208,ox+scale*499,oy+scale*270); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*499,oy+scale*270,ox+scale*471,oy+scale*296); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*471,oy+scale*296,ox+scale*452,oy+scale*316); renderer.setColor(secondaryColour); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*320,oy+scale*108,ox+scale*358,oy+scale*98); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*358,oy+scale*98,ox+scale*389,oy+scale*90); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*389,oy+scale*90,ox+scale*416,oy+scale*105); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*416,oy+scale*105,ox+scale*424,oy+scale*136); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*424,oy+scale*136,ox+scale*434,oy+scale*174); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*206,oy+scale*174,ox+scale*216,oy+scale*136); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*216,oy+scale*136,ox+scale*224,oy+scale*105); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*224,oy+scale*105,ox+scale*251,oy+scale*90); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*251,oy+scale*90,ox+scale*282,oy+scale*98); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*282,oy+scale*98,ox+scale*320,oy+scale*108); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*206,oy+scale*306,ox+scale*178,oy+scale*278); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*178,oy+scale*278,ox+scale*155,oy+scale*255); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*155,oy+scale*255,ox+scale*155,oy+scale*225); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*155,oy+scale*225,ox+scale*178,oy+scale*202); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*178,oy+scale*202,ox+scale*206,oy+scale*174); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*320,oy+scale*372,ox+scale*282,oy+scale*382); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*282,oy+scale*382,ox+scale*251,oy+scale*390); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*251,oy+scale*390,ox+scale*224,oy+scale*375); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*224,oy+scale*375,ox+scale*216,oy+scale*344); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*216,oy+scale*344,ox+scale*206,oy+scale*306); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*434,oy+scale*306,ox+scale*424,oy+scale*344); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*424,oy+scale*344,ox+scale*416,oy+scale*375); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*416,oy+scale*375,ox+scale*389,oy+scale*390); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*389,oy+scale*390,ox+scale*358,oy+scale*382); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*358,oy+scale*382,ox+scale*320,oy+scale*372); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*434,oy+scale*174,ox+scale*462,oy+scale*202); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*462,oy+scale*202,ox+scale*485,oy+scale*225); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*485,oy+scale*225,ox+scale*485,oy+scale*255); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*485,oy+scale*255,ox+scale*462,oy+scale*278); renderer.triangle(ox+scale*320,oy+scale*240,ox+scale*462,oy+scale*278,ox+scale*434,oy+scale*306); renderer.setColor(tertiaryColour); renderer.triangle(ox+scale*343,oy+scale*201,ox+scale*362,oy+scale*149,ox+scale*378,oy+scale*159); renderer.triangle(ox+scale*297,oy+scale*201,ox+scale*262,oy+scale*159,ox+scale*278,oy+scale*149); renderer.triangle(ox+scale*275,oy+scale*240,ox+scale*220,oy+scale*249,ox+scale*220,oy+scale*231); renderer.triangle(ox+scale*297,oy+scale*279,ox+scale*278,oy+scale*331,ox+scale*262,oy+scale*321); renderer.triangle(ox+scale*343,oy+scale*279,ox+scale*378,oy+scale*321,ox+scale*362,oy+scale*331); renderer.triangle(ox+scale*365,oy+scale*240,ox+scale*420,oy+scale*231,ox+scale*420,oy+scale*249);
 
         }
         else if (index==18)
@@ -425,4 +238,205 @@ oy=oy-240*scale;
         }
 
     }
+
+
+
+    static public void setColour(int index)
+    {
+
+        switch (index) {
+            case 0:
+                primaryColour = new Color(255f/255f,250f/255f,3f/255f,1);//light yellow
+                secondaryColour = new Color(79f/255f,45f/255f,0f/255f,1);//dark red
+                tertiaryColour = new Color(255f/255f,187f/255f,12f/255f,1);//light orange
+                contrastColour = new Color(59f/255f,94f/255f,250f/255f,1);//light teal
+                break;
+            case 1:
+                primaryColour = new Color(123f/255f,0f/255f,0f/255f,1);//dark red
+                secondaryColour = new Color(134f/255f,0f/255f,0f/255f,1);//dark red
+                tertiaryColour = new Color(136f/255f,0f/255f,0f/255f,1);//dark red
+                contrastColour = new Color(124f/255f,255f/255f,255f/255f,1);//light cyan
+                break;
+            case 2:
+                primaryColour = new Color(255f/255f,126f/255f,13f/255f,1);//orange
+                secondaryColour = new Color(255f/255f,84f/255f,20f/255f,1);//red
+                tertiaryColour = new Color(255f/255f,196f/255f,15f/255f,1);//light orange
+                contrastColour = new Color(0f/255f,120f/255f,239f/255f,1);//teal
+                break;
+            case 3:
+                primaryColour = new Color(191f/255f,0f/255f,0f/255f,1);//dark red
+                secondaryColour = new Color(234f/255f,130f/255f,0f/255f,1);//orange
+                tertiaryColour = new Color(255f/255f,0f/255f,0f/255f,1);//red
+                contrastColour = new Color(28f/255f,212f/255f,255f/255f,1);//light teal
+                break;
+            case 4:
+                primaryColour = new Color(255f/255f,255f/255f,255f/255f,1);//white
+                secondaryColour = new Color(219f/255f,167f/255f,0f/255f,1);//orange
+                tertiaryColour = new Color(255f/255f,255f/255f,198f/255f,1);//light yellow
+                contrastColour = new Color(12f/255f,29f/255f,104f/255f,1);//dark blue
+                break;
+            case 5:
+                primaryColour = new Color(125f/255f,187f/255f,255f/255f,1);//light teal
+                secondaryColour = new Color(0f/255f,0f/255f,181f/255f,1);//dark blue
+                tertiaryColour = new Color(75f/255f,94f/255f,255f/255f,1);//light blue
+                contrastColour = new Color(188f/255f,161f/255f,25f/255f,1);//yellow
+                break;
+            case 6:
+                primaryColour = new Color(162f/255f,162f/255f,255f/255f,1);//light teal
+                secondaryColour = new Color(0f/255f,120f/255f,189f/255f,1);//teal
+                tertiaryColour = new Color(115f/255f,115f/255f,255f/255f,1);//light teal
+                contrastColour = new Color(163f/255f,123f/255f,22f/255f,1);//orange
+                break;
+            case 7:
+                primaryColour = new Color(255f/255f,240f/255f,255f/255f,1);//white
+                secondaryColour = new Color(255f/255f,255f/255f,255f/255f,1);//white
+                tertiaryColour = new Color(3f/255f,2f/255f,0f/255f,1);//black
+                contrastColour = new Color(84f/255f,89f/255f,85f/255f,1);//green
+                break;
+            case 8:
+                primaryColour = new Color(151f/255f,151f/255f,255f/255f,1);//light teal
+                secondaryColour = new Color(151f/255f,151f/255f,255f/255f,1);//light teal
+                tertiaryColour = new Color(177f/255f,0f/255f,0f/255f,1);//dark red
+                contrastColour = new Color(95f/255f,154f/255f,85f/255f,1);//green
+                break;
+            case 9:
+                primaryColour = new Color(255f/255f,157f/255f,255f/255f,1);//light magenta
+                secondaryColour = new Color(255f/255f,255f/255f,140f/255f,1);//light yellow
+                tertiaryColour = new Color(255f/255f,216f/255f,255f/255f,1);//light magenta
+                contrastColour = new Color(0f/255f,46f/255f,38f/255f,1);//dark green
+                break;
+            case 10:
+                primaryColour = new Color(193f/255f,193f/255f,255f/255f,1);//light teal
+                secondaryColour = new Color(242f/255f,242f/255f,255f/255f,1);//white
+                tertiaryColour = new Color(133f/255f,133f/255f,255f/255f,1);//light teal
+                contrastColour = new Color(66f/255f,66f/255f,0f/255f,1);//dark red
+                break;
+            case 11:
+                primaryColour = new Color(69f/255f,0f/255f,102f/255f,1);//dark blue
+                secondaryColour = new Color(255f/255f,255f/255f,225f/255f,1);//light yellow
+                tertiaryColour = new Color(104f/255f,0f/255f,174f/255f,1);//purple
+                contrastColour = new Color(112f/255f,170f/255f,88f/255f,1);//yellow green
+                break;
+            case 12:
+                primaryColour = new Color(255f/255f,181f/255f,255f/255f,1);//light magenta
+                secondaryColour = new Color(126f/255f,193f/255f,0f/255f,1);//yellow green
+                tertiaryColour = new Color(255f/255f,227f/255f,255f/255f,1);//white
+                contrastColour = new Color(43f/255f,55f/255f,85f/255f,1);//dark blue
+                break;
+            case 13:
+                primaryColour = new Color(255f/255f,14f/255f,163f/255f,1);//light magenta
+                secondaryColour = new Color(0f/255f,128f/255f,52f/255f,1);//dark green
+                tertiaryColour = new Color(255f/255f,8f/255f,8f/255f,1);//red
+                contrastColour = new Color(85f/255f,205f/255f,181f/255f,1);//light cyan
+                break;
+            case 14:
+                primaryColour = new Color(244f/255f,255f/255f,194f/255f,1);//light yellow
+                secondaryColour = new Color(255f/255f,243f/255f,157f/255f,1);//light yellow
+                tertiaryColour = new Color(255f/255f,255f/255f,195f/255f,1);//light yellow
+                contrastColour = new Color(4f/255f,4f/255f,73f/255f,1);//dark blue
+                break;
+            case 15:
+                primaryColour = new Color(195f/255f,0f/255f,0f/255f,1);//dark red
+                secondaryColour = new Color(255f/255f,238f/255f,238f/255f,1);//light magenta
+                tertiaryColour = new Color(255f/255f,255f/255f,186f/255f,1);//light yellow
+                contrastColour = new Color(20f/255f,91f/255f,114f/255f,1);//blue
+                break;
+            case 16:
+                primaryColour = new Color(255f/255f,243f/255f,255f/255f,1);//white
+                secondaryColour = new Color(111f/255f,0f/255f,240f/255f,1);//purple
+                tertiaryColour = new Color(190f/255f,76f/255f,255f/255f,1);//light purple
+                contrastColour = new Color(70f/255f,149f/255f,5f/255f,1);//green
+                break;
+            case 17:
+                primaryColour = new Color(208f/255f,208f/255f,255f/255f,1);//light teal
+                secondaryColour = new Color(85f/255f,85f/255f,255f/255f,1);//light blue
+                tertiaryColour = new Color(255f/255f,255f/255f,177f/255f,1);//light yellow
+                contrastColour = new Color(72f/255f,72f/255f,26f/255f,1);//dark red
+                break;
+            case 18:
+                primaryColour = new Color(251f/255f,169f/255f,0f/255f,1);//light orange
+                secondaryColour = new Color(175f/255f,0f/255f,0f/255f,1);//dark red
+                tertiaryColour = new Color(255f/255f,255f/255f,60f/255f,1);//light yellow
+                contrastColour = new Color(28f/255f,114f/255f,235f/255f,1);//teal
+                break;
+            case 19:
+                primaryColour = new Color(255f/255f,172f/255f,105f/255f,1);//light orange
+                secondaryColour = new Color(199f/255f,255f/255f,109f/255f,1);//light yellow green
+                tertiaryColour = new Color(153f/255f,255f/255f,94f/255f,1);//light yellow green
+                contrastColour = new Color(53f/255f,28f/255f,152f/255f,1);//blue
+                break;
+            case 20:
+                primaryColour = new Color(255f/255f,209f/255f,15f/255f,1);//light orange
+                secondaryColour = new Color(255f/255f,255f/255f,35f/255f,1);//light yellow
+                tertiaryColour = new Color(255f/255f,146f/255f,23f/255f,1);//light orange
+                contrastColour = new Color(0f/255f,52f/255f,231f/255f,1);//blue
+                break;
+            case 21:
+                primaryColour = new Color(238f/255f,204f/255f,0f/255f,1);//light yellow
+                secondaryColour = new Color(255f/255f,255f/255f,189f/255f,1);//light yellow
+                tertiaryColour = new Color(161f/255f,7f/255f,0f/255f,1);//dark orange
+                contrastColour = new Color(37f/255f,100f/255f,192f/255f,1);//teal
+                break;
+            case 22:
+                primaryColour = new Color(255f/255f,202f/255f,255f/255f,1);//light magenta
+                secondaryColour = new Color(255f/255f,255f/255f,35f/255f,1);//light yellow
+                tertiaryColour = new Color(179f/255f,78f/255f,255f/255f,1);//light purple
+                contrastColour = new Color(25f/255f,77f/255f,73f/255f,1);//dark green
+                break;
+            case 23:
+                primaryColour = new Color(255f/255f,255f/255f,200f/255f,1);//light yellow
+                secondaryColour = new Color(255f/255f,174f/255f,255f/255f,1);//light magenta
+                tertiaryColour = new Color(184f/255f,32f/255f,255f/255f,1);//light purple
+                contrastColour = new Color(24f/255f,101f/255f,18f/255f,1);//dark green
+                break;
+            case 24:
+                primaryColour = new Color(255f/255f,229f/255f,3f/255f,1);//light yellow
+                secondaryColour = new Color(81f/255f,0f/255f,173f/255f,1);//purple
+                tertiaryColour = new Color(66f/255f,57f/255f,0f/255f,1);//dark red
+                contrastColour = new Color(121f/255f,160f/255f,196f/255f,1);//light cyan
+                break;
+            case 25:
+                primaryColour = new Color(243f/255f,170f/255f,255f/255f,1);//light magenta
+                secondaryColour = new Color(76f/255f,0f/255f,190f/255f,1);//purple
+                tertiaryColour = new Color(255f/255f,255f/255f,193f/255f,1);//light yellow
+                contrastColour = new Color(64f/255f,113f/255f,42f/255f,1);//green
+                break;
+            case 26:
+                primaryColour = new Color(122f/255f,0f/255f,0f/255f,1);//dark red
+                secondaryColour = new Color(71f/255f,0f/255f,0f/255f,1);//dark red
+                tertiaryColour = new Color(255f/255f,179f/255f,55f/255f,1);//light orange
+                contrastColour = new Color(106f/255f,195f/255f,237f/255f,1);//light teal
+                break;
+            case 27:
+                primaryColour = new Color(255f/255f,184f/255f,184f/255f,1);//light magenta
+                secondaryColour = new Color(255f/255f,4f/255f,4f/255f,1);//red
+                tertiaryColour = new Color(255f/255f,145f/255f,145f/255f,1);//light magenta
+                contrastColour = new Color(0f/255f,144f/255f,144f/255f,1);//green
+                break;
+            case 28:
+                primaryColour = new Color(29f/255f,214f/255f,255f/255f,1);//light teal
+                secondaryColour = new Color(0f/255f,165f/255f,216f/255f,1);//teal
+                tertiaryColour = new Color(93f/255f,248f/255f,255f/255f,1);//light cyan
+                contrastColour = new Color(214f/255f,46f/255f,13f/255f,1);//red
+                break;
+            case 29:
+                primaryColour = new Color(238f/255f,127f/255f,255f/255f,1);//light magenta
+                secondaryColour = new Color(150f/255f,0f/255f,254f/255f,1);//light purple
+                tertiaryColour = new Color(255f/255f,195f/255f,255f/255f,1);//light magenta
+                contrastColour = new Color(41f/255f,148f/255f,0f/255f,1);//dark green
+                break;
+            case 30:
+                primaryColour = new Color(255f/255f,255f/255f,220f/255f,1);//light yellow
+                secondaryColour = new Color(255f/255f,255f/255f,169f/255f,1);//light yellow
+                tertiaryColour = new Color(251f/255f,255f/255f,66f/255f,1);//light yellow
+                contrastColour = new Color(1f/255f,0f/255f,103f/255f,1);//dark blue
+                break;
+        }
+    }
+
+
+
+
+
+
 }

@@ -12,13 +12,15 @@ import java.util.Random;
 final class FlowerPosList
 {
     static ArrayList<Vector2> list = new ArrayList<Vector2>();
+    static ArrayList<Integer> index = new ArrayList<Integer>();
     static Random rand = new Random();
     private FlowerPosList()
     {
     }
-    public static void add(float x, float y)
+    public static void add(float x, float y,int i)
     {
         list.add(new Vector2(x,y));
+        index.add(i);
     }
     public static Vector2 get(int index)
     {
