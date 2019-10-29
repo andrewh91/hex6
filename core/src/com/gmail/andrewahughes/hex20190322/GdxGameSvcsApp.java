@@ -103,7 +103,7 @@ int loadTimer =0;
             sb = new SpriteBatch();
             mainMenu = new HexOptionField(vpWidth, vpHeight,
                     4, 0, portrait == 1,
-                    new String[]{"Sign In", "Start Practise Game", "Start Hiscore Game","Exit"},
+                    new String[]{"Sign in", "Start Practise Game", "Start Hiscore Game","Exit"},
                     2);
 
             for (int i = 0; i < mainMenu.hexOptionArray.length; i++)
@@ -1042,7 +1042,10 @@ public void prepareNewGame()
         hideAllStages();
         gameOverStage.setScore(noOfHexes,score,difficulty, gameMode);
         gameOverStage.setVisible(true);
+        if(gameMode!=1)
+        {
         gameStage.setVisible(true);
+        }
         Gdx.input.setInputProcessor(gameOverStage);
         Gdx.input.setCatchBackKey(true);
     }

@@ -1708,16 +1708,16 @@ Color secondaryColour = new Color(Color.YELLOW);
 
     void flashGreenBackground()
     {
-        red = 0.51f;
-        green = 0.86f;
-        blue = 0.22f;
+        red = 1.0f;
+        green = 0.95f;
+        blue = 0.7f;
     }
 
     void flashRedBackground()
     {
-        red = 0.86f;
-        green = 0.42f;
-        blue = 0.22f;
+        red = 0.0f;
+        green = 0.0f;
+        blue = 0.0f;
     }
 
     public void updateDifficulty(int newDifficulty)

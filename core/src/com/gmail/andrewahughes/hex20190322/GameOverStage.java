@@ -27,7 +27,7 @@ public class GameOverStage extends Stage {
     Actor continueButton = new Actor();
     float continueButtonTimer;
 int scorePosY=0;
-    int scoreValue, difficultyValue,noOfHexesValue, gameModeValue;
+    int scoreValue, difficultyValue,noOfHexesValue, gameModeValue =0;
 
     public GameOverStage(Viewport viewport, final StageInterface stageInterface) {
         super( viewport );
@@ -88,8 +88,10 @@ this.addActor(continueButton);
             }
             sb.setProjectionMatrix(getViewport().getCamera().combined);
 sb.begin();
-           // Gdx.gl.glClearColor(0.86f, 0.65f, 0.22f, 1);
-           // Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+            if(gameModeValue==1) {//if singkes mode draw back buffer so game over is not transparent, if field mode shiw the field underneath game over screen
+                Gdx.gl.glClearColor(0.86f, 0.65f, 0.22f, 1);
+                Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+            }
             /*
             for(int i = 0 ; i< centredTextArray.length;i++)
 
@@ -122,6 +124,7 @@ sb.begin();
     public void setScore(int noOfHexes,int score,int difficulty, int gameMode)
     {
 scoreValue=score;
+        gameModeValue=gameMode;//record if its singles modr or not, if so we need a back buffer
 scorePosY=stageInterface.getScreenHeight()/2;
 font.getData().setScale(fontScale);
 fontSpeed = (stageInterface.getScreenHeight()-50)/2;

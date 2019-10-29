@@ -211,19 +211,19 @@ updateUI();
 
             if(!newOnlineScore&&hexOptionFieldArray.get(7).hexOptionArray[2].isVisible())
             {//if scoreboard option menu visible and not gameover grey out the submit score button in the scoreboard option menu
-                shapeRenderer.setColor(0.04f,0.04f,0.04f, 1);
+                shapeRenderer.setColor(0.04f,0.04f,0.04f, 0.6f);
                 hexOptionFieldArray.get(7).hexOptionArray[2].drawHex(shapeRenderer);
 
             }
             //black out difficulty if not in practise mode
 if(practise==false&&hexOptionFieldArray.get(0).hexOptionArray[2].isVisible())
 {
-    shapeRenderer.setColor(0.09f,0.08f,0.01f, 1);
+    shapeRenderer.setColor(0.09f,0.08f,0.01f, 0.6f);
     hexOptionFieldArray.get(0).hexOptionArray[2].drawHex(shapeRenderer);
 }
 else if(practise&&hexOptionFieldArray.get(0).hexOptionArray[9].isVisible())
 {
-    shapeRenderer.setColor(0.09f,0.08f,0.01f, 1);
+    shapeRenderer.setColor(0.09f,0.08f,0.01f, 0.6f);
     hexOptionFieldArray.get(0).hexOptionArray[9].drawHex(shapeRenderer);
 }
 /*
