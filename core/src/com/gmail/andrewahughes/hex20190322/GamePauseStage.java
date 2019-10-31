@@ -216,6 +216,7 @@ updateUI();
 
             }
             //black out difficulty if not in practise mode
+            /*
 if(practise==false&&hexOptionFieldArray.get(0).hexOptionArray[2].isVisible())
 {
     shapeRenderer.setColor(0.09f,0.08f,0.01f, 0.6f);
@@ -226,6 +227,7 @@ else if(practise&&hexOptionFieldArray.get(0).hexOptionArray[9].isVisible())
     shapeRenderer.setColor(0.09f,0.08f,0.01f, 0.6f);
     hexOptionFieldArray.get(0).hexOptionArray[9].drawHex(shapeRenderer);
 }
+*/
 /*
             hexOptionField.draw(shapeRenderer);
             difficultyOptionField.draw(shapeRenderer);
@@ -411,7 +413,7 @@ else if(practise&&hexOptionFieldArray.get(0).hexOptionArray[9].isVisible())
             }});//end return to main menu
 
 //go to difficulty menu
-
+/*
             hexOptionField.hexOptionArray[2].addListener(new ClickListener()
             {
                 @Override
@@ -426,7 +428,7 @@ else if(practise&&hexOptionFieldArray.get(0).hexOptionArray[9].isVisible())
                     }
                 }
             });//end go to difficulty menu
-
+*/
 //go to swap orientation//disabling this, swap orientation was number 3, need to decrement all buttons following this now to fill its placr
         /*hexOptionField.hexOptionArray[3].addListener(new ClickListener() {
             @Override
@@ -437,6 +439,7 @@ else if(practise&&hexOptionFieldArray.get(0).hexOptionArray[9].isVisible())
             }});//end go to swap orientation
 */
 //go to symbol
+        /*
         hexOptionField.hexOptionArray[3].addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -506,8 +509,8 @@ else if(practise&&hexOptionFieldArray.get(0).hexOptionArray[9].isVisible())
 
                 stageInterface.setZoomMode(zoomMode);
             }});//end go to zoom mode
-
-    hexOptionField.hexOptionArray[8].addListener(new ClickListener()
+*/
+    hexOptionField.hexOptionArray[2].addListener(new ClickListener()
     {
         @Override
         public void clicked(InputEvent event, float x, float y)
@@ -1180,10 +1183,18 @@ if(portrait)
 
     public void setupFields()
     {
+        /*
         hexOptionField = new HexOptionField(width, height, 9, 0, portrait,
                 new String[]{""}
                 , 0
         );
+        */
+        hexOptionField = new HexOptionField(width, height, 3, 0, portrait,
+                new String[]{""}
+                , 0
+        );
+
+
         createOptionsMenu();
 
         difficultyOptionField = new HexOptionField(width, height, 13, 2,
@@ -1262,10 +1273,18 @@ if(portrait)
 
 void createOptionsMenu()
 {
+    /*
     hexOptionField = new HexOptionField(width,height,9,
             0,portrait,
             new String[]{"Cancel Changes","Return to Main Menu","Change Difficulty" ,"Change Symbol Type",
                     "Save Changes","Change Game Mode","Change Number of Hexes","Change Zoom Mode","Scoreboard"
+            }
+            ,0);
+            */
+
+    hexOptionField = new HexOptionField(width,height,3,
+            0,portrait,
+            new String[]{"Cancel Changes","Return to Main Menu","Scoreboard"
             }
             ,0);
 }

@@ -168,7 +168,7 @@ drawHex(sr);
                 ox = (int)centreX;
                 oy = (int)centreY;
                 ox=(int)(ox-340*scale);
-                oy=(int)(oy+480*scale);
+                oy=(int)(oy+250*scale);
                 oy=(int)(oy+0*scale);
 /*play**************************************************************************************/
                 renderer.setColor(primaryColour);
@@ -186,7 +186,7 @@ drawHex(sr);
                 ox = (int)centreX;
                 oy = (int)centreY;
                 ox=(int)(ox-320*scale);
-                oy=(int)(oy+480*scale);
+                oy=(int)(oy+250*scale);
                 oy=(int)(oy+0*scale);
 
 
@@ -229,7 +229,7 @@ drawHex(sr);
                 ox = (int)centreX;
                 oy = (int)centreY;
                 ox=(int)(ox-320*scale);
-                oy=(int)(oy+480*scale);
+                oy=(int)(oy+250*scale);
                 oy=(int)(oy+0*scale);
 /*scoreboard*******************************************************************************/
                 renderer.setColor(secondaryColour);
@@ -263,7 +263,7 @@ drawHex(sr);
                 ox = (int)centreX;
                 oy = (int)centreY;
                 ox=(int)(ox-320*scale);
-                oy=(int)(oy+480*scale); 
+                oy=(int)(oy+250*scale);
                 oy=(int)(oy+0*scale);
 
 
@@ -279,7 +279,7 @@ drawHex(sr);
                 ox = (int)centreX;
                 oy = (int)centreY;
                 ox=(int)(ox-320*scale);
-                oy=(int)(oy+480*scale); 
+                oy=(int)(oy+250*scale);
                 oy=(int)(oy+0*scale);
 /*scoreboard*******************************************************************************/
                 renderer.setColor(secondaryColour);
@@ -315,7 +315,7 @@ drawHex(sr);
                 ox = (int)centreX;
                 oy = (int)centreY;
                 ox=(int)(ox-288*scale);
-                oy=(int)(oy+480*scale);
+                oy=(int)(oy+250*scale);
                 oy=(int)(oy-100*scale);
 /*scoreboard upload group********************************************************************/
                 renderer.setColor(secondaryColour);
@@ -327,7 +327,7 @@ drawHex(sr);
                 oy = (int)centreY;
 
                 ox=(int)(ox-280*scale);
-                oy=(int)(oy+480*scale); 
+                oy=(int)(oy+250*scale);
                 oy=(int)(oy-0*scale);
 //wifi
 //offset y by +92 to centre this
@@ -340,7 +340,7 @@ drawHex(sr);
                 oy = (int)centreY;
 
                 ox=(int)(ox-360*scale);
-                oy=(int)(oy+480*scale); 
+                oy=(int)(oy+250*scale);
                 oy=(int)(oy+360*scale);
 
 //up arrow
@@ -357,16 +357,16 @@ drawHex(sr);
                 ox = (int)centreX;
                 oy = (int)centreY;
                 ox=(int)(ox-288*scale);
-                oy=(int)(oy+480*scale);
+                oy=(int)(oy+250*scale);
                 oy=(int)(oy-100*scale);
 /*scoreboard offline group*****************************************************************/
-                renderer.setColor(secondaryColour); 
+                renderer.setColor(secondaryColour);
                 renderer.triangle(ox+scale*163.2f,oy+scale*-99.2f,ox+scale*220.8f,oy+scale*-99.2f,ox+scale*220.8f,oy+scale*-156.8f); renderer.triangle(ox+scale*163.2f,oy+scale*-99.2f,ox+scale*220.8f,oy+scale*-156.8f,ox+scale*163.2f,oy+scale*-156.8f); renderer.triangle(ox+scale*348.8f,oy+scale*-99.2f,ox+scale*227.2f,oy+scale*-99.2f,ox+scale*227.2f,oy+scale*-156.8f); renderer.triangle(ox+scale*348.8f,oy+scale*-99.2f,ox+scale*227.2f,oy+scale*-156.8f,ox+scale*348.8f,oy+scale*-156.8f); renderer.triangle(ox+scale*163.2f,oy+scale*-163.2f,ox+scale*220.8f,oy+scale*-163.2f,ox+scale*220.8f,oy+scale*-220.8f); renderer.triangle(ox+scale*163.2f,oy+scale*-163.2f,ox+scale*220.8f,oy+scale*-220.8f,ox+scale*163.2f,oy+scale*-220.8f); renderer.triangle(ox+scale*227.2f,oy+scale*-163.2f,ox+scale*348.8f,oy+scale*-163.2f,ox+scale*348.8f,oy+scale*-220.8f); renderer.triangle(ox+scale*227.2f,oy+scale*-163.2f,ox+scale*348.8f,oy+scale*-220.8f,ox+scale*227.2f,oy+scale*-220.8f); renderer.triangle(ox+scale*163.2f,oy+scale*-227.2f,ox+scale*220.8f,oy+scale*-227.2f,ox+scale*220.8f,oy+scale*-284.8f); renderer.triangle(ox+scale*163.2f,oy+scale*-227.2f,ox+scale*220.8f,oy+scale*-284.8f,ox+scale*163.2f,oy+scale*-284.8f); renderer.triangle(ox+scale*227.2f,oy+scale*-227.2f,ox+scale*348.8f,oy+scale*-227.2f,ox+scale*348.8f,oy+scale*-284.8f); renderer.triangle(ox+scale*227.2f,oy+scale*-227.2f,ox+scale*348.8f,oy+scale*-284.8f,ox+scale*227.2f,oy+scale*-284.8f);
 
                 ox = (int)centreX;
                 oy = (int)centreY;
                 ox=(int)(ox-280*scale);
-                oy=(int)(oy+480*scale);
+                oy=(int)(oy+250*scale);
                 oy=(int)(oy+0*scale);
 
 //wifi
@@ -380,7 +380,7 @@ drawHex(sr);
                 ox = (int)centreX;
                 oy = (int)centreY;
                 ox=(int)(ox-150*scale);
-                oy=(int)(oy+480*scale);
+                oy=(int)(oy+250*scale);
                 oy=(int)(oy+12*scale);
 //exit
                 renderer.setColor(tertiaryColour); renderer.triangle(ox+scale*229.2f,oy+scale*-90,ox+scale*246,oy+scale*-106.8f,ox+scale*154.8f,oy+scale*-198); renderer.triangle(ox+scale*229.2f,oy+scale*-90,ox+scale*154.8f,oy+scale*-198,ox+scale*138,oy+scale*-181.2f); renderer.triangle(ox+scale*138,oy+scale*-106.8f,ox+scale*154.8f,oy+scale*-90,ox+scale*246,oy+scale*-181.2f); renderer.triangle(ox+scale*138,oy+scale*-106.8f,ox+scale*246,oy+scale*-181.2f,ox+scale*229.2f,oy+scale*-198);
@@ -396,7 +396,7 @@ drawHex(sr);
                 ox = (int)centreX;
                 oy = (int)centreY;
                 ox=(int)(ox-380*scale);
-                oy=(int)(oy+480*scale);
+                oy=(int)(oy+250*scale);
                 oy=(int)(oy+50*scale);
 /*head group ************************************************************************/
 //offset y by -120 to centre this 
@@ -430,10 +430,10 @@ drawHex(sr);
 
                 ox = (int)centreX;
                 oy = (int)centreY;
-                ox=(int)(ox-90*scale);
-                oy=(int)(oy+480*scale);
-                oy=(int)(oy+120*scale);
-                
+                ox=(int)(ox-260*scale);
+                oy=(int)(oy+250*scale);
+                oy=(int)(oy+0*scale);
+
 //left arrow
 //offset x by -90 to centre 
                 renderer.setColor(primaryColour); renderer.triangle
@@ -446,12 +446,12 @@ drawHex(sr);
                     (ox+scale*380,oy-scale*240,ox+scale*440,oy-scale*256,ox+scale*404,oy-scale*256); renderer.triangle
 
                     (ox+scale*380,oy-scale*240,ox+scale*404,oy-scale*256,ox+scale*404,oy-scale*272);
-                
+
 
                 ox = (int)centreX;
                 oy = (int)centreY;
                 ox=(int)(ox-280*scale);
-                oy=(int)(oy+480*scale);
+                oy=(int)(oy+250*scale);
                 oy=(int)(oy-50*scale);
 //wifi
 //offset y by +92 to centre this 
@@ -483,7 +483,7 @@ drawHex(sr);
                 ox = (int)centreX;
                 oy = (int)centreY;
                 ox=(int)(ox-340*scale);
-                oy=(int)(oy+480*scale);
+                oy=(int)(oy+250*scale);
                 oy=(int)(oy+0*scale);
 /*play**************************************************************************************/
                 renderer.setColor(primaryColour);
@@ -496,7 +496,7 @@ drawHex(sr);
                 ox = (int)centreX;
                 oy = (int)centreY;
                 ox=(int)(ox-340*scale);
-                oy=(int)(oy+480*scale);
+                oy=(int)(oy+250*scale);
                 oy=(int)(oy+0*scale);
 /*play**************************************************************************************/
                 renderer.setColor(primaryColour);
@@ -507,9 +507,9 @@ drawHex(sr);
         {
             ox = (int)centreX;
             oy = (int)centreY;
-            ox=(int)(ox-250*scale);
-            oy=(int)(oy+480*scale);
-            oy=(int)(oy+20*scale);
+            ox=(int)(ox-320*scale);
+            oy=(int)(oy+250*scale);
+            oy=(int)(oy+0*scale);
 /*exit*******************************************************************************/
             renderer.setColor(tertiaryColour); renderer.triangle(ox+scale*382,oy-scale*150,ox+scale*410,oy-scale*178,ox+scale*258,oy-scale*330); renderer.triangle
 
@@ -529,10 +529,10 @@ drawHex(sr);
             ox = (int)centreX;
             oy = (int)centreY;
             ox=(int)(ox-380*scale);
-            oy=(int)(oy+480*scale);
+            oy=(int)(oy+250*scale);
             oy=(int)(oy+50*scale);
 /*head 2 group *****************************************************************************/
-//offset y by -120 to centre this 
+//offset y by -120 to centre this
 
             renderer.setColor(primaryColour); renderer.triangle(ox+scale*380,oy-scale*380,ox+scale*260,oy-scale*380,ox+scale*320,oy-scale*296); renderer.setColor(secondaryColour);
 
@@ -562,14 +562,14 @@ drawHex(sr);
 
             ox = (int)centreX;
             oy = (int)centreY;
-            ox=(int)(ox-90*scale);
-            oy=(int)(oy+480*scale); 
-            oy=(int)(oy+120*scale);
+            ox=(int)(ox-80*scale);
+            oy=(int)(oy+250*scale);
+            oy=(int)(oy+0*scale);
 
-            
+
 //right arrow
 
-//offset x by +90 to centre 
+//offset x by +90 to centre
             renderer.setColor(tertiaryColour);
             renderer.triangle(ox+scale*260,oy-scale*240,ox+scale*236,oy-scale*272,ox+scale*236,oy-scale*256); renderer.triangle
 
@@ -580,13 +580,13 @@ drawHex(sr);
                 (ox+scale*260,oy-scale*240,ox+scale*200,oy-scale*224,ox+scale*236,oy-scale*224); renderer.triangle
 
                 (ox+scale*260,oy-scale*240,ox+scale*236,oy-scale*224,ox+scale*236,oy-scale*208);
-            
+
 
 
             ox = (int)centreX;
             oy = (int)centreY;
             ox=(int)(ox-280*scale);
-            oy=(int)(oy+480*scale); 
+            oy=(int)(oy+250*scale);
             oy=(int)(oy-50*scale);
 //wifi
 //offset y by +92 to centre this 
