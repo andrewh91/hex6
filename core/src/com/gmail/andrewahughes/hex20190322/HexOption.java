@@ -138,7 +138,7 @@ drawHex(sr);
         {
 
             int ox = (int)centreX;
-            int oy = (int)centreY + 120;
+            int oy = (int)centreY;
             Color primaryColour;
             Color secondaryColour;
             Color tertiaryColour;
@@ -166,8 +166,9 @@ drawHex(sr);
 
 
                 ox = (int)centreX;
-                oy = (int)centreY + 120;
+                oy = (int)centreY;
                 ox=(int)(ox-340*scale);
+                oy=(int)(oy+480*scale);
                 oy=(int)(oy+0*scale);
 /*play**************************************************************************************/
                 renderer.setColor(primaryColour);
@@ -183,8 +184,9 @@ drawHex(sr);
 
 
                 ox = (int)centreX;
-                oy = (int)centreY + 120;
+                oy = (int)centreY;
                 ox=(int)(ox-320*scale);
+                oy=(int)(oy+480*scale);
                 oy=(int)(oy+0*scale);
 
 
@@ -225,8 +227,9 @@ drawHex(sr);
 
 
                 ox = (int)centreX;
-                oy = (int)centreY + 120;
+                oy = (int)centreY;
                 ox=(int)(ox-320*scale);
+                oy=(int)(oy+480*scale);
                 oy=(int)(oy+0*scale);
 /*scoreboard*******************************************************************************/
                 renderer.setColor(secondaryColour);
@@ -258,8 +261,9 @@ drawHex(sr);
             else if(text=="Back" )
             {
                 ox = (int)centreX;
-                oy = (int)centreY + 120;
+                oy = (int)centreY;
                 ox=(int)(ox-320*scale);
+                oy=(int)(oy+480*scale); 
                 oy=(int)(oy+0*scale);
 
 
@@ -273,8 +277,9 @@ drawHex(sr);
 
 
                 ox = (int)centreX;
-                oy = (int)centreY + 120;
+                oy = (int)centreY;
                 ox=(int)(ox-320*scale);
+                oy=(int)(oy+480*scale); 
                 oy=(int)(oy+0*scale);
 /*scoreboard*******************************************************************************/
                 renderer.setColor(secondaryColour);
@@ -308,167 +313,78 @@ drawHex(sr);
 
 
                 ox = (int)centreX;
-                oy = (int)centreY + 120;
-                ox=(int)(ox-360*scale);
-                oy=(int)(oy+100*scale);
+                oy = (int)centreY;
+                ox=(int)(ox-288*scale);
+                oy=(int)(oy+480*scale);
+                oy=(int)(oy-100*scale);
 /*scoreboard upload group********************************************************************/
                 renderer.setColor(secondaryColour);
-                renderer.triangle(ox+scale*204,oy-scale*124,ox+scale*276,oy-scale*124,ox+scale*276,oy-scale*196); renderer.triangle
-
-                    (ox+scale*204,oy-scale*124,ox+scale*276,oy-scale*196,ox+scale*204,oy-scale*196); renderer.triangle
-
-                    (ox+scale*436,oy-scale*124,ox+scale*284,oy-scale*124,ox+scale*284,oy-scale*196); renderer.triangle
-
-                    (ox+scale*436,oy-scale*124,ox+scale*284,oy-scale*196,ox+scale*436,oy-scale*196); renderer.triangle
-
-                    (ox+scale*204,oy-scale*204,ox+scale*276,oy-scale*204,ox+scale*276,oy-scale*276); renderer.triangle
-
-                    (ox+scale*204,oy-scale*204,ox+scale*276,oy-scale*276,ox+scale*204,oy-scale*276); renderer.triangle
-
-                    (ox+scale*284,oy-scale*204,ox+scale*436,oy-scale*204,ox+scale*436,oy-scale*276); renderer.triangle
-
-                    (ox+scale*284,oy-scale*204,ox+scale*436,oy-scale*276,ox+scale*284,oy-scale*276); renderer.triangle
-
-                    (ox+scale*204,oy-scale*284,ox+scale*276,oy-scale*284,ox+scale*276,oy-scale*356); renderer.triangle
-
-                    (ox+scale*204,oy-scale*284,ox+scale*276,oy-scale*356,ox+scale*204,oy-scale*356); renderer.triangle
-
-                    (ox+scale*284,oy-scale*284,ox+scale*436,oy-scale*284,ox+scale*436,oy-scale*356); renderer.triangle
-
-                    (ox+scale*284,oy-scale*284,ox+scale*436,oy-scale*356,ox+scale*284,oy-scale*356);
+                renderer.triangle(ox+scale*163.2f,oy+scale*-99.2f,ox+scale*220.8f,oy+scale*-99.2f,ox+scale*220.8f,oy+scale*-156.8f); renderer.triangle(ox+scale*163.2f,oy+scale*-99.2f,ox+scale*220.8f,oy+scale*-156.8f,ox+scale*163.2f,oy+scale*-156.8f); renderer.triangle(ox+scale*348.8f,oy+scale*-99.2f,ox+scale*227.2f,oy+scale*-99.2f,ox+scale*227.2f,oy+scale*-156.8f); renderer.triangle(ox+scale*348.8f,oy+scale*-99.2f,ox+scale*227.2f,oy+scale*-156.8f,ox+scale*348.8f,oy+scale*-156.8f); renderer.triangle(ox+scale*163.2f,oy+scale*-163.2f,ox+scale*220.8f,oy+scale*-163.2f,ox+scale*220.8f,oy+scale*-220.8f); renderer.triangle(ox+scale*163.2f,oy+scale*-163.2f,ox+scale*220.8f,oy+scale*-220.8f,ox+scale*163.2f,oy+scale*-220.8f); renderer.triangle(ox+scale*227.2f,oy+scale*-163.2f,ox+scale*348.8f,oy+scale*-163.2f,ox+scale*348.8f,oy+scale*-220.8f); renderer.triangle(ox+scale*227.2f,oy+scale*-163.2f,ox+scale*348.8f,oy+scale*-220.8f,ox+scale*227.2f,oy+scale*-220.8f); renderer.triangle(ox+scale*163.2f,oy+scale*-227.2f,ox+scale*220.8f,oy+scale*-227.2f,ox+scale*220.8f,oy+scale*-284.8f); renderer.triangle(ox+scale*163.2f,oy+scale*-227.2f,ox+scale*220.8f,oy+scale*-284.8f,ox+scale*163.2f,oy+scale*-284.8f); renderer.triangle(ox+scale*227.2f,oy+scale*-227.2f,ox+scale*348.8f,oy+scale*-227.2f,ox+scale*348.8f,oy+scale*-284.8f); renderer.triangle(ox+scale*227.2f,oy+scale*-227.2f,ox+scale*348.8f,oy+scale*-284.8f,ox+scale*227.2f,oy+scale*-284.8f);
 
 
 
                 ox = (int)centreX;
-                oy = (int)centreY + 120;
+                oy = (int)centreY;
 
                 ox=(int)(ox-280*scale);
-                oy=(int)(oy+100*scale);
+                oy=(int)(oy+480*scale); 
+                oy=(int)(oy-0*scale);
 //wifi
 //offset y by +92 to centre this
-                renderer.setColor(primaryColour); renderer.triangle(ox+scale*320,oy-scale*188,ox+scale*292,oy-scale*196,ox+scale*292,oy-scale*200); renderer.triangle
+                renderer.setColor(primaryColour); renderer.triangle(ox+scale*320,oy+scale*-188,ox+scale*292,oy+scale*-196,ox+scale*292,oy+scale*-200); renderer.triangle(ox+scale*320,oy+scale*-188,ox+scale*292,oy+scale*-200,ox+scale*320,oy+scale*-196); renderer.triangle(ox+scale*320,oy+scale*-188,ox+scale*320,oy+scale*-196,ox+scale*348,oy+scale*-200); renderer.triangle(ox+scale*320,oy+scale*-188,ox+scale*348,oy+scale*-200,ox+scale*348,oy+scale*-196); renderer.triangle(ox+scale*320,oy+scale*-132,ox+scale*264,oy+scale*-148,ox+scale*264,oy+scale*-156); renderer.triangle(ox+scale*320,oy+scale*-132,ox+scale*264,oy+scale*-156,ox+scale*320,oy+scale*-144); renderer.triangle(ox+scale*320,oy+scale*-132,ox+scale*320,oy+scale*-144,ox+scale*376,oy+scale*-156); renderer.triangle(ox+scale*320,oy+scale*-132,ox+scale*376,oy+scale*-156,ox+scale*376,oy+scale*-148); renderer.triangle(ox+scale*320,oy+scale*-80,ox+scale*236,oy+scale*-104,ox+scale*236,oy+scale*-116); renderer.triangle(ox+scale*320,oy+scale*-80,ox+scale*236,oy+scale*-116,ox+scale*320,oy+scale*-96); renderer.triangle(ox+scale*320,oy+scale*-80,ox+scale*320,oy+scale*-96,ox+scale*404,oy+scale*-116); renderer.triangle(ox+scale*320,oy+scale*-80,ox+scale*404,oy+scale*-116,ox+scale*404,oy+scale*-104);
 
-                    (ox+scale*320,oy-scale*188,ox+scale*292,oy-scale*200,ox+scale*320,oy-scale*196); renderer.triangle
-
-                    (ox+scale*320,oy-scale*188,ox+scale*320,oy-scale*196,ox+scale*348,oy-scale*200); renderer.triangle
-
-                    (ox+scale*320,oy-scale*188,ox+scale*348,oy-scale*200,ox+scale*348,oy-scale*196); renderer.triangle
-
-                    (ox+scale*320,oy-scale*132,ox+scale*264,oy-scale*148,ox+scale*264,oy-scale*156); renderer.triangle
-
-                    (ox+scale*320,oy-scale*132,ox+scale*264,oy-scale*156,ox+scale*320,oy-scale*144); renderer.triangle
-
-                    (ox+scale*320,oy-scale*132,ox+scale*320,oy-scale*144,ox+scale*376,oy-scale*156); renderer.triangle
-
-                    (ox+scale*320,oy-scale*132,ox+scale*376,oy-scale*156,ox+scale*376,oy-scale*148); renderer.triangle
-
-                    (ox+scale*320,oy-scale*80,ox+scale*236,oy-scale*104,ox+scale*236,oy-scale*116); renderer.triangle(ox+scale*320,oy-scale*80,ox+scale*236,oy-scale*116,ox+scale*320,oy-scale*96);
-
-                renderer.triangle(ox+scale*320,oy-scale*80,ox+scale*320,oy-scale*96,ox+scale*404,oy-scale*116); renderer.triangle
-
-                    (ox+scale*320,oy-scale*80,ox+scale*404,oy-scale*116,ox+scale*404,oy-scale*104);
 
 
 
                 ox = (int)centreX;
-                oy = (int)centreY + 120;
-               
+                oy = (int)centreY;
 
-                ox=(int)(ox-80*scale);
-                oy=(int)(oy+280*scale);
+                ox=(int)(ox-360*scale);
+                oy=(int)(oy+480*scale); 
+                oy=(int)(oy+360*scale);
+
 //up arrow
 //centred
                 renderer.setColor(primaryColour); renderer.triangle
-                    (ox+scale*240,oy-scale*270,ox+scale*208,oy-scale*314,ox+scale*224,oy-scale*314); renderer.triangle
+                    (ox+scale*480,oy+scale*-540,ox+scale*416,oy+scale*-628,ox+scale*448,oy+scale*-628); renderer.triangle(ox+scale*480,oy+scale*-540,ox+scale*448,oy+scale*-628,ox+scale*448,oy+scale*-660); renderer.triangle(ox+scale*480,oy+scale*-540,ox+scale*448,oy+scale*-660,ox+scale*512,oy+scale*-660); renderer.triangle(ox+scale*480,oy+scale*-540,ox+scale*512,oy+scale*-660,ox+scale*512,oy+scale*-628); renderer.triangle(ox+scale*480,oy+scale*-540,ox+scale*512,oy+scale*-628,ox+scale*544,oy+scale*-628);
 
-                    (ox+scale*240,oy-scale*270,ox+scale*224,oy-scale*314,ox+scale*224,oy-scale*330); renderer.triangle
 
-                    (ox+scale*240,oy-scale*270,ox+scale*224,oy-scale*330,ox+scale*256,oy-scale*330); renderer.triangle
-
-                    (ox+scale*240,oy-scale*270,ox+scale*256,oy-scale*330,ox+scale*256,oy-scale*314); renderer.triangle
-
-                    (ox+scale*240,oy-scale*270,ox+scale*256,oy-scale*314,ox+scale*272,oy-scale*314);
-               
 /*end scoreboard upload group */
             }
             else if(text=="Show Offline Scoreboard" )
             {
 
                 ox = (int)centreX;
-                oy = (int)centreY + 120;
-                ox=(int)(ox-360*scale);
-                oy=(int)(oy+100*scale);
+                oy = (int)centreY;
+                ox=(int)(ox-288*scale);
+                oy=(int)(oy+480*scale);
+                oy=(int)(oy-100*scale);
 /*scoreboard offline group*****************************************************************/
-                renderer.setColor(secondaryColour);
-                renderer.triangle(ox+scale*204,oy-scale*124,ox+scale*276,oy-scale*124,ox+scale*276,oy-scale*196); renderer.triangle
-
-                    (ox+scale*204,oy-scale*124,ox+scale*276,oy-scale*196,ox+scale*204,oy-scale*196); renderer.triangle
-
-                    (ox+scale*436,oy-scale*124,ox+scale*284,oy-scale*124,ox+scale*284,oy-scale*196); renderer.triangle
-
-                    (ox+scale*436,oy-scale*124,ox+scale*284,oy-scale*196,ox+scale*436,oy-scale*196); renderer.triangle
-
-                    (ox+scale*204,oy-scale*204,ox+scale*276,oy-scale*204,ox+scale*276,oy-scale*276); renderer.triangle
-
-                    (ox+scale*204,oy-scale*204,ox+scale*276,oy-scale*276,ox+scale*204,oy-scale*276); renderer.triangle
-
-                    (ox+scale*284,oy-scale*204,ox+scale*436,oy-scale*204,ox+scale*436,oy-scale*276); renderer.triangle
-
-                    (ox+scale*284,oy-scale*204,ox+scale*436,oy-scale*276,ox+scale*284,oy-scale*276); renderer.triangle
-
-                    (ox+scale*204,oy-scale*284,ox+scale*276,oy-scale*284,ox+scale*276,oy-scale*356); renderer.triangle
-
-                    (ox+scale*204,oy-scale*284,ox+scale*276,oy-scale*356,ox+scale*204,oy-scale*356); renderer.triangle
-
-                    (ox+scale*284,oy-scale*284,ox+scale*436,oy-scale*284,ox+scale*436,oy-scale*356); renderer.triangle
-
-                    (ox+scale*284,oy-scale*284,ox+scale*436,oy-scale*356,ox+scale*284,oy-scale*356);
-
-
+                renderer.setColor(secondaryColour); 
+                renderer.triangle(ox+scale*163.2f,oy+scale*-99.2f,ox+scale*220.8f,oy+scale*-99.2f,ox+scale*220.8f,oy+scale*-156.8f); renderer.triangle(ox+scale*163.2f,oy+scale*-99.2f,ox+scale*220.8f,oy+scale*-156.8f,ox+scale*163.2f,oy+scale*-156.8f); renderer.triangle(ox+scale*348.8f,oy+scale*-99.2f,ox+scale*227.2f,oy+scale*-99.2f,ox+scale*227.2f,oy+scale*-156.8f); renderer.triangle(ox+scale*348.8f,oy+scale*-99.2f,ox+scale*227.2f,oy+scale*-156.8f,ox+scale*348.8f,oy+scale*-156.8f); renderer.triangle(ox+scale*163.2f,oy+scale*-163.2f,ox+scale*220.8f,oy+scale*-163.2f,ox+scale*220.8f,oy+scale*-220.8f); renderer.triangle(ox+scale*163.2f,oy+scale*-163.2f,ox+scale*220.8f,oy+scale*-220.8f,ox+scale*163.2f,oy+scale*-220.8f); renderer.triangle(ox+scale*227.2f,oy+scale*-163.2f,ox+scale*348.8f,oy+scale*-163.2f,ox+scale*348.8f,oy+scale*-220.8f); renderer.triangle(ox+scale*227.2f,oy+scale*-163.2f,ox+scale*348.8f,oy+scale*-220.8f,ox+scale*227.2f,oy+scale*-220.8f); renderer.triangle(ox+scale*163.2f,oy+scale*-227.2f,ox+scale*220.8f,oy+scale*-227.2f,ox+scale*220.8f,oy+scale*-284.8f); renderer.triangle(ox+scale*163.2f,oy+scale*-227.2f,ox+scale*220.8f,oy+scale*-284.8f,ox+scale*163.2f,oy+scale*-284.8f); renderer.triangle(ox+scale*227.2f,oy+scale*-227.2f,ox+scale*348.8f,oy+scale*-227.2f,ox+scale*348.8f,oy+scale*-284.8f); renderer.triangle(ox+scale*227.2f,oy+scale*-227.2f,ox+scale*348.8f,oy+scale*-284.8f,ox+scale*227.2f,oy+scale*-284.8f);
 
                 ox = (int)centreX;
-                oy = (int)centreY + 120;
+                oy = (int)centreY;
                 ox=(int)(ox-280*scale);
-                oy=(int)(oy+100*scale);
+                oy=(int)(oy+480*scale);
+                oy=(int)(oy+0*scale);
+
 //wifi
-//offset y by +92 to centre this
-                renderer.setColor(primaryColour); renderer.triangle(ox+scale*320,oy-scale*188,ox+scale*292,oy-scale*196,ox+scale*292,oy-scale*200); renderer.triangle
+//offset y by +92 to centre this 
+                renderer.setColor(primaryColour); renderer.triangle(ox+scale*320,oy+scale*-188,ox+scale*292,oy+scale*-196,ox+scale*292,oy+scale*-200); renderer.triangle(ox+scale*320,oy+scale*-188,ox+scale*292,oy+scale*-200,ox+scale*320,oy+scale*-196); renderer.triangle(ox+scale*320,oy+scale*-188,ox+scale*320,oy+scale*-196,ox+scale*348,oy+scale*-200); renderer.triangle(ox+scale*320,oy+scale*-188,ox+scale*348,oy+scale*-200,ox+scale*348,oy+scale*-196); renderer.triangle(ox+scale*320,oy+scale*-132,ox+scale*264,oy+scale*-148,ox+scale*264,oy+scale*-156); renderer.triangle(ox+scale*320,oy+scale*-132,ox+scale*264,oy+scale*-156,ox+scale*320,oy+scale*-144); renderer.triangle(ox+scale*320,oy+scale*-132,ox+scale*320,oy+scale*-144,ox+scale*376,oy+scale*-156); renderer.triangle(ox+scale*320,oy+scale*-132,ox+scale*376,oy+scale*-156,ox+scale*376,oy+scale*-148); renderer.triangle(ox+scale*320,oy+scale*-80,ox+scale*236,oy+scale*-104,ox+scale*236,oy+scale*-116); renderer.triangle(ox+scale*320,oy+scale*-80,ox+scale*236,oy+scale*-116,ox+scale*320,oy+scale*-96); renderer.triangle(ox+scale*320,oy+scale*-80,ox+scale*320,oy+scale*-96,ox+scale*404,oy+scale*-116); renderer.triangle(ox+scale*320,oy+scale*-80,ox+scale*404,oy+scale*-116,ox+scale*404,oy+scale*-104);
 
-                    (ox+scale*320,oy-scale*188,ox+scale*292,oy-scale*200,ox+scale*320,oy-scale*196); renderer.triangle
-
-                    (ox+scale*320,oy-scale*188,ox+scale*320,oy-scale*196,ox+scale*348,oy-scale*200); renderer.triangle
-
-                    (ox+scale*320,oy-scale*188,ox+scale*348,oy-scale*200,ox+scale*348,oy-scale*196); renderer.triangle
-
-                    (ox+scale*320,oy-scale*132,ox+scale*264,oy-scale*148,ox+scale*264,oy-scale*156); renderer.triangle
-
-                    (ox+scale*320,oy-scale*132,ox+scale*264,oy-scale*156,ox+scale*320,oy-scale*144); renderer.triangle
-
-                    (ox+scale*320,oy-scale*132,ox+scale*320,oy-scale*144,ox+scale*376,oy-scale*156); renderer.triangle
-
-                    (ox+scale*320,oy-scale*132,ox+scale*376,oy-scale*156,ox+scale*376,oy-scale*148); renderer.triangle
-
-                    (ox+scale*320,oy-scale*80,ox+scale*236,oy-scale*104,ox+scale*236,oy-scale*116); renderer.triangle(ox+scale*320,oy-scale*80,ox+scale*236,oy-scale*116,ox+scale*320,oy-scale*96);
-
-                renderer.triangle(ox+scale*320,oy-scale*80,ox+scale*320,oy-scale*96,ox+scale*404,oy-scale*116); renderer.triangle
-
-                    (ox+scale*320,oy-scale*80,ox+scale*404,oy-scale*116,ox+scale*404,oy-scale*104);
 
 
 
 
                 ox = (int)centreX;
-                oy = (int)centreY + 120;
-                ox=(int)(ox-250*scale);
-                oy=(int)(oy+170*scale);
+                oy = (int)centreY;
+                ox=(int)(ox-150*scale);
+                oy=(int)(oy+480*scale);
+                oy=(int)(oy+12*scale);
 //exit
-                renderer.setColor(tertiaryColour); renderer.triangle(ox+scale*382,oy-scale*150,ox+scale*410,oy-scale*178,ox+scale*258,oy-scale*330); renderer.triangle
+                renderer.setColor(tertiaryColour); renderer.triangle(ox+scale*229.2f,oy+scale*-90,ox+scale*246,oy+scale*-106.8f,ox+scale*154.8f,oy+scale*-198); renderer.triangle(ox+scale*229.2f,oy+scale*-90,ox+scale*154.8f,oy+scale*-198,ox+scale*138,oy+scale*-181.2f); renderer.triangle(ox+scale*138,oy+scale*-106.8f,ox+scale*154.8f,oy+scale*-90,ox+scale*246,oy+scale*-181.2f); renderer.triangle(ox+scale*138,oy+scale*-106.8f,ox+scale*246,oy+scale*-181.2f,ox+scale*229.2f,oy+scale*-198);
 
-                    (ox+scale*382,oy-scale*150,ox+scale*258,oy-scale*330,ox+scale*230,oy-scale*302); renderer.triangle
-
-                    (ox+scale*230,oy-scale*178,ox+scale*258,oy-scale*150,ox+scale*410,oy-scale*302); renderer.triangle
-
-                    (ox+scale*230,oy-scale*178,ox+scale*410,oy-scale*302,ox+scale*382,oy-scale*330);
 
 
 /*end scoreboard offline group */
@@ -478,11 +394,12 @@ drawHex(sr);
             {
 
                 ox = (int)centreX;
-                oy = (int)centreY + 120;
+                oy = (int)centreY;
                 ox=(int)(ox-380*scale);
+                oy=(int)(oy+480*scale);
                 oy=(int)(oy+50*scale);
 /*head group ************************************************************************/
-//offset y by -120 to centre this
+//offset y by -120 to centre this 
 //head
                 renderer.setColor(primaryColour); renderer.triangle(ox+scale*380,oy-scale*380,ox+scale*260,oy-scale*380,ox+scale*320,oy-scale*296); renderer.setColor(secondaryColour);
 
@@ -512,12 +429,13 @@ drawHex(sr);
 
 
                 ox = (int)centreX;
-                oy = (int)centreY + 120;
-               
-                ox=(int)(ox-350*scale);
-                oy=(int)(oy+20*scale);
+                oy = (int)centreY;
+                ox=(int)(ox-90*scale);
+                oy=(int)(oy+480*scale);
+                oy=(int)(oy+120*scale);
+                
 //left arrow
-//offset x by -90 to centre
+//offset x by -90 to centre 
                 renderer.setColor(primaryColour); renderer.triangle
                     (ox+scale*380,oy-scale*240,ox+scale*404,oy-scale*208,ox+scale*404,oy-scale*224); renderer.triangle
 
@@ -528,14 +446,15 @@ drawHex(sr);
                     (ox+scale*380,oy-scale*240,ox+scale*440,oy-scale*256,ox+scale*404,oy-scale*256); renderer.triangle
 
                     (ox+scale*380,oy-scale*240,ox+scale*404,oy-scale*256,ox+scale*404,oy-scale*272);
-               
+                
 
                 ox = (int)centreX;
-                oy = (int)centreY + 120;
+                oy = (int)centreY;
                 ox=(int)(ox-280*scale);
-                oy=(int)(oy+100*scale);
+                oy=(int)(oy+480*scale);
+                oy=(int)(oy-50*scale);
 //wifi
-//offset y by +92 to centre this
+//offset y by +92 to centre this 
                 renderer.setColor(primaryColour); renderer.triangle(ox+scale*320,oy-scale*188,ox+scale*292,oy-scale*196,ox+scale*292,oy-scale*200); renderer.triangle
 
                     (ox+scale*320,oy-scale*188,ox+scale*292,oy-scale*200,ox+scale*320,oy-scale*196); renderer.triangle
@@ -562,8 +481,9 @@ drawHex(sr);
             else if(text=="Start Practise Game" )
             {
                 ox = (int)centreX;
-                oy = (int)centreY + 120;
+                oy = (int)centreY;
                 ox=(int)(ox-340*scale);
+                oy=(int)(oy+480*scale);
                 oy=(int)(oy+0*scale);
 /*play**************************************************************************************/
                 renderer.setColor(primaryColour);
@@ -574,8 +494,9 @@ drawHex(sr);
             {
 
                 ox = (int)centreX;
-                oy = (int)centreY + 120;
+                oy = (int)centreY;
                 ox=(int)(ox-340*scale);
+                oy=(int)(oy+480*scale);
                 oy=(int)(oy+0*scale);
 /*play**************************************************************************************/
                 renderer.setColor(primaryColour);
@@ -583,113 +504,115 @@ drawHex(sr);
 
             }
             else if(text=="Exit" )
-            {
-                ox = (int)centreX;
-                oy = (int)centreY + 120;
-                ox=(int)(ox-250*scale);
-                oy=(int)(oy+20*scale);
+        {
+            ox = (int)centreX;
+            oy = (int)centreY;
+            ox=(int)(ox-250*scale);
+            oy=(int)(oy+480*scale);
+            oy=(int)(oy+20*scale);
 /*exit*******************************************************************************/
-                renderer.setColor(tertiaryColour); renderer.triangle(ox+scale*382,oy-scale*150,ox+scale*410,oy-scale*178,ox+scale*258,oy-scale*330); renderer.triangle
+            renderer.setColor(tertiaryColour); renderer.triangle(ox+scale*382,oy-scale*150,ox+scale*410,oy-scale*178,ox+scale*258,oy-scale*330); renderer.triangle
 
-                    (ox+scale*382,oy-scale*150,ox+scale*258,oy-scale*330,ox+scale*230,oy-scale*302); renderer.triangle
+                (ox+scale*382,oy-scale*150,ox+scale*258,oy-scale*330,ox+scale*230,oy-scale*302); renderer.triangle
 
-                    (ox+scale*230,oy-scale*178,ox+scale*258,oy-scale*150,ox+scale*410,oy-scale*302); renderer.triangle
+                (ox+scale*230,oy-scale*178,ox+scale*258,oy-scale*150,ox+scale*410,oy-scale*302); renderer.triangle
 
-                    (ox+scale*230,oy-scale*178,ox+scale*410,oy-scale*302,ox+scale*382,oy-scale*330);
+                (ox+scale*230,oy-scale*178,ox+scale*410,oy-scale*302,ox+scale*382,oy-scale*330);
 
-            }
-
+        }
 
 
 
             else if(text=="Sign out" )
-            {
+        {
 
-                ox = (int)centreX;
-                oy = (int)centreY + 120;
-                ox=(int)(ox-380*scale);
-                oy=(int)(oy+50*scale);
+            ox = (int)centreX;
+            oy = (int)centreY;
+            ox=(int)(ox-380*scale);
+            oy=(int)(oy+480*scale);
+            oy=(int)(oy+50*scale);
 /*head 2 group *****************************************************************************/
-//offset y by -120 to centre this
+//offset y by -120 to centre this 
 
-                renderer.setColor(primaryColour); renderer.triangle(ox+scale*380,oy-scale*380,ox+scale*260,oy-scale*380,ox+scale*320,oy-scale*296); renderer.setColor(secondaryColour);
+            renderer.setColor(primaryColour); renderer.triangle(ox+scale*380,oy-scale*380,ox+scale*260,oy-scale*380,ox+scale*320,oy-scale*296); renderer.setColor(secondaryColour);
 
-                renderer.triangle(ox+scale*320,oy-scale*300,ox+scale*292,oy-scale*292,ox+scale*272,oy-scale*272); renderer.triangle
+            renderer.triangle(ox+scale*320,oy-scale*300,ox+scale*292,oy-scale*292,ox+scale*272,oy-scale*272); renderer.triangle
 
-                    (ox+scale*320,oy-scale*300,ox+scale*272,oy-scale*272,ox+scale*260,oy-scale*244); renderer.triangle
+                (ox+scale*320,oy-scale*300,ox+scale*272,oy-scale*272,ox+scale*260,oy-scale*244); renderer.triangle
 
-                    (ox+scale*320,oy-scale*300,ox+scale*260,oy-scale*244,ox+scale*264,oy-scale*216); renderer.triangle
+                (ox+scale*320,oy-scale*300,ox+scale*260,oy-scale*244,ox+scale*264,oy-scale*216); renderer.triangle
 
-                    (ox+scale*320,oy-scale*300,ox+scale*264,oy-scale*216,ox+scale*284,oy-scale*192); renderer.triangle
+                (ox+scale*320,oy-scale*300,ox+scale*264,oy-scale*216,ox+scale*284,oy-scale*192); renderer.triangle
 
-                    (ox+scale*320,oy-scale*300,ox+scale*284,oy-scale*192,ox+scale*316,oy-scale*180); renderer.triangle
+                (ox+scale*320,oy-scale*300,ox+scale*284,oy-scale*192,ox+scale*316,oy-scale*180); renderer.triangle
 
-                    (ox+scale*320,oy-scale*300,ox+scale*316,oy-scale*180,ox+scale*324,oy-scale*180); renderer.triangle
+                (ox+scale*320,oy-scale*300,ox+scale*316,oy-scale*180,ox+scale*324,oy-scale*180); renderer.triangle
 
-                    (ox+scale*320,oy-scale*300,ox+scale*324,oy-scale*180,ox+scale*356,oy-scale*192); renderer.triangle
+                (ox+scale*320,oy-scale*300,ox+scale*324,oy-scale*180,ox+scale*356,oy-scale*192); renderer.triangle
 
-                    (ox+scale*320,oy-scale*300,ox+scale*356,oy-scale*192,ox+scale*376,oy-scale*216); renderer.triangle
+                (ox+scale*320,oy-scale*300,ox+scale*356,oy-scale*192,ox+scale*376,oy-scale*216); renderer.triangle
 
-                    (ox+scale*320,oy-scale*300,ox+scale*376,oy-scale*216,ox+scale*380,oy-scale*244); renderer.triangle
+                (ox+scale*320,oy-scale*300,ox+scale*376,oy-scale*216,ox+scale*380,oy-scale*244); renderer.triangle
 
-                    (ox+scale*320,oy-scale*300,ox+scale*380,oy-scale*244,ox+scale*368,oy-scale*272); renderer.triangle
+                (ox+scale*320,oy-scale*300,ox+scale*380,oy-scale*244,ox+scale*368,oy-scale*272); renderer.triangle
 
-                    (ox+scale*320,oy-scale*300,ox+scale*368,oy-scale*272,ox+scale*348,oy-scale*292);
+                (ox+scale*320,oy-scale*300,ox+scale*368,oy-scale*272,ox+scale*348,oy-scale*292);
 
 
 
-                ox = (int)centreX;
-                oy = (int)centreY + 120;   
-               
+            ox = (int)centreX;
+            oy = (int)centreY;
+            ox=(int)(ox-90*scale);
+            oy=(int)(oy+480*scale); 
+            oy=(int)(oy+120*scale);
 
-                ox=(int)(ox-175*scale);
-                oy=(int)(oy+20*scale);
-
+            
 //right arrow
 
-//offset x by +90 to centre
-                renderer.setColor(tertiaryColour);
-                renderer.triangle(ox+scale*260,oy-scale*240,ox+scale*236,oy-scale*272,ox+scale*236,oy-scale*256); renderer.triangle
+//offset x by +90 to centre 
+            renderer.setColor(tertiaryColour);
+            renderer.triangle(ox+scale*260,oy-scale*240,ox+scale*236,oy-scale*272,ox+scale*236,oy-scale*256); renderer.triangle
 
-                    (ox+scale*260,oy-scale*240,ox+scale*236,oy-scale*256,ox+scale*200,oy-scale*256); renderer.triangle
+                (ox+scale*260,oy-scale*240,ox+scale*236,oy-scale*256,ox+scale*200,oy-scale*256); renderer.triangle
 
-                    (ox+scale*260,oy-scale*240,ox+scale*200,oy-scale*256,ox+scale*200,oy-scale*224); renderer.triangle
+                (ox+scale*260,oy-scale*240,ox+scale*200,oy-scale*256,ox+scale*200,oy-scale*224); renderer.triangle
 
-                    (ox+scale*260,oy-scale*240,ox+scale*200,oy-scale*224,ox+scale*236,oy-scale*224); renderer.triangle
+                (ox+scale*260,oy-scale*240,ox+scale*200,oy-scale*224,ox+scale*236,oy-scale*224); renderer.triangle
 
-                    (ox+scale*260,oy-scale*240,ox+scale*236,oy-scale*224,ox+scale*236,oy-scale*208);
-               
+                (ox+scale*260,oy-scale*240,ox+scale*236,oy-scale*224,ox+scale*236,oy-scale*208);
+            
 
 
-                ox = (int)centreX;
-                oy = (int)centreY + 120;
-                ox=(int)(ox-280*scale);
-                oy=(int)(oy+100*scale);
+            ox = (int)centreX;
+            oy = (int)centreY;
+            ox=(int)(ox-280*scale);
+            oy=(int)(oy+480*scale); 
+            oy=(int)(oy-50*scale);
 //wifi
-//offset y by +92 to centre this
-                renderer.setColor(primaryColour); renderer.triangle(ox+scale*320,oy-scale*188,ox+scale*292,oy-scale*196,ox+scale*292,oy-scale*200); renderer.triangle
+//offset y by +92 to centre this 
+            renderer.setColor(primaryColour); renderer.triangle(ox+scale*320,oy-scale*188,ox+scale*292,oy-scale*196,ox+scale*292,oy-scale*200); renderer.triangle
 
-                    (ox+scale*320,oy-scale*188,ox+scale*292,oy-scale*200,ox+scale*320,oy-scale*196); renderer.triangle
+                (ox+scale*320,oy-scale*188,ox+scale*292,oy-scale*200,ox+scale*320,oy-scale*196); renderer.triangle
 
-                    (ox+scale*320,oy-scale*188,ox+scale*320,oy-scale*196,ox+scale*348,oy-scale*200); renderer.triangle
+                (ox+scale*320,oy-scale*188,ox+scale*320,oy-scale*196,ox+scale*348,oy-scale*200); renderer.triangle
 
-                    (ox+scale*320,oy-scale*188,ox+scale*348,oy-scale*200,ox+scale*348,oy-scale*196); renderer.triangle
+                (ox+scale*320,oy-scale*188,ox+scale*348,oy-scale*200,ox+scale*348,oy-scale*196); renderer.triangle
 
-                    (ox+scale*320,oy-scale*132,ox+scale*264,oy-scale*148,ox+scale*264,oy-scale*156); renderer.triangle
+                (ox+scale*320,oy-scale*132,ox+scale*264,oy-scale*148,ox+scale*264,oy-scale*156); renderer.triangle
 
-                    (ox+scale*320,oy-scale*132,ox+scale*264,oy-scale*156,ox+scale*320,oy-scale*144); renderer.triangle
+                (ox+scale*320,oy-scale*132,ox+scale*264,oy-scale*156,ox+scale*320,oy-scale*144); renderer.triangle
 
-                    (ox+scale*320,oy-scale*132,ox+scale*320,oy-scale*144,ox+scale*376,oy-scale*156); renderer.triangle
+                (ox+scale*320,oy-scale*132,ox+scale*320,oy-scale*144,ox+scale*376,oy-scale*156); renderer.triangle
 
-                    (ox+scale*320,oy-scale*132,ox+scale*376,oy-scale*156,ox+scale*376,oy-scale*148); renderer.triangle
+                (ox+scale*320,oy-scale*132,ox+scale*376,oy-scale*156,ox+scale*376,oy-scale*148); renderer.triangle
 
-                    (ox+scale*320,oy-scale*80,ox+scale*236,oy-scale*104,ox+scale*236,oy-scale*116); renderer.triangle(ox+scale*320,oy-scale*80,ox+scale*236,oy-scale*116,ox+scale*320,oy-scale*96);
+                (ox+scale*320,oy-scale*80,ox+scale*236,oy-scale*104,ox+scale*236,oy-scale*116); renderer.triangle(ox+scale*320,oy-scale*80,ox+scale*236,oy-scale*116,ox+scale*320,oy-scale*96);
 
-                renderer.triangle(ox+scale*320,oy-scale*80,ox+scale*320,oy-scale*96,ox+scale*404,oy-scale*116); renderer.triangle
+            renderer.triangle(ox+scale*320,oy-scale*80,ox+scale*320,oy-scale*96,ox+scale*404,oy-scale*116); renderer.triangle
 
-                    (ox+scale*320,oy-scale*80,ox+scale*404,oy-scale*116,ox+scale*404,oy-scale*104);
+                (ox+scale*320,oy-scale*80,ox+scale*404,oy-scale*116,ox+scale*404,oy-scale*104);
 /*end of head 2 group*/
-            }
+        }
 
 
 
@@ -704,4 +627,4 @@ drawHex(sr);
 
 
 
-        }
+            }
