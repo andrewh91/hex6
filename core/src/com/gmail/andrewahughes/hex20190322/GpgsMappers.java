@@ -28,13 +28,13 @@ public class GpgsMappers {
         }
         */
 //debug score board, only one, we should be unable to write to it, but should be able to call it in debug mode
-        /*
+
         if (leaderboardId != null)
         {
             if (leaderboardId.equals(GdxGameSvcsApp.LEADERBOARD1 + 0))
                 gpgsId = "CgkI5p3QhdEeEAIQAQ";
         }
-        */
+        else
 
 //release mode
         if (leaderboardId != null) {

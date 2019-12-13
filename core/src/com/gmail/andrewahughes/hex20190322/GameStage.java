@@ -124,7 +124,7 @@ Col’s  	rows	total	orientation
     //prefer not to use Boolean for the orientation, when changing the options in game we can use 0 to show no change, 1 portrait 2 landscape
     //game mode is 0 by default, this is the field mode, many hexes on screen, hexes disappear when matched, game mode 1 would be singles mode, 2 hexes on screen, symbols are replaced when matching
     //field width and height are just defaults, they will be changed later
-    int portrait1Landscape2 = 1, fieldPosX = 50, fieldPosY = 50, fieldWidth = 620, fieldHeight = 1180, gameMode = 2, symbolType = 1, noOfSymbols = 31;
+    int portrait1Landscape2 = 1, fieldPosX = 50, fieldPosY = 50, fieldWidth = 620, fieldHeight = 1180, gameMode = 2, symbolType = 3, noOfSymbols = 31;
 
 
     //haven’t properly implemented the zoom mode yet, the alternative is called quickMode – or just zoomSelectionMode false

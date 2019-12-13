@@ -95,7 +95,7 @@ drawHex(sr);
     }
     public void drawText (SpriteBatch sb) {
         if (this.isVisible()) {
-            font.draw(sb, " " + text, centreX-edgeSize*0.95f, centreY +glyphLayout.height / 2,edgeSize*2f, Align.center,true);
+            font.draw(sb, " " + text, centreX-edgeSize*0.95f, centreY +altitudeSize-glyphLayout.height / 2,edgeSize*2f, Align.center,true);
            // font.draw(sb, "" + hexIndex + " " + text, centreX + glyphLayout.width / 2, centreY + glyphLayout.height / 2,altitudeSize*2f, Align.center,true);
         }
 

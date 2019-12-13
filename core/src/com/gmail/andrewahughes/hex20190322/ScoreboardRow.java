@@ -67,7 +67,7 @@ public class ScoreboardRow
 //instances of this class and decides which width is the largest, then we will 
 //feed that largest width into the draw method for all instances
         font.draw(sb, ""+dateTime, x1,height);
-        font.draw(sb, ""+noOfHexes, x2,height);
+        font.draw(sb, "", x2,height);
         font.draw(sb, ""+score, x3,height);
     }
 }

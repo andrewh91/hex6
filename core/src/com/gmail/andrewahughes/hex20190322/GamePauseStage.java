@@ -200,7 +200,7 @@ updateUI();
 
         if (visible) {
 
-            Gdx.gl.glClearColor(1.00f, 0.91f, 0.57f, 1);
+            Gdx.gl.glClearColor(0.94f,0.67f,0.09f, 1);
             Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
             shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
             shapeRenderer.setProjectionMatrix(getViewport().getCamera().combined);
@@ -342,7 +342,7 @@ else if(practise&&hexOptionFieldArray.get(0).hexOptionArray[9].isVisible())
                 scoreboardRowArray[category].score=" ";
             }
 //test if the new score is better than the recorded score or if the recorded score is blank
-            if(scoreboardRowArray[category].score.equals( " ")||scoreboardScore<Integer.parseInt(scoreboardRowArray[category].score))
+            if(scoreboardRowArray[category].score.equals( " ")||scoreboardScore>Integer.parseInt(scoreboardRowArray[category].score))
             {
 //set the recorded score as the new score
                 scoreboardRowArray[category].score=""+scoreboardScore;
@@ -352,7 +352,7 @@ else if(practise&&hexOptionFieldArray.get(0).hexOptionArray[9].isVisible())
 
 
 //if the new score was better than the daily score we should check if it was better than the all time score too 
-                if(scoreboardRowArray[category+7].score.equals(" ")||scoreboardScore<Integer.parseInt(scoreboardRowArray[category+7].score))
+                if(scoreboardRowArray[category+7].score.equals(" ")||scoreboardScore>Integer.parseInt(scoreboardRowArray[category+7].score))
                 {
 //set the recorded score as the new score 
                     scoreboardRowArray[category+7].score=""+scoreboardScore;
@@ -769,7 +769,7 @@ public void clicked(InputEvent event, float x, float y) {
                         {
 //this returns true if upload successful, if unsuccessful set a flag
 if(stageInterface.submitScore(Integer.valueOf(scoreboardRowArray[i].score),
-                            Integer.valueOf(scoreboardRowArray[i].noOfHexes),category)==false)
+                            Integer.valueOf(scoreboardRowArray[i].noOfHexes),/*category*/0)==false)
                             {
                                 allUploaded=false;
                             }
